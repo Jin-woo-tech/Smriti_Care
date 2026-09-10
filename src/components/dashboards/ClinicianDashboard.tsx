@@ -34,8 +34,14 @@ import { generateAndDownloadClinicalReport } from '../../lib/pdfReport';
 import { VoiceNarratorButton } from '../common/VoiceNarratorButton';
 
 export const ClinicianDashboard: React.FC = () => {
-  const { settings, cognitiveTrends, reminders, gameScores, ashaPatients } = useApp();
+  const { settings, cognitiveTrends, reminders, gameScores, ashaPatients, activePatient } = useApp();
   const lang = settings.language;
+  const patientName =
+    lang === 'as' && activePatient.nameAs
+      ? activePatient.nameAs
+      : lang === 'hi' && activePatient.nameHi
+      ? activePatient.nameHi
+      : activePatient.name;
 
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
@@ -50,27 +56,27 @@ export const ClinicianDashboard: React.FC = () => {
   const handleDownloadReport = () => {
     setIsGeneratingPdf(true);
     setTimeout(() => {
-      const targetPatient = ashaPatients[0] || {
-        id: 'p-1',
-        name: 'Bipin Gogoi',
-        nameAs: 'বিপিন গগৈ',
-        age: 72,
-        gender: 'M' as const,
-        village: 'Titabor',
-        villageAs: 'তিতাবৰ',
-        phone: '+91 98640 12345',
-        caregiverName: 'Priyanka Gogoi',
-        caregiverPhone: '+91 98640 67890',
-        lastVisitDate: '3 days ago',
-        adherenceRate: 92,
+      const targetPatient = {
+        id: activePatient.id,
+        name: activePatient.name,
+        nameAs: activePatient.nameAs || activePatient.name,
+        age: activePatient.age,
+        gender: activePatient.gender,
+        village: activePatient.location,
+        villageAs: activePatient.locationAs || activePatient.location,
+        phone: activePatient.emergencyContactPhone || '+91 94350 12345',
+        caregiverName: activePatient.emergencyContactName || 'Family Caregiver',
+        caregiverPhone: activePatient.emergencyContactPhone || '+91 98640 67890',
+        lastVisitDate: 'Recent',
+        adherenceRate: activePatient.adherenceRate || 95,
         cognitiveStatus: 'stable' as const,
         medicationStockDays: 18,
         nextScheduledVisit: 'Next Tuesday',
-        notes: 'Regular check-up conducted.',
+        notes: activePatient.condition || 'Regular clinical neuro-checkup completed.',
         notesAs: 'নিয়মীয়া স্বাস্থ্য পৰীক্ষা সম্পন্ন হৈছে।',
       };
 
-      generateAndDownloadClinicalReport(targetPatient, cognitiveTrends, 92);
+      generateAndDownloadClinicalReport(targetPatient, cognitiveTrends, activePatient.adherenceRate || 95);
       setIsGeneratingPdf(false);
     }, 600);
   };
@@ -108,10 +114,10 @@ export const ClinicianDashboard: React.FC = () => {
           <VoiceNarratorButton
             textToRead={
               lang === 'as'
-                ? 'চিকিৎসক পৰ্যবেক্ষণ ফলক। বিপিন গগৈৰ যোৱা ৩০ দিনৰ ঔষধ পালনৰ হাৰ ৯২ শতাংশ আৰু স্মৃতি শক্তি সন্তোষজনক।'
+                ? `চিকিৎসক পৰ্যবেক্ষণ ফলক। ${patientName}ৰ ঔষধ পালনৰ হাৰ ${activePatient.adherenceRate || 95} শতাংশ আৰু স্মৃতি শক্তি সন্তোষজনক।`
                 : lang === 'hi'
-                ? 'चिकित्सक मूल्यांकन पोर्टल। बिपिन गोगोई की 30-दिवसीय दवा अनुपालन दर 92% है और बहु-क्षेत्रीय संज्ञानात्मक रडार स्थिर स्थिति दर्शाता है।'
-                : 'Clinician Cognitive Dashboard for Bipin Gogoi. 30-day adherence is 92% and cognitive domain radar shows stable functioning.'
+                ? `चिकित्सक मूल्यांकन पोर्टल। ${patientName} की दवा अनुपालन दर ${activePatient.adherenceRate || 95}% है और बहु-क्षेत्रीय संज्ञानात्मक रडार स्थिर स्थिति दर्शाता है।`
+                : `Clinician Cognitive Dashboard for ${patientName}. Adherence is ${activePatient.adherenceRate || 95}% and cognitive domain radar shows steady functioning.`
             }
             size="lg"
             className="bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md shadow-lg font-bold"
@@ -136,26 +142,26 @@ export const ClinicianDashboard: React.FC = () => {
       <div className="glass-card-dark p-6 sm:p-8 rounded-[2.5rem] border border-white/12 hover:border-purple-500/40 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-purple-600/30 border border-purple-400/30">
-              BG
+            <div className={`w-16 h-16 rounded-2xl bg-gradient-to-tr ${activePatient.avatarColor || 'from-purple-600 to-indigo-600'} text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-purple-600/30 border border-purple-400/30`}>
+              {activePatient.avatarInitials || 'AJ'}
             </div>
             <div>
               <div className="flex items-center gap-2.5">
-                <h3 className="text-2xl font-black text-white">Bipin Gogoi</h3>
+                <h3 className="text-2xl font-black text-white">{patientName}</h3>
                 <span className="text-xs font-mono px-3 py-1 rounded-full bg-purple-500/20 text-purple-200 font-extrabold border border-purple-400/30 shadow-xs">
-                  ID: SMR-2026-084
+                  ID: SMR-2026-{activePatient.age}
                 </span>
               </div>
               <p className="text-xs text-sky-200/70 font-medium mt-1">
-                72 Years • Male • Titabor, Jorhat, Assam • Primary Caregiver: Priyanka Gogoi
+                {activePatient.age} Years • {activePatient.gender === 'F' ? 'Female' : activePatient.gender === 'M' ? 'Male' : 'Other'} • {activePatient.location} • Primary Contact: {activePatient.emergencyContactName || 'Family Caregiver'}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-6">
             <div className="text-right">
-              <span className="text-xs text-sky-200/60 uppercase font-black block tracking-wider">30-Day Adherence</span>
-              <span className="text-3xl font-black text-purple-300">92.4%</span>
+              <span className="text-xs text-sky-200/60 uppercase font-black block tracking-wider">Adherence Rate</span>
+              <span className="text-3xl font-black text-purple-300">{activePatient.adherenceRate || 95}%</span>
             </div>
             <div className="text-right">
               <span className="text-xs text-sky-200/60 uppercase font-black block tracking-wider">Overall Baseline</span>
