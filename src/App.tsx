@@ -207,7 +207,32 @@ export const App: React.FC = () => {
 
         {/* Footer */}
         <footer className="bg-[#0c1222]/90 backdrop-blur-xl border-t border-white/10 mt-12 py-8 px-4 sm:px-8 text-white">
-          <div className="max-w-7xl mx-auto text-center space-y-2">
+          <div className="max-w-7xl mx-auto text-center space-y-3.5">
+            {/* Team StarX Branding Badge */}
+            <div className="flex items-center justify-center gap-3">
+              <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-purple-600/30 to-indigo-600/30 border border-purple-400/40 p-1 flex items-center justify-center shadow-lg shadow-purple-600/30 backdrop-blur-md">
+                <img
+                  src="/team-starx-logo.png"
+                  alt="Team StarX Logo"
+                  className="w-full h-full object-contain filter drop-shadow"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    if (!target.src.includes('image-removebg-preview.png')) {
+                      target.src = '/image-removebg-preview.png';
+                    }
+                  }}
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm sm:text-base font-black text-white tracking-wide">
+                  Crafted with <span className="text-rose-400 animate-pulse">❤️</span> by <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-cyan-300 font-extrabold">Team StarX</span>
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-[#c084fc] text-[10px] font-black border border-purple-400/30">
+                  SIH 2026
+                </span>
+              </div>
+            </div>
+
             <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-bold text-sky-200">
               <span className="text-[#c084fc] font-extrabold">SmritiCare (স্মৃতি কেয়াৰ / स्मृति केयर)</span>
               <span>•</span>

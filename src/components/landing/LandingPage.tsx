@@ -508,6 +508,43 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
         </div>
       </section>
 
+      {/* Team StarX Spotlight & SIH 2026 Credits Section */}
+      <section className="glass-card-dark rounded-[32px] p-6 sm:p-8 border border-purple-500/30 text-center relative overflow-hidden">
+        <div className="absolute -top-16 -left-16 w-48 h-48 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-cyan-600/20 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-2xl mx-auto space-y-4">
+          <div className="flex items-center justify-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600/30 to-indigo-600/30 border border-purple-400/40 p-1.5 flex items-center justify-center shadow-lg shadow-purple-600/30 backdrop-blur-md">
+              <img
+                src="/team-starx-logo.png"
+                alt="Team StarX Logo"
+                className="w-full h-full object-contain filter drop-shadow"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.includes('image-removebg-preview.png')) {
+                    target.src = '/image-removebg-preview.png';
+                  }
+                }}
+              />
+            </div>
+            <div className="text-left">
+              <div className="flex items-center gap-2">
+                <h3 className="text-lg sm:text-xl font-black text-white">Built & Designed by Team StarX</h3>
+                <span className="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-[#c084fc] text-[10px] font-black border border-purple-400/30">
+                  SIH 2026
+                </span>
+              </div>
+              <p className="text-xs text-sky-200/70 font-medium">Smart India Hackathon 2026 • Cognitive Healthcare Track</p>
+            </div>
+          </div>
+
+          <p className="text-xs sm:text-sm text-sky-100/80 leading-relaxed">
+            SmritiCare was engineered by <strong className="text-purple-300">Team StarX</strong> to bridge digital geriatric care and community health workers (ASHAs) across Assam with trilingual accessibility, neuro-cognitive exercises, and emergency safety networks.
+          </p>
+        </div>
+      </section>
+
       {/* Safety Notice & Medical Disclaimer */}
       <section className="rounded-2xl bg-purple-950/40 border border-purple-400/30 p-5 text-purple-200 text-xs sm:text-sm leading-relaxed backdrop-blur-md">
         <p className="font-bold mb-1 flex items-center gap-1.5 text-purple-300">

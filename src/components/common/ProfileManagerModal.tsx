@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { PatientProfile } from '../../types';
+import { maskPhoneNumber } from '../../lib/utils';
 
 export const ProfileManagerModal: React.FC = () => {
   const {
@@ -210,8 +211,13 @@ export const ProfileManagerModal: React.FC = () => {
                             <MapPin size={12} className="text-[#c084fc]" />
                             {lang === 'as' && profile.locationAs ? profile.locationAs : lang === 'hi' && profile.locationHi ? profile.locationHi : profile.location}
                           </span>
+                          {profile.emergencyContactPhone && (
+                            <span className="text-[11px] font-mono text-purple-300 hidden sm:inline-block">
+                              • {maskPhoneNumber(profile.emergencyContactPhone)}
+                            </span>
+                          )}
                           {profile.condition && (
-                            <span className="truncate hidden sm:inline-block">
+                            <span className="truncate hidden md:inline-block">
                               • {lang === 'as' && profile.conditionAs ? profile.conditionAs : lang === 'hi' && profile.conditionHi ? profile.conditionHi : profile.condition}
                             </span>
                           )}
