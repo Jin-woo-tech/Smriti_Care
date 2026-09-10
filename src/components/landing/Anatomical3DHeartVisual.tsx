@@ -12,8 +12,8 @@ export const Anatomical3DHeartVisual: React.FC<Anatomical3DHeartVisualProps> = (
 }) => {
   return (
     <div className="relative w-full max-w-[540px] mx-auto flex flex-col items-center justify-center select-none py-2">
-      {/* Background Soft Glow Aura matching Image #10 */}
-      <div className="absolute inset-0 bg-gradient-to-t from-sky-400/20 via-blue-500/10 to-transparent blur-3xl rounded-full scale-110 pointer-events-none" />
+      {/* Background Soft Glow Aura in Purple & Cyan */}
+      <div className="absolute inset-0 bg-gradient-to-t from-purple-500/25 via-indigo-500/15 to-transparent blur-3xl rounded-full scale-110 pointer-events-none" />
 
       {/* 3D Glossy Anatomical Heart Graphic */}
       <div className="relative w-full aspect-square max-w-[440px] flex items-center justify-center animate-float-slow">
@@ -23,7 +23,7 @@ export const Anatomical3DHeartVisual: React.FC<Anatomical3DHeartVisualProps> = (
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
-            {/* Ceramic Pearl White / Metallic Shading Gradients matching Image #10 */}
+            {/* Ceramic Pearl White / Metallic Shading Gradients */}
             <radialGradient id="specularGlow" cx="40%" cy="30%" r="50%">
               <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
               <stop offset="35%" stopColor="#e2e8f0" stopOpacity="0.6" />
@@ -53,8 +53,8 @@ export const Anatomical3DHeartVisual: React.FC<Anatomical3DHeartVisualProps> = (
             </linearGradient>
 
             <linearGradient id="veinGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#67e8f9" />
-              <stop offset="100%" stopColor="#0284c7" />
+              <stop offset="0%" stopColor="#c084fc" />
+              <stop offset="100%" stopColor="#8b5cf6" />
             </linearGradient>
 
             <filter id="glossHighlight" x="-20%" y="-20%" width="140%" height="140%">
@@ -63,7 +63,7 @@ export const Anatomical3DHeartVisual: React.FC<Anatomical3DHeartVisualProps> = (
             </filter>
           </defs>
 
-          {/* Top Great Vessels & Aortic Arches matching Image #10 glossy ceramic pipes */}
+          {/* Top Great Vessels & Aortic Arches glossy ceramic pipes */}
           {/* Vena Cava / Right Pulmonary Tube */}
           <path
             d="M 180 160 C 170 120, 160 80, 185 60 C 198 50, 215 55, 218 80 C 220 105, 215 130, 210 160 Z"
@@ -122,7 +122,7 @@ export const Anatomical3DHeartVisual: React.FC<Anatomical3DHeartVisualProps> = (
             opacity="0.75"
           />
 
-          {/* High-Gloss Specular Highlights (Ceramic reflections matching Image #10) */}
+          {/* High-Gloss Specular Highlights */}
           <path
             d="M 180 200 C 160 230, 160 280, 175 320 C 170 280, 175 230, 195 200 Z"
             fill="url(#specularGlow)"
@@ -144,7 +144,7 @@ export const Anatomical3DHeartVisual: React.FC<Anatomical3DHeartVisualProps> = (
             opacity="0.75"
           />
 
-          {/* Intricate Coronary Arteries / Neural Pathways Web matching Image #10 */}
+          {/* Intricate Coronary Arteries / Neural Pathways Web */}
           {/* Main Left Anterior Descending Artery */}
           <path
             d="M 250 175 Q 235 220, 225 260 T 215 310 T 235 370 T 255 435"
@@ -176,21 +176,21 @@ export const Anatomical3DHeartVisual: React.FC<Anatomical3DHeartVisualProps> = (
             strokeLinecap="round"
           />
 
-          {/* Subtle Glowing Cyan Pulse Points on arteries */}
-          <circle cx="235" cy="240" r="3" fill="#38bdf8" className="animate-ping opacity-75" />
+          {/* Glowing Purple & Cyan Pulse Points on arteries */}
+          <circle cx="235" cy="240" r="3" fill="#c084fc" className="animate-ping opacity-75" />
           <circle cx="310" cy="285" r="3.5" fill="#38bdf8" />
-          <circle cx="215" cy="310" r="3" fill="#38bdf8" />
-          <circle cx="255" cy="435" r="4" fill="#38bdf8" className="animate-pulse" />
+          <circle cx="215" cy="310" r="3" fill="#c084fc" />
+          <circle cx="255" cy="435" r="4" fill="#a855f7" className="animate-pulse" />
         </svg>
 
-        {/* Center CTA Button Overlaid on Heart (Matching Image #10) */}
+        {/* Center CTA Button Overlaid on Heart in Electric Purple */}
         <div className="absolute bottom-6 sm:bottom-8 z-20">
           <button
             onClick={onExplore}
-            className="group inline-flex items-center gap-2.5 px-7 sm:px-9 py-3.5 sm:py-4 rounded-full bg-[#c5f82a] hover:bg-[#d4ff42] text-slate-950 font-black text-sm sm:text-base tracking-wide shadow-2xl shadow-[#c5f82a]/30 hover:shadow-[#c5f82a]/50 hover:scale-105 active:scale-95 transition-all cursor-pointer border border-[#c5f82a]/80"
+            className="group inline-flex items-center gap-2.5 px-7 sm:px-9 py-3.5 sm:py-4 rounded-full bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] hover:from-[#9333ea] hover:to-[#7c3aed] text-white font-black text-sm sm:text-base tracking-wide shadow-2xl shadow-purple-600/40 hover:shadow-purple-600/60 hover:scale-105 active:scale-95 transition-all cursor-pointer border border-purple-400/50"
           >
             <span>{exploreLabel}</span>
-            <ArrowRight size={18} className="text-slate-950 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight size={18} className="text-white group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
       </div>

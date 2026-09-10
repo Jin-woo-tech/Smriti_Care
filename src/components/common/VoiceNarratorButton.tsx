@@ -43,13 +43,13 @@ export const VoiceNarratorButton: React.FC<VoiceNarratorButtonProps> = ({
       type="button"
       onClick={handleClick}
       aria-label="Read text aloud"
-      className={`inline-flex items-center gap-1.5 font-medium rounded-full bg-teal-50 text-teal-800 hover:bg-teal-100 dark:bg-teal-900/40 dark:text-teal-200 border border-teal-200 dark:border-teal-700 transition-all cursor-pointer ${sizeClasses[size]} ${className}`}
+      className={`inline-flex items-center gap-1.5 font-bold rounded-2xl bg-purple-500/20 text-purple-200 hover:bg-purple-500/30 border border-purple-400/30 transition-all cursor-pointer backdrop-blur-md shadow-xs ${sizeClasses[size]} ${className}`}
       title="Click to hear this text read aloud"
     >
       {isSpeaking ? (
-        <VolumeX size={iconSizes[size]} className="animate-pulse text-amber-600" />
+        <VolumeX size={iconSizes[size]} className="animate-pulse text-amber-400" />
       ) : (
-        <Volume2 size={iconSizes[size]} className="text-teal-700 dark:text-teal-300" />
+        <Volume2 size={iconSizes[size]} className="text-[#c084fc]" />
       )}
       {label && <span>{label}</span>}
     </button>

@@ -94,19 +94,19 @@ const PathBoard: React.FC<{
   const nextExpectedLabel = nodes[currentOrderIndex]?.label || 'Done';
 
   return (
-    <div className="w-full max-w-2xl space-y-4">
+    <div className="w-full max-w-2xl space-y-4 text-white">
       {/* Target prompt */}
-      <div className="flex justify-between items-center bg-teal-50 p-3.5 rounded-2xl border border-teal-200">
-        <span className="text-sm font-semibold text-slate-700">
-          Next target to tap: <strong className="text-teal-700 text-lg ml-1 font-mono">[{nextExpectedLabel}]</strong>
+      <div className="flex justify-between items-center glass-card-dark p-3.5 rounded-2xl border border-white/12">
+        <span className="text-sm font-semibold text-sky-200/90">
+          Next target to tap: <strong className="text-[#c084fc] text-lg ml-1 font-mono">[{nextExpectedLabel}]</strong>
         </span>
-        <span className="text-sm text-slate-500 font-semibold">
-          Progress: <strong>{currentOrderIndex} / {nodeCount}</strong>
+        <span className="text-sm text-sky-200/70 font-semibold">
+          Progress: <strong className="text-white">{currentOrderIndex} / {nodeCount}</strong>
         </span>
       </div>
 
       {/* Play Canvas Container */}
-      <div className="relative w-full h-80 sm:h-96 rounded-2xl bg-sky-50/70 border-2 border-dashed border-sky-200 overflow-hidden shadow-inner">
+      <div className="relative w-full h-80 sm:h-96 rounded-2xl bg-purple-950/20 border-2 border-dashed border-purple-400/30 overflow-hidden shadow-inner backdrop-blur-md">
         {nodes.map(node => {
           const isCompleted = node.order < currentOrderIndex;
           const isNext = node.order === currentOrderIndex;
@@ -118,10 +118,10 @@ const PathBoard: React.FC<{
               style={{ left: `${node.x}%`, top: `${node.y}%` }}
               className={`absolute -translate-x-1/2 -translate-y-1/2 w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center font-extrabold text-lg sm:text-xl transition-all cursor-pointer shadow-md border-2 ${
                 isCompleted
-                  ? 'bg-emerald-500 border-emerald-600 text-white opacity-80 cursor-default scale-90'
+                  ? 'bg-purple-900/60 border-purple-400 text-purple-200 opacity-60 cursor-default scale-90'
                   : isNext
-                  ? 'bg-teal-700 border-teal-800 text-white animate-bounce shadow-teal-700/50 scale-110'
-                  : 'bg-white border-sky-200 text-slate-900 hover:border-teal-500 hover:scale-105'
+                  ? 'bg-gradient-to-tr from-[#a855f7] to-[#8b5cf6] border-purple-300 text-white animate-pulse shadow-[0_0_20px_rgba(168,85,247,0.7)] scale-110'
+                  : 'bg-white/10 border-white/20 text-white hover:border-purple-400 hover:bg-white/20 hover:scale-105 backdrop-blur-md'
               }`}
             >
               {node.label}
