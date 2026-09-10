@@ -7,6 +7,7 @@ import {
   AshaPatientRecord,
   SyncQueueItem,
   AppSettings,
+  PatientProfile,
   GameId
 } from '../types';
 
@@ -20,7 +21,89 @@ const STORAGE_KEYS = {
   ASHA_PATIENTS: 'smritincare_asha_patients',
   SYNC_QUEUE: 'smritincare_sync_queue',
   WATER_INTAKE: 'smritincare_water_intake',
+  PATIENT_PROFILES: 'smritincare_patient_profiles',
+  ACTIVE_PATIENT_ID: 'smritincare_active_patient_id',
 };
+
+// Seed Profiles for multi-patient switching
+export const initialPatientProfiles: PatientProfile[] = [
+  {
+    id: 'pat-ananya-20',
+    name: 'Ananya Jain',
+    nameAs: 'অনন্যা জৈন',
+    nameHi: 'अनन्या जैन',
+    age: 20,
+    gender: 'F',
+    location: 'Titabor, Jorhat',
+    locationAs: 'তিতাবৰ, যোৰহাট',
+    locationHi: 'तिताबोर, जोरहाट',
+    avatarInitials: 'AJ',
+    avatarColor: 'from-purple-600 to-indigo-500',
+    condition: 'Cognitive Wellness & Memory Training',
+    conditionAs: 'মগজুৰ স্বাস্থ্য আৰু স্মৃতি প্ৰশিক্ষণ',
+    conditionHi: 'संज्ञानात्मक स्वास्थ्य एवं स्मृति प्रशिक्षण',
+    adherenceRate: 98,
+    emergencyContactName: 'Rajesh Jain (Guardian)',
+    emergencyContactPhone: '+91 94350 77889',
+  },
+  {
+    id: 'pat-bipin-72',
+    name: 'Bipin Gogoi',
+    nameAs: 'বিপিন গগৈ',
+    nameHi: 'बिपिन गोगोई',
+    age: 72,
+    gender: 'M',
+    location: 'Titabor Borchapori',
+    locationAs: 'তিতাবৰ বৰচাপৰি',
+    locationHi: 'तिताबोर बोरचापोरी',
+    avatarInitials: 'BG',
+    avatarColor: 'from-blue-600 to-cyan-500',
+    condition: 'Hypertension & Mild Cognitive Care',
+    conditionAs: 'উচ্চ ৰক্তচাপ আৰু মৃদু স্মৃতি সংৰক্ষণ',
+    conditionHi: 'उच्च रक्तचाप एवं प्रारंभिक स्मृति देखभाल',
+    adherenceRate: 92,
+    emergencyContactName: 'Priyanka Gogoi (Daughter)',
+    emergencyContactPhone: '+91 98640 67890',
+  },
+  {
+    id: 'pat-pratima-68',
+    name: 'Pratima Barua',
+    nameAs: 'প্ৰতিমা বৰুৱা',
+    nameHi: 'प्रतिमा बरुआ',
+    age: 68,
+    gender: 'F',
+    location: 'Dulia Gaon, Titabor',
+    locationAs: 'দুলীয়া গাঁও, তিতাবৰ',
+    locationHi: 'दुलिया गांव, तिताबोर',
+    avatarInitials: 'PB',
+    avatarColor: 'from-emerald-600 to-teal-500',
+    condition: 'Type 2 Diabetes & Routine Support',
+    conditionAs: 'মধুমেহ আৰু ৰুটিন সংৰক্ষণ',
+    conditionHi: 'मधुमेह एवं दैनिक दिनचर्या सहायता',
+    adherenceRate: 74,
+    emergencyContactName: 'Manoj Barua (Son)',
+    emergencyContactPhone: '+91 94351 11223',
+  },
+  {
+    id: 'pat-hemanta-77',
+    name: 'Hemanta Sarma',
+    nameAs: 'হেমন্ত শৰ্মা',
+    nameHi: 'हेमंत शर्मा',
+    age: 77,
+    gender: 'M',
+    location: 'Chinnamara, Jorhat',
+    locationAs: 'চিনামৰা, যোৰহাট',
+    locationHi: 'चिनामरा, जोरहाट',
+    avatarInitials: 'HS',
+    avatarColor: 'from-amber-600 to-orange-500',
+    condition: 'Active Neuro-Care & Clinic Follow-up',
+    conditionAs: 'নিউৰো পৰীক্ষা আৰু ক্লিনিক তত্বাৱধান',
+    conditionHi: 'न्यूरो देखभाल एवं क्लिनिक फॉलो-अप',
+    adherenceRate: 61,
+    emergencyContactName: 'Anita Sarma (Wife)',
+    emergencyContactPhone: '+91 98642 99887',
+  }
+];
 
 // Initial Seed Data tailored for North East India (Assam context)
 export const initialSettings: AppSettings = {
@@ -32,6 +115,7 @@ export const initialSettings: AppSettings = {
   voiceAssistanceEnabled: true,
   apiKey: '',
   isSimulatedOffline: false,
+  activePatientId: 'pat-ananya-20',
 };
 
 export const initialReminders: Reminder[] = [
