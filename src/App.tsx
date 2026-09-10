@@ -32,7 +32,7 @@ export const App: React.FC = () => {
   const lang = settings.language;
 
   const [activeTab, setActiveTab] = useState<PatientTab>('dashboard');
-  const [showLanding, setShowLanding] = useState<boolean>(true); // Default to Landing Showcase matching Image #10
+  const [showLanding, setShowLanding] = useState<boolean>(true); // Default to Landing Showcase
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState<boolean>(false);
 
   // Tab definitions for Patient Mode
@@ -88,12 +88,12 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0b1c30] text-white flex font-sans transition-colors duration-200 antialiased selection:bg-[#c5f82a] selection:text-slate-950 overflow-x-hidden">
-      {/* Ambient Luminous Frosted Glow Orbs matching Image #12 */}
-      <div className="fixed -top-40 -left-40 w-[28rem] h-[28rem] bg-cyan-400/20 rounded-full blur-[130px] pointer-events-none z-0" />
-      <div className="fixed top-1/4 -right-40 w-[32rem] h-[32rem] bg-[#c5f82a]/15 rounded-full blur-[150px] pointer-events-none z-0" />
-      <div className="fixed bottom-10 left-1/4 w-[30rem] h-[30rem] bg-sky-500/18 rounded-full blur-[140px] pointer-events-none z-0" />
-      <div className="fixed -bottom-20 -right-20 w-[24rem] h-[24rem] bg-emerald-400/15 rounded-full blur-[120px] pointer-events-none z-0" />
+    <div className="relative min-h-screen bg-[#0c1222] text-white flex font-sans transition-colors duration-200 antialiased selection:bg-[#a855f7] selection:text-white overflow-x-hidden">
+      {/* Ambient Luminous Frosted Glow Orbs in Purple & Deep Blue Theme */}
+      <div className="fixed -top-40 -left-40 w-[28rem] h-[28rem] bg-purple-600/20 rounded-full blur-[130px] pointer-events-none z-0" />
+      <div className="fixed top-1/4 -right-40 w-[32rem] h-[32rem] bg-indigo-600/15 rounded-full blur-[150px] pointer-events-none z-0" />
+      <div className="fixed bottom-10 left-1/4 w-[30rem] h-[30rem] bg-purple-500/15 rounded-full blur-[140px] pointer-events-none z-0" />
+      <div className="fixed -bottom-20 -right-20 w-[24rem] h-[24rem] bg-blue-600/15 rounded-full blur-[120px] pointer-events-none z-0" />
 
       {/* Left Sidebar Navigation */}
       <Sidebar
@@ -113,19 +113,19 @@ export const App: React.FC = () => {
         {/* Top Offline Notification Banner */}
         <OfflineBanner />
 
-        {/* Modern Top Header matching Image #10 */}
+        {/* Modern Top Header */}
         <TopHeader
           onToggleMobileSidebar={() => setIsMobileSidebarOpen(prev => !prev)}
         />
 
         {/* Landing / Architecture Overview Banner */}
         {showLanding ? (
-          <div className="bg-[#c5f82a]/15 border-b border-[#c5f82a]/30 py-2.5 px-4 text-center backdrop-blur-md flex items-center justify-center gap-2">
+          <div className="bg-purple-500/15 border-b border-purple-400/30 py-2.5 px-4 text-center backdrop-blur-md flex items-center justify-center gap-2">
             <button
               onClick={() => setShowLanding(false)}
-              className="inline-flex items-center gap-2 text-xs font-black text-[#c5f82a] hover:text-white cursor-pointer transition-colors"
+              className="inline-flex items-center gap-2 text-xs font-black text-[#c084fc] hover:text-white cursor-pointer transition-colors"
             >
-              <Compass size={14} className="text-[#c5f82a]" />
+              <Compass size={14} className="text-[#c084fc]" />
               <span>
                 {lang === 'as'
                   ? 'প্ৰত্যক্ষ প’ৰ্টেললৈ উভতি যাওক (Return to Active Role Portal)'
@@ -138,7 +138,7 @@ export const App: React.FC = () => {
         ) : (
           /* Horizontal quick-pill tab selector for Patient role on desktop & tablet */
           currentRole === 'patient' && (
-            <div className="bg-[#14263d]/80 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-2.5 z-10 sticky top-[61px]">
+            <div className="bg-[#0f172a]/80 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-2.5 z-10 sticky top-[61px]">
               <div className="max-w-7xl mx-auto flex items-center gap-2 overflow-x-auto no-scrollbar">
                 {patientTabs.map(tab => {
                   const isActive = activeTab === tab.id;
@@ -148,7 +148,7 @@ export const App: React.FC = () => {
                       onClick={() => setActiveTab(tab.id)}
                       className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                         isActive
-                          ? 'bg-[#c5f82a] text-slate-950 font-black shadow-md shadow-[#c5f82a]/25'
+                          ? 'bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] text-white font-black shadow-md shadow-purple-600/30 border border-purple-400/30'
                           : 'text-sky-200/80 hover:text-white hover:bg-white/10'
                       }`}
                     >
@@ -205,10 +205,10 @@ export const App: React.FC = () => {
         </main>
 
         {/* Footer */}
-        <footer className="bg-[#101e30]/90 backdrop-blur-xl border-t border-white/10 mt-12 py-8 px-4 sm:px-8 text-white">
+        <footer className="bg-[#0c1222]/90 backdrop-blur-xl border-t border-white/10 mt-12 py-8 px-4 sm:px-8 text-white">
           <div className="max-w-7xl mx-auto text-center space-y-2">
             <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-bold text-sky-200">
-              <span className="text-[#c5f82a] font-extrabold">SmritiCare (স্মৃতি কেয়াৰ / स्मृति केयर)</span>
+              <span className="text-[#c084fc] font-extrabold">SmritiCare (স্মৃতি কেয়াৰ / स्मृति केयर)</span>
               <span>•</span>
               <span>Smart India Hackathon SIH 2026</span>
               <span>•</span>
@@ -227,7 +227,7 @@ export const App: React.FC = () => {
         <button
           onClick={() => setA11yOpen(true)}
           title="Display & Font Accessibility"
-          className="w-12 h-12 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/25 backdrop-blur-xl shadow-xl flex items-center justify-center text-white hover:text-[#c5f82a] cursor-pointer transition-all active:scale-95"
+          className="w-12 h-12 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/25 backdrop-blur-xl shadow-xl flex items-center justify-center text-white hover:text-[#c084fc] cursor-pointer transition-all active:scale-95"
         >
           <SlidersHorizontal size={20} />
         </button>

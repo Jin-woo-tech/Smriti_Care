@@ -88,13 +88,13 @@ export const GameShell: React.FC<GameShellProps> = ({
     saveGameScore(record);
     setLatestScore(record as GameScoreRecord);
 
-    // Fire celebration confetti
+    // Fire celebration confetti with Purple/Cyan palette
     try {
       confetti({
-        particleCount: 70,
-        spread: 60,
+        particleCount: 75,
+        spread: 65,
         origin: { y: 0.6 },
-        colors: ['#0f766e', '#d97706', '#10b981', '#3b82f6'],
+        colors: ['#a855f7', '#38bdf8', '#c084fc', '#818cf8'],
       });
     } catch {
       // Ignore if unavailable
@@ -102,12 +102,12 @@ export const GameShell: React.FC<GameShellProps> = ({
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      {/* Top Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-sky-200">
+    <div className="max-w-4xl mx-auto space-y-6 text-white animate-in fade-in">
+      {/* Top Navigation & Status Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/10">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-900 border border-sky-200 font-bold text-sm cursor-pointer transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/15 font-bold text-sm cursor-pointer transition-all active:scale-95 shadow-xs backdrop-blur-md"
         >
           <ArrowLeft size={18} />
           <span>{getTranslation('actionBack', lang)}</span>
@@ -115,25 +115,25 @@ export const GameShell: React.FC<GameShellProps> = ({
 
         <div className="flex items-center gap-3">
           {/* Adaptive Tier Badge */}
-          <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-teal-100 text-teal-900 border border-teal-300">
+          <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-purple-500/20 text-purple-200 border border-purple-400/40 shadow-xs">
             {lang === 'as' ? tierConfig.tierLabelAs : tierConfig.tierLabel}
           </span>
 
           {/* Active Timer */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-50 border border-sky-200 text-slate-800 font-mono text-sm font-bold">
-            <Timer size={16} className="text-teal-700" />
+          <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-white/10 border border-white/15 text-white font-mono text-sm font-bold backdrop-blur-md">
+            <Timer size={16} className="text-[#c084fc]" />
             <span>{secondsElapsed}s</span>
           </div>
         </div>
       </div>
 
       {/* Header Info */}
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-sky-100 shadow-sm shadow-sky-900/5">
+      <div className="glass-card-dark p-6 sm:p-8 rounded-[2rem] border border-white/12 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+          <h1 className="text-2xl sm:text-3xl font-black text-white">
             {lang === 'as' ? titleAs : title}
           </h1>
-          <p className="text-sm text-slate-600 mt-1 max-w-2xl">
+          <p className="text-sm text-sky-200/80 mt-1 max-w-2xl font-medium leading-relaxed">
             {lang === 'as' ? instructionsAs : instructions}
           </p>
         </div>
@@ -146,29 +146,33 @@ export const GameShell: React.FC<GameShellProps> = ({
           }
           size="md"
           label={getTranslation('actionListen', lang)}
+          className="bg-purple-500/20 hover:bg-purple-500/30 text-white border border-purple-400/30"
         />
       </div>
 
       {/* Game Content Box */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-sky-100 shadow-sm shadow-sky-900/5 min-h-[420px] flex flex-col justify-center items-center">
+      <div className="glass-card-dark rounded-[2.5rem] p-6 sm:p-8 border border-white/12 min-h-[440px] flex flex-col justify-center items-center relative overflow-hidden">
+        {/* Background glow orb */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+
         {!isGameActive && !isFinished && (
-          <div className="text-center max-w-md space-y-6 py-8">
-            <div className="w-20 h-20 mx-auto rounded-3xl bg-teal-100 flex items-center justify-center text-teal-700 shadow-inner">
+          <div className="text-center max-w-md space-y-6 py-8 relative z-10">
+            <div className="w-20 h-20 mx-auto rounded-3xl bg-purple-500/20 text-[#c084fc] border border-purple-400/40 flex items-center justify-center shadow-lg shadow-purple-600/25">
               <Sparkles size={40} />
             </div>
 
             <div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-2">
+              <h3 className="text-2xl font-black text-white mb-2">
                 {lang === 'as' ? 'খেলিবলৈ প্ৰস্তুত নে?' : 'Ready to begin?'}
               </h3>
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-sky-200/80 font-medium leading-relaxed">
                 {lang === 'as' ? tierConfig.feedbackMessageAs : tierConfig.feedbackMessage}
               </p>
             </div>
 
             <button
               onClick={handleStartGame}
-              className="w-full py-4 rounded-2xl bg-teal-700 hover:bg-teal-800 text-white font-extrabold text-lg shadow-lg shadow-teal-700/20 cursor-pointer transition-all active:scale-95"
+              className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] hover:from-[#9333ea] hover:to-[#7c3aed] text-white font-extrabold text-lg shadow-xl shadow-purple-600/35 cursor-pointer transition-all active:scale-95 border border-purple-400/30"
             >
               {getTranslation('actionPlay', lang)}
             </button>
@@ -177,16 +181,16 @@ export const GameShell: React.FC<GameShellProps> = ({
 
         {/* Finished Result Summary */}
         {isFinished && latestScore && (
-          <div className="text-center max-w-md space-y-6 py-6 animate-in fade-in zoom-in-95">
-            <div className="w-20 h-20 mx-auto rounded-3xl bg-emerald-100 flex items-center justify-center text-emerald-700 shadow-lg">
+          <div className="text-center max-w-md space-y-6 py-6 animate-in fade-in zoom-in-95 relative z-10">
+            <div className="w-20 h-20 mx-auto rounded-3xl bg-purple-500/20 text-[#c084fc] border border-purple-400/40 flex items-center justify-center shadow-xl shadow-purple-600/25">
               <Award size={44} />
             </div>
 
             <div>
-              <h3 className="text-2xl font-bold text-slate-900">
+              <h3 className="text-2xl font-black text-white">
                 {lang === 'as' ? 'বঢ়িয়া প্ৰদৰ্শন!' : 'Wonderful Exercise!'}
               </h3>
-              <p className="text-sm text-slate-600 mt-1">
+              <p className="text-sm text-sky-200/80 mt-1 font-medium">
                 {lang === 'as'
                   ? 'আপোনাৰ মগজুৰ সক্ৰিয়তা আৰু মনোযোগ অতি প্ৰশংসনীয়।'
                   : 'Your cognitive engagement has been recorded to your daily baseline.'}
@@ -194,22 +198,22 @@ export const GameShell: React.FC<GameShellProps> = ({
             </div>
 
             {/* Score Metrics Grid */}
-            <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-sky-50 border border-sky-200">
+            <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-white/5 border border-white/10">
               <div>
-                <p className="text-xs text-slate-500 uppercase font-bold">Score</p>
-                <p className="text-xl font-extrabold text-teal-700">
+                <p className="text-xs text-sky-200/60 uppercase font-bold tracking-wider">Score</p>
+                <p className="text-xl font-extrabold text-white">
                   {latestScore.score}/{latestScore.maxScore}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-slate-500 uppercase font-bold">Accuracy</p>
-                <p className="text-xl font-extrabold text-emerald-600">
+                <p className="text-xs text-sky-200/60 uppercase font-bold tracking-wider">Accuracy</p>
+                <p className="text-xl font-extrabold text-purple-300">
                   {latestScore.accuracy}%
                 </p>
               </div>
               <div>
-                <p className="text-xs text-slate-500 uppercase font-bold">Time</p>
-                <p className="text-xl font-extrabold text-sky-700">
+                <p className="text-xs text-sky-200/60 uppercase font-bold tracking-wider">Time</p>
+                <p className="text-xl font-extrabold text-sky-300">
                   {latestScore.durationSeconds}s
                 </p>
               </div>
@@ -218,14 +222,14 @@ export const GameShell: React.FC<GameShellProps> = ({
             <div className="flex gap-3">
               <button
                 onClick={handleStartGame}
-                className="flex-1 py-3.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold cursor-pointer transition-colors flex items-center justify-center gap-2 shadow-xs"
+                className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] hover:from-[#9333ea] hover:to-[#7c3aed] text-white font-bold cursor-pointer transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 border border-purple-400/30"
               >
                 <RotateCcw size={18} />
                 <span>{lang === 'as' ? 'পুনৰ খেলক' : 'Play Again'}</span>
               </button>
               <button
                 onClick={onBack}
-                className="px-6 py-3.5 rounded-xl bg-sky-100 hover:bg-sky-200 text-sky-950 font-bold cursor-pointer transition-colors"
+                className="px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold cursor-pointer transition-all border border-white/15"
               >
                 {getTranslation('actionBack', lang)}
               </button>

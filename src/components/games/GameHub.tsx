@@ -48,7 +48,6 @@ export const GameHub: React.FC = () => {
     domainHi?: string;
     domainAs: string;
     icon: string;
-    color: string;
   }[] = [
     {
       id: 'remember-match',
@@ -62,7 +61,6 @@ export const GameHub: React.FC = () => {
       domainHi: 'दृश्य एवं स्थानिक स्मृति',
       domainAs: 'দৃষ্টি আৰু স্থানিক স্মৃতি',
       icon: '👒',
-      color: 'border-teal-200 bg-white hover:border-teal-400',
     },
     {
       id: 'find-symbol',
@@ -76,7 +74,6 @@ export const GameHub: React.FC = () => {
       domainHi: 'ध्यान एवं दृश्य खोज',
       domainAs: 'মনোযোগ আৰু চিহ্ন অনুসন্ধান',
       icon: '🦏',
-      color: 'border-sky-200 bg-white hover:border-sky-400',
     },
     {
       id: 'follow-path',
@@ -90,7 +87,6 @@ export const GameHub: React.FC = () => {
       domainHi: 'कार्यकारी योजना एवं समन्वय',
       domainAs: 'কাৰ্য্যকৰী পৰিকল্পনা',
       icon: '🔢',
-      color: 'border-indigo-200 bg-white hover:border-indigo-400',
     },
     {
       id: 'remember-routine',
@@ -104,7 +100,6 @@ export const GameHub: React.FC = () => {
       domainHi: 'दैनिक प्रक्रियात्मक स्मरण',
       domainAs: 'দৈনন্দিন ৰুটিন স্মৃতি',
       icon: '🌅',
-      color: 'border-amber-200 bg-white hover:border-amber-400',
     },
     {
       id: 'sequence-recall',
@@ -118,7 +113,6 @@ export const GameHub: React.FC = () => {
       domainHi: 'अल्पकालिक कार्यशील स्मृति',
       domainAs: 'স্বল্পম্যাদী ক্ৰমিক স্মৃতি',
       icon: '✨',
-      color: 'border-rose-200 bg-white hover:border-rose-400',
     },
     {
       id: 'local-memory',
@@ -132,27 +126,29 @@ export const GameHub: React.FC = () => {
       domainHi: 'प्रासंगिक एवं अर्थगत स्मृति',
       domainAs: 'সাংস্কৃতিক স্মৃতি',
       icon: '🏝️',
-      color: 'border-emerald-200 bg-white hover:border-emerald-400',
     },
   ];
 
   return (
-    <div className="space-y-8 py-4">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-gradient-to-r from-teal-800 via-teal-700 to-sky-800 text-white p-6 sm:p-8 rounded-3xl shadow-xl shadow-teal-900/10">
-        <div className="space-y-2 max-w-2xl">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-teal-100 text-xs font-bold backdrop-blur-xs">
-            <Brain size={14} className="text-amber-300" />
-            <span>AI Adaptive Cognitive Training</span>
+    <div className="space-y-8 py-4 text-white">
+      {/* Header Banner */}
+      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/14 shadow-2xl relative overflow-hidden flex flex-wrap items-center justify-between gap-6">
+        <div className="absolute -top-24 -right-24 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="space-y-2 max-w-2xl relative z-10">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/15 border border-purple-400/30 text-purple-300 text-xs font-bold shadow-inner">
+            <Brain size={14} className="text-[#c084fc]" />
+            <span>AI Adaptive Cognitive Stimulation</span>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
             {lang === 'as'
               ? 'মগজুৰ ৬ টা সক্ৰিয় খেল'
               : lang === 'hi'
               ? '6 दैनिक संज्ञानात्मक देखभाल खेल'
               : '6 Daily Cognitive Care Games'}
           </h1>
-          <p className="text-sm sm:text-base text-teal-100/90 leading-relaxed">
+          <p className="text-sm sm:text-base text-sky-200/80 leading-relaxed">
             {lang === 'as'
               ? 'প্ৰতিটো খেল আপোনাৰ ব্যক্তিগত দক্ষতা আৰু আৰাম অনুসৰি স্বয়ংক্রিয়ভাৱে সহজ বা মধ্যম হৈ পৰে।'
               : lang === 'hi'
@@ -161,18 +157,20 @@ export const GameHub: React.FC = () => {
           </p>
         </div>
 
-        <VoiceNarratorButton
-          textToRead={
-            lang === 'as'
-              ? 'মগজুৰ ৬ টা সক্ৰিয় খেল। আপোনাৰ পচন্দৰ খেলটো বাছি লৈ খেলক।'
-              : lang === 'hi'
-              ? '6 दैनिक संज्ञानात्मक स्वास्थ्य खेल। शुरुआत करने के लिए नीचे दिए गए किसी भी खेल पर टैप करें।'
-              : 'Six daily cognitive care games. Select any game below to begin your exercise.'
-          }
-          size="lg"
-          label={getTranslation('actionListen', lang)}
-          className="bg-white text-teal-950 border-0 shadow-md font-bold"
-        />
+        <div className="relative z-10">
+          <VoiceNarratorButton
+            textToRead={
+              lang === 'as'
+                ? 'মগজুৰ ৬ টা সক্ৰিয় খেল। আপোনাৰ পচন্দৰ খেলটো বাছি লৈ খেলক।'
+                : lang === 'hi'
+                ? '6 दैनिक संज्ञानात्मक स्वास्थ्य खेल। शुरुआत करने के लिए नीचे दिए गए किसी भी खेल पर टैप करें।'
+                : 'Six daily cognitive care games. Select any game below to begin your exercise.'
+            }
+            size="lg"
+            label={getTranslation('actionListen', lang)}
+            className="bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md shadow-lg font-bold"
+          />
+        </div>
       </div>
 
       {/* Grid of Games */}
@@ -186,14 +184,14 @@ export const GameHub: React.FC = () => {
             <div
               key={game.id}
               onClick={() => setActiveGame(game.id)}
-              className={`rounded-3xl p-6 border-2 ${game.color} shadow-sm shadow-sky-900/5 hover:shadow-xl hover:scale-[1.02] transition-all cursor-pointer flex flex-col justify-between group`}
+              className="glass-card-dark p-6 rounded-3xl border border-white/12 hover:border-purple-400/50 shadow-lg hover:shadow-[0_12px_36px_rgba(0,0,0,0.4),0_0_24px_rgba(168,85,247,0.2)] transition-all cursor-pointer flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-4xl p-2.5 bg-sky-50 rounded-2xl shadow-xs border border-sky-100 group-hover:scale-110 transition-transform">
+                  <span className="text-4xl p-3 bg-white/10 rounded-2xl shadow-inner border border-white/15 group-hover:scale-110 transition-transform">
                     {game.icon}
                   </span>
-                  <span className="text-[11px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-sky-100 text-sky-900 border border-sky-200">
+                  <span className="text-[11px] font-extrabold uppercase px-3 py-1 rounded-full bg-purple-500/20 text-purple-200 border border-purple-400/30">
                     {lang === 'as'
                       ? tier.tierLabelAs
                       : lang === 'hi'
@@ -202,29 +200,29 @@ export const GameHub: React.FC = () => {
                   </span>
                 </div>
 
-                <p className="text-xs font-bold text-teal-700 uppercase tracking-wider mb-1">
+                <p className="text-xs font-bold text-[#c084fc] uppercase tracking-wider mb-1">
                   {lang === 'as' ? game.domainAs : lang === 'hi' ? (game.domainHi || game.domain) : game.domain}
                 </p>
-                <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-teal-700 transition-colors">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#c084fc] transition-colors">
                   {lang === 'as' ? game.titleAs : lang === 'hi' ? (game.titleHi || game.title) : game.title}
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-sky-200/70 leading-relaxed font-medium">
                   {lang === 'as' ? game.descAs : lang === 'hi' ? (game.descHi || game.desc) : game.desc}
                 </p>
               </div>
 
-              <div className="pt-6 mt-4 border-t border-sky-100 flex items-center justify-between">
+              <div className="pt-5 mt-4 border-t border-white/10 flex items-center justify-between">
                 {bestScore !== null ? (
-                  <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
-                    <Award size={14} /> Best: {bestScore}/100
+                  <span className="text-xs font-bold text-purple-300 flex items-center gap-1.5">
+                    <Award size={15} /> Best: {bestScore}/100
                   </span>
                 ) : (
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-sky-200/50 font-medium">
                     {lang === 'hi' ? 'खेलने के लिए तैयार' : lang === 'as' ? 'খেলিবলৈ সাজু' : 'Ready to play'}
                   </span>
                 )}
 
-                <button className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs shadow-sm transition-colors cursor-pointer">
+                <button className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] hover:from-[#9333ea] hover:to-[#7c3aed] text-white font-bold text-xs shadow-md shadow-purple-600/30 transition-all border border-purple-400/30 cursor-pointer">
                   <span>{getTranslation('actionPlay', lang)}</span>
                   <Play size={12} className="fill-white" />
                 </button>

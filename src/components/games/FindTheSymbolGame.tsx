@@ -108,26 +108,26 @@ const SymbolBoard: React.FC<{
   };
 
   return (
-    <div className="w-full max-w-2xl space-y-6">
+    <div className="w-full max-w-2xl space-y-6 text-white">
       {/* Target Banner */}
-      <div className="p-4 rounded-2xl bg-teal-50 border-2 border-teal-500 flex items-center justify-between">
+      <div className="glass-card-dark p-4 rounded-2xl border border-purple-400/40 bg-purple-950/30 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-4xl p-2 bg-white rounded-xl shadow-xs border border-teal-200">
+          <span className="text-4xl p-2 bg-purple-500/20 rounded-xl shadow-xs border border-purple-400/30">
             {targetSymbol.icon}
           </span>
           <div>
-            <p className="text-xs font-bold text-teal-700 uppercase tracking-wide">
+            <p className="text-xs font-bold text-[#c084fc] uppercase tracking-wide">
               Find This Symbol
             </p>
-            <h3 className="text-xl font-black text-teal-950">
+            <h3 className="text-xl font-black text-white">
               {targetSymbol.name} ({targetSymbol.nameAs})
             </h3>
           </div>
         </div>
 
         <div className="text-right">
-          <span className="text-xs text-slate-500 block font-bold">Remaining</span>
-          <span className="text-2xl font-black text-teal-700">
+          <span className="text-xs text-sky-200/70 block font-bold">Remaining</span>
+          <span className="text-2xl font-black text-purple-300">
             {targetCount - foundIds.length} left
           </span>
         </div>
@@ -141,10 +141,10 @@ const SymbolBoard: React.FC<{
             <button
               key={item.id}
               onClick={() => handleItemClick(item)}
-              className={`h-20 sm:h-24 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl transition-all cursor-pointer border-2 shadow-xs ${
+              className={`h-20 sm:h-24 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl transition-all cursor-pointer border shadow-md ${
                 isFound
-                  ? 'bg-emerald-100 border-emerald-500 scale-95 opacity-50 cursor-default'
-                  : 'bg-white border-sky-200 hover:border-teal-500 hover:scale-105 active:scale-95 text-slate-800'
+                  ? 'bg-purple-950/60 border-purple-400 text-white scale-95 opacity-50 cursor-default shadow-[0_0_15px_rgba(168,85,247,0.3)]'
+                  : 'bg-white/10 border-white/15 hover:border-purple-400 hover:bg-white/15 hover:scale-105 active:scale-95 text-white backdrop-blur-md'
               }`}
             >
               {item.icon}

@@ -114,10 +114,10 @@ const MatchBoard: React.FC<{
       : 'grid-cols-4 sm:grid-cols-6';
 
   return (
-    <div className="w-full max-w-2xl space-y-6">
-      <div className="flex justify-between items-center px-2 text-sm font-semibold text-slate-600">
-        <span>Moves Made: <strong className="text-teal-700">{moves}</strong></span>
-        <span>Pairs Matched: <strong className="text-emerald-600">{matchedSymbols.length} / {pairCount}</strong></span>
+    <div className="w-full max-w-2xl space-y-6 text-white">
+      <div className="flex justify-between items-center px-2 text-sm font-bold text-sky-200/80">
+        <span>Moves Made: <strong className="text-[#c084fc] font-mono">{moves}</strong></span>
+        <span>Pairs Matched: <strong className="text-purple-300 font-mono">{matchedSymbols.length} / {pairCount}</strong></span>
       </div>
 
       <div className={`grid ${gridColsClass} gap-3 sm:gap-4`}>
@@ -129,12 +129,12 @@ const MatchBoard: React.FC<{
             <button
               key={card.id}
               onClick={() => handleCardClick(idx)}
-              className={`h-24 sm:h-28 rounded-2xl flex flex-col items-center justify-center text-center p-2 transition-all duration-300 transform cursor-pointer border-2 shadow-xs ${
+              className={`h-24 sm:h-28 rounded-2xl flex flex-col items-center justify-center text-center p-2 transition-all duration-300 transform cursor-pointer border shadow-md ${
                 isMatched
-                  ? 'bg-emerald-50 border-emerald-500 text-emerald-950 scale-95 opacity-90'
+                  ? 'bg-purple-950/60 border-purple-400 text-white scale-95 shadow-[0_0_20px_rgba(168,85,247,0.35)]'
                   : isFlipped
-                  ? 'bg-teal-50 border-teal-600 text-teal-950 scale-100 shadow-md'
-                  : 'bg-sky-50 border-sky-200 text-sky-800 hover:border-teal-500 hover:bg-sky-100'
+                  ? 'bg-purple-500/25 border-purple-400/80 text-white scale-100 shadow-[0_0_15px_rgba(168,85,247,0.25)]'
+                  : 'bg-white/10 border-white/15 text-purple-300 hover:border-purple-400/60 hover:bg-white/15 hover:scale-102 backdrop-blur-md'
               }`}
             >
               {isFlipped ? (
@@ -143,7 +143,7 @@ const MatchBoard: React.FC<{
                   <span className="text-[10px] sm:text-xs font-bold leading-tight line-clamp-1">{card.nameAs}</span>
                 </>
               ) : (
-                <span className="text-2xl text-sky-400 font-black">?</span>
+                <span className="text-2xl text-purple-300 font-black">?</span>
               )}
             </button>
           );
