@@ -16,6 +16,7 @@ import { TopHeader } from './components/common/TopHeader';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { EmergencyModal } from './components/common/EmergencyModal';
 import { A11yModal } from './components/common/A11yModal';
+import { ProfileManagerModal } from './components/common/ProfileManagerModal';
 import { LandingPage } from './components/landing/LandingPage';
 import { PatientDashboard } from './components/dashboards/PatientDashboard';
 import { CaregiverDashboard } from './components/dashboards/CaregiverDashboard';
@@ -244,6 +245,7 @@ export const App: React.FC = () => {
       {/* Modals */}
       <EmergencyModal />
       <A11yModal />
+      <ProfileManagerModal />
     </div>
   );
 };
