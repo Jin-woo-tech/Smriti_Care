@@ -50,16 +50,16 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
 
   return (
     <div className="space-y-6 sm:space-y-8 text-white animate-in fade-in duration-300">
-      {/* Hero Banner with Frosted Glass Panels & Atmospheric Glow */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-[#122e4d]/95 via-[#1a4470]/90 to-[#0e2742]/95 p-6 sm:p-9 rounded-[2.5rem] border border-white/20 shadow-2xl backdrop-blur-2xl space-y-6">
+      {/* Hero Banner with Frosted Glass Panels & Purple Ambient Glow */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-[#161233]/95 via-[#1a1c48]/90 to-[#0e172e]/95 p-6 sm:p-9 rounded-[2.5rem] border border-white/20 shadow-2xl backdrop-blur-2xl space-y-6">
         {/* Background glow accents */}
-        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-72 h-72 rounded-full bg-cyan-400/20 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/3 -mb-16 w-64 h-64 rounded-full bg-[#c5f82a]/15 blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-72 h-72 rounded-full bg-purple-500/25 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 -mb-16 w-64 h-64 rounded-full bg-indigo-500/20 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 text-[#c5f82a] border border-white/15 text-xs font-bold backdrop-blur-md">
-              <Sun size={14} className="text-[#c5f82a]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/20 text-purple-200 border border-purple-400/30 text-xs font-bold backdrop-blur-md shadow-xs">
+              <Sun size={14} className="text-[#c084fc]" />
               <span>
                 {lang === 'as'
                   ? 'তিতাবৰ, যোৰহাট • ২৬°C ফৰকাল'
@@ -75,7 +75,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
                 ? 'नमस्ते, बिपिन गोगोई जी!'
                 : 'Namaskar, Bipin Gogoi!'}
             </h1>
-            <p className="text-xs sm:text-sm text-cyan-100/80 font-medium max-w-xl">
+            <p className="text-xs sm:text-sm text-sky-100/80 font-medium max-w-xl">
               {lang === 'as'
                 ? 'আজিৰ দিনটো আপোনাৰ বাবে শুভ হওক। আপোনাৰ দৈনিক ঔষধ আৰু স্মৃতি খেল সাজু আছে।'
                 : lang === 'hi'
@@ -93,7 +93,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
                 : 'Namaskar Bipin Gogoi. Welcome to your SmritiCare daily board. Tap any tile below to check medicines, play memory games, or talk with Sathi.'
             }
             size="lg"
-            className="bg-[#c5f82a] text-slate-950 hover:bg-[#d6ff40] border-0 shadow-lg font-black"
+            className="bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] hover:from-[#9333ea] hover:to-[#7c3aed] text-white border-0 shadow-lg shadow-purple-600/35 font-black"
           />
         </div>
 
@@ -102,11 +102,11 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
           {/* Metric 1: Medicines */}
           <div
             onClick={() => onNavigateTab('routine')}
-            className="bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-4 hover:bg-white/20 hover:border-[#c5f82a]/50 transition-all cursor-pointer group"
+            className="bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-4 hover:bg-white/20 hover:border-purple-400/50 transition-all cursor-pointer group"
           >
-            <div className="flex items-center justify-between text-cyan-200 text-xs font-bold mb-1">
+            <div className="flex items-center justify-between text-purple-200 text-xs font-bold mb-1">
               <span className="flex items-center gap-1.5">
-                <Pill size={15} className="text-[#c5f82a]" />
+                <Pill size={15} className="text-[#c084fc]" />
                 <span>{lang === 'as' ? 'ঔষধ' : lang === 'hi' ? 'दवाइयां' : 'Medicines'}</span>
               </span>
               <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -114,7 +114,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
             <div className="text-xl sm:text-2xl font-black text-white">
               {completedTodayCount}/{reminders.length}
             </div>
-            <p className="text-[11px] text-[#c5f82a] font-semibold mt-0.5">
+            <p className="text-[11px] text-purple-300 font-semibold mt-0.5">
               {pillPercent}% {lang === 'as' ? 'সম্পূৰ্ণ' : lang === 'hi' ? 'पूर्ण' : 'Completed'}
             </p>
           </div>
@@ -124,7 +124,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
             onClick={() => onNavigateTab('routine')}
             className="bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-4 hover:bg-white/20 hover:border-cyan-300/50 transition-all cursor-pointer group"
           >
-            <div className="flex items-center justify-between text-cyan-200 text-xs font-bold mb-1">
+            <div className="flex items-center justify-between text-sky-200 text-xs font-bold mb-1">
               <span className="flex items-center gap-1.5">
                 <Droplets size={15} className="text-cyan-300" />
                 <span>{lang === 'as' ? 'পানী' : lang === 'hi' ? 'जल सेवन' : 'Hydration'}</span>
@@ -142,19 +142,19 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
           {/* Metric 3: Walk */}
           <div
             onClick={() => onNavigateTab('routine')}
-            className="bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-4 hover:bg-white/20 hover:border-emerald-300/50 transition-all cursor-pointer group"
+            className="bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-4 hover:bg-white/20 hover:border-purple-300/50 transition-all cursor-pointer group"
           >
-            <div className="flex items-center justify-between text-cyan-200 text-xs font-bold mb-1">
+            <div className="flex items-center justify-between text-purple-200 text-xs font-bold mb-1">
               <span className="flex items-center gap-1.5">
-                <Footprints size={15} className="text-emerald-300" />
+                <Footprints size={15} className="text-purple-300" />
                 <span>{lang === 'as' ? 'খোজ কঢ়া' : lang === 'hi' ? 'सैर' : 'Daily Walk'}</span>
               </span>
               <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </div>
-            <div className="text-xl sm:text-2xl font-black text-emerald-300">
+            <div className="text-xl sm:text-2xl font-black text-purple-300">
               20 Mins
             </div>
-            <p className="text-[11px] text-emerald-300 font-semibold mt-0.5">
+            <p className="text-[11px] text-purple-200 font-semibold mt-0.5">
               {lang === 'as' ? 'সম্পূৰ্ণ হ’ল' : lang === 'hi' ? 'सफलतापूर्वक पूर्ण' : 'Done today'}
             </p>
           </div>
@@ -162,19 +162,19 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
           {/* Metric 4: Cognitive Health */}
           <div
             onClick={() => onNavigateTab('games')}
-            className="bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-4 hover:bg-white/20 hover:border-amber-300/50 transition-all cursor-pointer group"
+            className="bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-4 hover:bg-white/20 hover:border-indigo-300/50 transition-all cursor-pointer group"
           >
-            <div className="flex items-center justify-between text-cyan-200 text-xs font-bold mb-1">
+            <div className="flex items-center justify-between text-indigo-200 text-xs font-bold mb-1">
               <span className="flex items-center gap-1.5">
-                <Brain size={15} className="text-amber-300" />
+                <Brain size={15} className="text-indigo-300" />
                 <span>{lang === 'as' ? 'মগজুৰ সূচক' : lang === 'hi' ? 'स्मृति सूचकांक' : 'Brain Index'}</span>
               </span>
               <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </div>
-            <div className="text-xl sm:text-2xl font-black text-amber-300">
+            <div className="text-xl sm:text-2xl font-black text-indigo-200">
               84%
             </div>
-            <p className="text-[11px] text-amber-300 font-semibold mt-0.5">
+            <p className="text-[11px] text-indigo-300 font-semibold mt-0.5">
               {lang === 'as' ? 'স্থিৰ ও সুস্থ' : lang === 'hi' ? 'स्थिर व सकारात्मक' : 'Stable vs Baseline'}
             </p>
           </div>
@@ -185,35 +185,35 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
       {nextReminder && (
         <div
           onClick={() => onNavigateTab('routine')}
-          className="p-5 sm:p-6 rounded-[2rem] bg-gradient-to-r from-white/15 via-white/10 to-white/5 backdrop-blur-2xl border border-white/20 shadow-xl hover:border-[#c5f82a]/50 transition-all cursor-pointer flex flex-wrap items-center justify-between gap-4 group"
+          className="p-5 sm:p-6 rounded-[2rem] bg-gradient-to-r from-purple-950/40 via-[#101b38]/80 to-purple-950/40 backdrop-blur-2xl border border-purple-500/30 shadow-xl hover:border-purple-400/60 transition-all cursor-pointer flex flex-wrap items-center justify-between gap-4 group"
         >
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-[#c5f82a]/20 text-[#c5f82a] border border-[#c5f82a]/30 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-md">
+            <div className="w-14 h-14 rounded-2xl bg-purple-500/20 text-[#c084fc] border border-purple-400/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-lg shadow-purple-500/25">
               <Pill size={28} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-black uppercase tracking-wider bg-[#c5f82a] text-slate-950 px-2.5 py-0.5 rounded-full shadow-xs">
+                <span className="text-[10px] font-black uppercase tracking-wider bg-[#a855f7] text-white px-2.5 py-0.5 rounded-full shadow-xs">
                   {lang === 'as'
                     ? 'পৰৱৰ্তী নিৰ্ধাৰিত ঔষধ'
                     : lang === 'hi'
                     ? 'अगली निर्धारित दवा'
                     : 'Next Scheduled Pill'}
                 </span>
-                <span className="text-xs font-mono font-bold text-cyan-200 flex items-center gap-1">
+                <span className="text-xs font-mono font-bold text-sky-200 flex items-center gap-1">
                   <Clock size={12} /> {nextReminder.time}
                 </span>
               </div>
               <h3 className="text-lg sm:text-xl font-black text-white mt-1">
                 {getReminderTitle(nextReminder)}
               </h3>
-              <p className="text-xs font-medium text-cyan-100/70">
+              <p className="text-xs font-medium text-purple-200/80">
                 {nextReminder.dose || '1 tablet'} • {nextReminder.notes || 'Routine schedule'}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-slate-950 font-black text-xs sm:text-sm bg-[#c5f82a] px-5 py-2.5 rounded-2xl group-hover:bg-[#d6ff40] transition-colors shadow-lg">
+          <div className="flex items-center gap-2 text-white font-black text-xs sm:text-sm bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] px-5 py-2.5 rounded-2xl group-hover:from-[#9333ea] group-hover:to-[#7c3aed] transition-all shadow-lg shadow-purple-600/30 border border-purple-400/30">
             <span>
               {lang === 'as' ? 'ঔষধ তালিকা চাওক' : lang === 'hi' ? 'दवा सूची देखें' : 'View Schedule'}
             </span>
@@ -222,7 +222,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
         </div>
       )}
 
-      {/* Modern Organ & Cognitive Health Bento Cards matching Image #12 */}
+      {/* Modern Organ & Cognitive Health Bento Cards matching Dark Frosted Glass Theme */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Bento 1: Brain Health Check */}
         <div
@@ -237,18 +237,18 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
               </div>
             </div>
 
-            <span className="text-[10px] font-black uppercase tracking-wider text-cyan-300 bg-cyan-950/60 border border-cyan-800/60 px-2.5 py-0.5 rounded-full">
+            <span className="text-[10px] font-black uppercase tracking-wider text-purple-300 bg-purple-950/60 border border-purple-800/60 px-2.5 py-0.5 rounded-full">
               Cognitive Scan
             </span>
-            <h3 className="text-xl font-black text-white group-hover:text-[#c5f82a] transition-colors mt-2">
+            <h3 className="text-xl font-black text-white group-hover:text-purple-300 transition-colors mt-2">
               Brain Health Check
             </h3>
-            <p className="text-xs text-cyan-100/70 mt-1 font-medium leading-relaxed">
+            <p className="text-xs text-sky-100/70 mt-1 font-medium leading-relaxed">
               6 scientifically graded neuro-cognitive memory exercises.
             </p>
           </div>
 
-          <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#c5f82a]">
+          <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-purple-300">
             <span>6 Memory Games</span>
             <span className="text-white/60">3-Tier Adaptive</span>
           </div>
@@ -267,18 +267,18 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
               </div>
             </div>
 
-            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-300 bg-emerald-950/60 border border-emerald-800/60 px-2.5 py-0.5 rounded-full">
+            <span className="text-[10px] font-black uppercase tracking-wider text-indigo-300 bg-indigo-950/60 border border-indigo-800/60 px-2.5 py-0.5 rounded-full">
               Medication Safety
             </span>
-            <h3 className="text-xl font-black text-white group-hover:text-emerald-300 transition-colors mt-2">
+            <h3 className="text-xl font-black text-white group-hover:text-indigo-300 transition-colors mt-2">
               Medicine Packaging AI
             </h3>
-            <p className="text-xs text-cyan-100/70 mt-1 font-medium leading-relaxed">
+            <p className="text-xs text-sky-100/70 mt-1 font-medium leading-relaxed">
               Instant strip photo scan with dosage & expiry verification.
             </p>
           </div>
 
-          <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-emerald-300">
+          <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-indigo-300">
             <span>Visual Scanner</span>
             <span className="text-white/60">Audio Feedback</span>
           </div>
@@ -303,7 +303,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
             <h3 className="text-xl font-black text-white group-hover:text-sky-300 transition-colors mt-2">
               Hydration & Vitals
             </h3>
-            <p className="text-xs text-cyan-100/70 mt-1 font-medium leading-relaxed">
+            <p className="text-xs text-sky-100/70 mt-1 font-medium leading-relaxed">
               8-glass water intake tracking and walking timer logs.
             </p>
           </div>
@@ -327,18 +327,18 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
               </div>
             </div>
 
-            <span className="text-[10px] font-black uppercase tracking-wider text-[#c5f82a] bg-lime-950/60 border border-lime-800/60 px-2.5 py-0.5 rounded-full">
+            <span className="text-[10px] font-black uppercase tracking-wider text-purple-300 bg-purple-950/60 border border-purple-800/60 px-2.5 py-0.5 rounded-full">
               AI Voice Companion
             </span>
-            <h3 className="text-xl font-black text-white group-hover:text-[#c5f82a] transition-colors mt-2">
+            <h3 className="text-xl font-black text-white group-hover:text-purple-300 transition-colors mt-2">
               Smriti Sathi (AI)
             </h3>
-            <p className="text-xs text-cyan-100/70 mt-1 font-medium leading-relaxed">
+            <p className="text-xs text-sky-100/70 mt-1 font-medium leading-relaxed">
               Empathetic voice conversations in Assamese, Hindi, and English.
             </p>
           </div>
 
-          <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#c5f82a]">
+          <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-purple-300">
             <span>Voice & Audio</span>
             <span className="text-white/60">Local Memory</span>
           </div>

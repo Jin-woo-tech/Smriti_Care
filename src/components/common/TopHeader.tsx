@@ -72,7 +72,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
                   ? 'दवाइयां, दिनचर्या, खेल, लैब रिपोर्ट खोजें...'
                   : 'Search medicines, routines, memory games, lab reports...'
               }
-              className="w-full pl-11 pr-12 py-2.5 bg-white/10 border border-white/20 rounded-2xl text-xs sm:text-sm text-white placeholder-sky-200/50 focus:outline-none focus:ring-2 focus:ring-[#c5f82a] focus:border-transparent backdrop-blur-md shadow-inner transition-all"
+              className="w-full pl-11 pr-12 py-2.5 bg-white/10 border border-white/20 rounded-2xl text-xs sm:text-sm text-white placeholder-sky-200/50 focus:outline-none focus:ring-2 focus:ring-[#a855f7] focus:border-transparent backdrop-blur-md shadow-inner transition-all"
             />
             <kbd className="hidden sm:inline-flex absolute right-3.5 top-1/2 -translate-y-1/2 items-center px-2 py-0.5 text-[10px] font-mono font-bold text-sky-200 bg-white/10 rounded-lg border border-white/20">
               /
@@ -89,7 +89,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
               className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-white/10 border border-white/20 text-white text-xs font-bold hover:bg-white/20 backdrop-blur-md shadow-xs cursor-pointer transition-all"
               title="Change Language"
             >
-              <Globe size={15} className="text-[#c5f82a]" />
+              <Globe size={15} className="text-[#c084fc]" />
               <span className="hidden md:inline">{currentLangObj.label}</span>
               <span className="md:hidden uppercase">{currentLangObj.id}</span>
               <ChevronDown size={13} className="text-sky-200" />
@@ -116,17 +116,17 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
                         }}
                         className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                           isSelected
-                            ? 'bg-[#c5f82a] text-slate-950 font-black'
+                            ? 'bg-[#a855f7] text-white font-black shadow-md shadow-purple-600/40'
                             : 'text-stone-200 hover:bg-white/10'
                         }`}
                       >
                         <div className="text-left">
                           <p>{l.label}</p>
-                          <p className={`text-[10px] font-normal ${isSelected ? 'text-slate-800' : 'text-sky-300'}`}>
+                          <p className={`text-[10px] font-normal ${isSelected ? 'text-purple-100' : 'text-sky-300'}`}>
                             {l.subLabel}
                           </p>
                         </div>
-                        {isSelected && <Check size={15} className="text-slate-950" />}
+                        {isSelected && <Check size={15} className="text-white" />}
                       </button>
                     );
                   })}
@@ -147,7 +147,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           >
             <span
               className={`w-2 h-2 rounded-full ${
-                settings.isSimulatedOffline ? 'bg-amber-400 animate-pulse' : 'bg-[#c5f82a]'
+                settings.isSimulatedOffline ? 'bg-amber-400 animate-pulse' : 'bg-[#c084fc]'
               }`}
             />
             <span>{settings.isSimulatedOffline ? 'Offline' : 'Online'}</span>

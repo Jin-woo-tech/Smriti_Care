@@ -16,42 +16,42 @@ interface ColorPad {
 const PADS: ColorPad[] = [
   {
     id: 0,
-    colorName: 'Green',
+    colorName: 'Electric Purple',
     symbol: 'Tea Leaf',
     symbolAs: 'চাহ পাত',
-    bgActive: 'bg-emerald-400 scale-105 shadow-xl shadow-emerald-500/50',
-    bgInactive: 'bg-emerald-700/80 hover:bg-emerald-600',
-    borderActive: 'border-emerald-200 ring-4 ring-emerald-300',
+    bgActive: 'bg-[#a855f7] scale-105 shadow-[0_0_30px_rgba(168,85,247,0.8)]',
+    bgInactive: 'bg-purple-900/60 hover:bg-purple-800/80 border border-purple-400/30',
+    borderActive: 'border-white ring-4 ring-purple-400',
     icon: '🍃',
   },
   {
     id: 1,
-    colorName: 'Amber',
+    colorName: 'Indigo',
     symbol: 'Xorai Stand',
     symbolAs: 'শৰাই',
-    bgActive: 'bg-amber-300 scale-105 shadow-xl shadow-amber-500/50',
-    bgInactive: 'bg-amber-600/80 hover:bg-amber-500',
-    borderActive: 'border-amber-100 ring-4 ring-amber-300',
+    bgActive: 'bg-indigo-500 scale-105 shadow-[0_0_30px_rgba(99,102,241,0.8)]',
+    bgInactive: 'bg-indigo-950/70 hover:bg-indigo-900/80 border border-indigo-400/30',
+    borderActive: 'border-white ring-4 ring-indigo-400',
     icon: '🏆',
   },
   {
     id: 2,
-    colorName: 'Blue',
+    colorName: 'Cyan',
     symbol: 'Brahmaputra',
     symbolAs: 'ব্ৰহ্মপুত্ৰ',
-    bgActive: 'bg-blue-400 scale-105 shadow-xl shadow-blue-500/50',
-    bgInactive: 'bg-blue-700/80 hover:bg-blue-600',
-    borderActive: 'border-blue-200 ring-4 ring-blue-300',
+    bgActive: 'bg-sky-400 scale-105 shadow-[0_0_30px_rgba(56,189,248,0.8)]',
+    bgInactive: 'bg-sky-950/70 hover:bg-sky-900/80 border border-sky-400/30',
+    borderActive: 'border-white ring-4 ring-sky-400',
     icon: '🌊',
   },
   {
     id: 3,
-    colorName: 'Red',
+    colorName: 'Fuchsia',
     symbol: 'Gamosa',
     symbolAs: 'গামোচা',
-    bgActive: 'bg-rose-400 scale-105 shadow-xl shadow-rose-500/50',
-    bgInactive: 'bg-rose-700/80 hover:bg-rose-600',
-    borderActive: 'border-rose-200 ring-4 ring-rose-300',
+    bgActive: 'bg-fuchsia-500 scale-105 shadow-[0_0_30px_rgba(217,70,239,0.8)]',
+    bgInactive: 'bg-fuchsia-950/70 hover:bg-fuchsia-900/80 border border-fuchsia-400/30',
+    borderActive: 'border-white ring-4 ring-fuchsia-400',
     icon: '🧣',
   },
 ];
@@ -154,19 +154,19 @@ const SequenceBoard: React.FC<{
   };
 
   return (
-    <div className="w-full max-w-md space-y-6">
+    <div className="w-full max-w-md space-y-6 text-white">
       {/* Status */}
-      <div className="text-center p-3.5 rounded-2xl bg-sky-50 border border-sky-200">
-        <p className="text-xs font-bold uppercase tracking-wider text-teal-800">
-          {isShowingSequence ? '👀 Watch the sequence...' : '👉 Your Turn! Tap the pads in order'}
+      <div className="glass-card-dark text-center p-3.5 rounded-2xl border border-white/12">
+        <p className="text-xs font-bold uppercase tracking-wider text-[#c084fc]">
+          {isShowingSequence ? '👀 Watch the glowing pattern...' : '👉 Your Turn! Tap the pads in order'}
         </p>
-        <p className="text-sm font-bold text-slate-700 mt-1">
-          Round: {currentRound} of {targetLength - 1}
+        <p className="text-sm font-bold text-sky-200/80 mt-1">
+          Round: <strong className="text-white font-mono">{currentRound}</strong> of <strong className="text-white font-mono">{targetLength - 1}</strong>
         </p>
       </div>
 
       {/* 2x2 Simon Pad Grid */}
-      <div className="grid grid-cols-2 gap-4 p-5 rounded-3xl bg-sky-100/60 border border-sky-200 shadow-inner">
+      <div className="grid grid-cols-2 gap-4 p-5 rounded-3xl bg-purple-950/30 border border-purple-400/30 shadow-2xl backdrop-blur-md">
         {PADS.map(pad => {
           const isActive = activePad === pad.id;
           return (
@@ -174,11 +174,11 @@ const SequenceBoard: React.FC<{
               key={pad.id}
               disabled={isShowingSequence}
               onClick={() => handlePadClick(pad.id)}
-              className={`h-36 sm:h-40 rounded-2xl flex flex-col items-center justify-center text-white transition-all transform cursor-pointer border-4 shadow-md ${
-                isActive ? `${pad.bgActive} ${pad.borderActive} scale-105 shadow-xl` : `${pad.bgInactive} border-transparent hover:opacity-90`
+              className={`h-36 sm:h-40 rounded-2xl flex flex-col items-center justify-center text-white transition-all transform cursor-pointer border-2 shadow-lg backdrop-blur-md ${
+                isActive ? `${pad.bgActive} ${pad.borderActive} scale-105` : `${pad.bgInactive}`
               } disabled:cursor-not-allowed`}
             >
-              <span className="text-4xl mb-1">{pad.icon}</span>
+              <span className="text-4xl mb-2">{pad.icon}</span>
               <span className="font-extrabold text-sm">{pad.symbolAs}</span>
             </button>
           );

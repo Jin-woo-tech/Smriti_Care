@@ -51,7 +51,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const lang = settings.language;
 
-  // Role Definitions matching Image #10 aesthetic
+  // Role Definitions matching Frosted Glass Purple & Blue aesthetic
   const roles: {
     id: Role;
     labelEn: string;
@@ -72,7 +72,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       subtitleHi: 'दवा व स्मरण',
       subtitleAs: 'দৈনিক যত্ন ও স্মৃতি',
       icon: <User size={18} />,
-      color: 'text-[#c5f82a] bg-white/10',
+      color: 'text-[#c084fc] bg-purple-500/15',
     },
     {
       id: 'caregiver',
@@ -83,7 +83,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       subtitleHi: 'दवा ट्रैकिंग व रुझान',
       subtitleAs: 'ঔষধ অনুসৰণ ও ধাৰা',
       icon: <Users size={18} />,
-      color: 'text-sky-300 bg-white/10',
+      color: 'text-sky-300 bg-sky-500/15',
     },
     {
       id: 'clinician',
@@ -94,7 +94,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       subtitleHi: 'रडार व मेडिकल रिपोर्ट',
       subtitleAs: 'কগনিটিভ ৰাডাৰ ও ৰিপোৰ্ট',
       icon: <Stethoscope size={18} />,
-      color: 'text-teal-300 bg-white/10',
+      color: 'text-purple-300 bg-purple-500/15',
     },
     {
       id: 'asha',
@@ -105,7 +105,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       subtitleHi: 'फील्ड स्क्रीनिंग व भेंट',
       subtitleAs: 'ফিল্ড স্ক্ৰীনিং ও সাক্ষাৎ',
       icon: <Activity size={18} />,
-      color: 'text-amber-300 bg-white/10',
+      color: 'text-amber-300 bg-amber-500/15',
     },
   ];
 
@@ -194,9 +194,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         />
       )}
 
-      {/* Main Sidebar Container matching Image #10 dark glass theme */}
+      {/* Main Sidebar Container matching Dark Frosted Glass theme */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-[#13243a]/95 backdrop-blur-2xl border-r border-white/10 flex flex-col justify-between transition-transform duration-300 ease-in-out lg:translate-x-0 text-white ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-[#0c1427]/90 backdrop-blur-2xl border-r border-white/10 flex flex-col justify-between transition-transform duration-300 ease-in-out lg:translate-x-0 text-white ${
           isOpenMobile ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:static lg:shadow-none'
         }`}
       >
@@ -210,15 +210,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
             }}
             className="flex items-center gap-3 cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-2xl bg-[#c5f82a] flex items-center justify-center text-slate-950 shadow-md shadow-[#c5f82a]/20 group-hover:scale-105 transition-transform">
-              <Heart size={22} className="fill-slate-950" />
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#8b5cf6] to-[#a855f7] flex items-center justify-center text-white shadow-lg shadow-purple-600/30 group-hover:scale-105 transition-transform border border-purple-400/30">
+              <Heart size={22} className="fill-white" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="text-lg font-black tracking-tight text-white">
                   {lang === 'as' ? 'স্মৃতি কেয়াৰ' : lang === 'hi' ? 'स्मृति केयर' : 'SmritiCare'}
                 </span>
-                <span className="text-[9px] font-black uppercase tracking-wider bg-[#c5f82a]/20 text-[#c5f82a] px-1.5 py-0.5 rounded border border-[#c5f82a]/30">
+                <span className="text-[9px] font-black uppercase tracking-wider bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded border border-purple-400/30">
                   SIH 2026
                 </span>
               </div>
@@ -242,7 +242,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Scrollable Navigation Sections */}
-        <div className="flex-1 overflow-y-auto px-4 py-5 space-y-6">
+        <div className="flex-1 overflow-y-auto px-4 py-5 space-y-6 no-scrollbar">
           {/* SECTION 1: ROLE PORTALS */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between px-2 mb-2">
@@ -253,7 +253,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   ? 'भूमिका पोर्टल'
                   : 'Stakeholder Portals'}
               </span>
-              <span className="text-[9px] font-bold text-[#c5f82a] bg-[#c5f82a]/10 px-2 py-0.5 rounded-full border border-[#c5f82a]/20">
+              <span className="text-[9px] font-bold text-purple-300 bg-purple-500/15 px-2 py-0.5 rounded-full border border-purple-400/30">
                 4 Roles
               </span>
             </div>
@@ -271,14 +271,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     }}
                     className={`w-full flex items-center justify-between p-2.5 rounded-2xl text-left transition-all cursor-pointer ${
                       isActiveRole
-                        ? 'bg-[#c5f82a] text-slate-950 font-black shadow-lg shadow-[#c5f82a]/25'
+                        ? 'bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] text-white font-black shadow-lg shadow-purple-600/35 border border-purple-400/40'
                         : 'text-stone-300 hover:bg-white/10 hover:text-white'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
                       <div
-                        className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${
-                          isActiveRole ? 'bg-slate-950 text-[#c5f82a]' : r.color
+                        className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors border ${
+                          isActiveRole ? 'bg-white/20 text-white border-white/30' : r.color + ' border-white/10'
                         }`}
                       >
                         {r.icon}
@@ -286,14 +286,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       <div>
                         <p
                           className={`text-xs font-bold leading-tight ${
-                            isActiveRole ? 'text-slate-950' : 'text-white'
+                            isActiveRole ? 'text-white' : 'text-stone-200'
                           }`}
                         >
                           {getRoleLabel(r)}
                         </p>
                         <p
                           className={`text-[10px] leading-tight ${
-                            isActiveRole ? 'text-slate-800' : 'text-sky-200/60'
+                            isActiveRole ? 'text-purple-100' : 'text-sky-200/60'
                           }`}
                         >
                           {getRoleSubtitle(r)}
@@ -302,7 +302,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     </div>
 
                     {isActiveRole ? (
-                      <span className="w-2 h-2 rounded-full bg-slate-950" />
+                      <span className="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_white]" />
                     ) : (
                       <ChevronRight size={14} className="text-sky-200/40" />
                     )}
@@ -335,12 +335,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       }}
                       className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left transition-all cursor-pointer ${
                         isActive
-                          ? 'bg-white/20 text-white font-black border border-white/30 shadow-md backdrop-blur-md'
+                          ? 'bg-purple-500/20 text-white font-black border border-purple-400/40 shadow-md backdrop-blur-md shadow-purple-900/30'
                           : 'text-stone-300 hover:bg-white/10 hover:text-white font-medium'
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <span className={isActive ? 'text-[#c5f82a]' : 'text-sky-200/70'}>
+                        <span className={isActive ? 'text-[#c084fc]' : 'text-sky-200/70'}>
                           {item.icon}
                         </span>
                         <span className="text-xs">{getNavLabel(item)}</span>
@@ -350,7 +350,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         <span
                           className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
                             isActive
-                              ? 'bg-[#c5f82a] text-slate-950'
+                              ? 'bg-[#a855f7] text-white shadow-xs'
                               : 'bg-white/10 text-sky-200'
                           }`}
                         >
@@ -382,14 +382,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }}
               className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left transition-all cursor-pointer ${
                 showLanding
-                  ? 'bg-white/20 text-white font-black border border-white/30'
+                  ? 'bg-purple-500/20 text-white font-black border border-purple-400/40'
                   : 'text-stone-300 hover:bg-white/10 hover:text-white font-medium'
               }`}
             >
               <div className="flex items-center gap-3">
                 <Compass
                   size={19}
-                  className={showLanding ? 'text-[#c5f82a]' : 'text-sky-200/70'}
+                  className={showLanding ? 'text-[#c084fc]' : 'text-sky-200/70'}
                 />
                 <span className="text-xs">
                   {lang === 'as'
@@ -399,7 +399,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'Hero Showcase & 3D Art'}
                 </span>
               </div>
-              <span className="text-[9px] font-bold bg-[#c5f82a] text-slate-950 px-1.5 py-0.5 rounded">
+              <span className="text-[9px] font-bold bg-purple-500/30 text-purple-200 border border-purple-400/40 px-1.5 py-0.5 rounded">
                 Hero
               </span>
             </button>
@@ -437,7 +437,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {settings.isSimulatedOffline ? (
                   <WifiOff size={19} className="text-amber-400" />
                 ) : (
-                  <Wifi size={19} className="text-[#c5f82a]" />
+                  <Wifi size={19} className="text-[#c084fc]" />
                 )}
                 <span className="text-xs font-medium">
                   {settings.isSimulatedOffline
@@ -447,19 +447,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
               <span
                 className={`w-2 h-2 rounded-full ${
-                  settings.isSimulatedOffline ? 'bg-amber-400 animate-pulse' : 'bg-[#c5f82a]'
+                  settings.isSimulatedOffline ? 'bg-amber-400 animate-pulse' : 'bg-[#c084fc]'
                 }`}
               />
             </button>
           </div>
         </div>
 
-        {/* Bottom User Profile Card matching Image #10 */}
-        <div className="p-4 border-t border-white/10 bg-[#0f1d2e]/60">
+        {/* Bottom User Profile Card */}
+        <div className="p-4 border-t border-white/10 bg-[#080e1c]/70">
           <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15 shadow-sm flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="relative">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-teal-400 text-slate-950 flex items-center justify-center font-black text-xs shadow-xs shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 text-white flex items-center justify-center font-black text-xs shadow-xs shrink-0 border border-purple-400/30">
                   {currentRole === 'patient'
                     ? 'BG'
                     : currentRole === 'caregiver'
@@ -468,7 +468,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     ? 'DR'
                     : 'MD'}
                 </div>
-                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#c5f82a] border-2 border-[#13243a]" />
+                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#c084fc] border-2 border-[#13243a]" />
               </div>
 
               <div className="min-w-0">
