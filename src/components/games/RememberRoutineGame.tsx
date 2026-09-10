@@ -126,31 +126,31 @@ const RoutineBoard: React.FC<{
   };
 
   return (
-    <div className="w-full max-w-2xl space-y-6">
+    <div className="w-full max-w-2xl space-y-6 text-white">
       {/* Ordered Timeline */}
       {selectedSteps.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs font-bold uppercase text-emerald-700">
+          <p className="text-xs font-bold uppercase text-[#c084fc] tracking-wider">
             Completed Sequence:
           </p>
           <div className="space-y-2">
             {selectedSteps.map((step, idx) => (
               <div
                 key={step.id}
-                className="flex items-center gap-3 p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-950 animate-in fade-in"
+                className="flex items-center gap-3 p-3.5 rounded-2xl bg-purple-950/40 border border-purple-400/40 text-white animate-in fade-in backdrop-blur-md shadow-md"
               >
-                <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold">
+                <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white flex items-center justify-center text-xs font-black shadow-xs">
                   {idx + 1}
                 </div>
-                <span className="text-xl">{step.icon}</span>
-                <span className="font-bold text-sm">{step.titleAs}</span>
-                <span className="text-xs font-mono ml-auto opacity-75">{step.timeHint}</span>
+                <span className="text-2xl">{step.icon}</span>
+                <span className="font-bold text-sm text-white">{step.titleAs}</span>
+                <span className="text-xs font-mono ml-auto text-sky-200/80">{step.timeHint}</span>
               </div>
             ))}
           </div>
           {availableSteps.length > 0 && (
-            <div className="flex justify-center py-1 text-slate-400">
-              <ArrowDown size={20} className="animate-bounce text-teal-600" />
+            <div className="flex justify-center py-1">
+              <ArrowDown size={20} className="animate-bounce text-[#c084fc]" />
             </div>
           )}
         </div>
@@ -158,7 +158,7 @@ const RoutineBoard: React.FC<{
 
       {/* Available choices to select */}
       <div>
-        <p className="text-xs font-bold uppercase text-slate-500 mb-2">
+        <p className="text-xs font-bold uppercase text-sky-200/70 mb-3 tracking-wider">
           Select what happens next ({availableSteps.length} steps remaining):
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -166,12 +166,12 @@ const RoutineBoard: React.FC<{
             <button
               key={step.id}
               onClick={() => handleStepClick(step)}
-              className="flex items-center gap-3 p-4 rounded-2xl bg-white border-2 border-sky-200 hover:border-teal-500 hover:bg-teal-50 text-left transition-all cursor-pointer shadow-xs active:scale-95"
+              className="glass-card-dark flex items-center gap-3.5 p-4 rounded-2xl border border-white/12 hover:border-purple-400/60 hover:bg-white/10 text-left transition-all cursor-pointer shadow-md active:scale-95 text-white backdrop-blur-md"
             >
-              <span className="text-3xl p-1 bg-sky-50 rounded-xl shadow-xs border border-sky-100">{step.icon}</span>
+              <span className="text-3xl p-2 bg-purple-500/20 rounded-xl shadow-xs border border-purple-400/30">{step.icon}</span>
               <div>
-                <p className="font-bold text-sm text-slate-900">{step.titleAs}</p>
-                <p className="text-xs text-slate-500">{step.title}</p>
+                <p className="font-bold text-sm text-white">{step.titleAs}</p>
+                <p className="text-xs text-sky-200/70 font-medium">{step.title}</p>
               </div>
             </button>
           ))}

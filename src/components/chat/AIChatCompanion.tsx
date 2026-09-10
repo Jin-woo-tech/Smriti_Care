@@ -4,11 +4,7 @@ import {
   Bot,
   User,
   Sparkles,
-  Volume2,
-  Mic,
-  Image as ImageIcon,
-  Heart,
-  ShieldAlert
+  Heart
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { getTranslation } from '../../lib/i18n';
@@ -39,10 +35,10 @@ export const AIChatCompanion: React.FC = () => {
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
   const quickPrompts = [
-    { en: getTranslation('chatPrompt1', 'en'), as: getTranslation('chatPrompt1', 'as') },
-    { en: getTranslation('chatPrompt2', 'en'), as: getTranslation('chatPrompt2', 'as') },
-    { en: getTranslation('chatPrompt3', 'en'), as: getTranslation('chatPrompt3', 'as') },
-    { en: getTranslation('chatPrompt4', 'en'), as: getTranslation('chatPrompt4', 'as') },
+    { en: getTranslation('chatPrompt1', 'en'), hi: getTranslation('chatPrompt1', 'hi'), as: getTranslation('chatPrompt1', 'as') },
+    { en: getTranslation('chatPrompt2', 'en'), hi: getTranslation('chatPrompt2', 'hi'), as: getTranslation('chatPrompt2', 'as') },
+    { en: getTranslation('chatPrompt3', 'en'), hi: getTranslation('chatPrompt3', 'hi'), as: getTranslation('chatPrompt3', 'as') },
+    { en: getTranslation('chatPrompt4', 'en'), hi: getTranslation('chatPrompt4', 'hi'), as: getTranslation('chatPrompt4', 'as') },
   ];
 
   const handleSend = async (textToSend: string) => {
@@ -80,56 +76,66 @@ export const AIChatCompanion: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-4">
+    <div className="max-w-4xl mx-auto space-y-4 text-white">
       {/* Header */}
-      <div className="bg-gradient-to-r from-teal-800 to-teal-900 text-white p-6 rounded-3xl shadow-xl flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-teal-700/80 border border-teal-500/50 flex items-center justify-center text-teal-200">
-            <Heart size={26} className="text-amber-300" />
+      <div className="glass-panel p-6 sm:p-8 rounded-[2.5rem] border border-white/14 shadow-2xl relative overflow-hidden flex flex-wrap items-center justify-between gap-4">
+        {/* Ambient glow */}
+        <div className="absolute -top-24 -right-24 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="flex items-center gap-4 relative z-10">
+          <div className="w-14 h-14 rounded-2xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-[#c084fc] shadow-lg shadow-purple-600/25">
+            <Heart size={28} className="text-[#c084fc]" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-2xl font-black">
-                {lang === 'as' ? 'স্মৃতি সাথী (AI Companion)' : 'Smriti Sathi (AI Care Companion)'}
+              <h2 className="text-2xl sm:text-3xl font-black text-white">
+                {lang === 'as' ? 'স্মৃতি সাথী (AI Companion)' : lang === 'hi' ? 'स्मृति साथी (AI Companion)' : 'Smriti Sathi (AI Care Companion)'}
               </h2>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-teal-700/80 text-teal-200">
-                Bilingual
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-200 border border-purple-400/30">
+                Trilingual
               </span>
             </div>
-            <p className="text-xs text-teal-100/80">
+            <p className="text-xs sm:text-sm text-sky-200/80 font-medium mt-1">
               {lang === 'as'
                 ? 'ঔষধ, স্মৃতি আৰু দৈনন্দিন কথা-বতৰাৰ বাবে আপোনাৰ সদা সজাগ সংগী।'
+                : lang === 'hi'
+                ? 'दवा, दिनचर्या और यादों के लिए आपका संवेदनशील AI संवादी साथी।'
                 : 'Empathetic voice-enabled conversational support for daily guidance.'}
             </p>
           </div>
         </div>
 
-        <VoiceNarratorButton
-          textToRead={
-            lang === 'as'
-              ? 'নমস্কাৰ! মই আপোনাৰ স্মৃতি সাথী। আপোনাৰ কিবা সুধিবলগীয়া থাকিলে তলৰ বুটামত টিপক।'
-              : 'Namaskar! I am Smriti Sathi. Tap any suggested question or speak to me directly.'
-          }
-          size="md"
-          className="bg-white text-teal-950 border-0 shadow-md font-bold"
-        />
+        <div className="relative z-10">
+          <VoiceNarratorButton
+            textToRead={
+              lang === 'as'
+                ? 'নমস্কাৰ! মই আপোনাৰ স্মৃতি সাথী। আপোনাৰ কিবা সুধিবলগীয়া থাকিলে তলৰ বুটামত টিপক।'
+                : lang === 'hi'
+                ? 'नमस्ते! मैं स्मृति साथी हूँ। किसी भी सुझाव प्रश्न पर टैप करें या सीधे बोलें।'
+                : 'Namaskar! I am Smriti Sathi. Tap any suggested question or speak to me directly.'
+            }
+            size="md"
+            label={getTranslation('actionListen', lang)}
+            className="bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md shadow-lg font-bold"
+          />
+        </div>
       </div>
 
       {/* Suggested Prompt Chips */}
-      <div className="flex gap-2 overflow-x-auto pb-1">
+      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
         {quickPrompts.map((p, i) => (
           <button
             key={i}
-            onClick={() => handleSend(lang === 'as' ? p.as : p.en)}
-            className="text-xs font-semibold px-3.5 py-2 rounded-xl bg-white border border-sky-200 hover:border-teal-500 hover:bg-teal-50 text-slate-800 whitespace-nowrap cursor-pointer transition-all shadow-xs"
+            onClick={() => handleSend(lang === 'as' ? p.as : lang === 'hi' ? (p.hi || p.en) : p.en)}
+            className="text-xs font-semibold px-4 py-2.5 rounded-2xl glass-card-dark border border-white/12 hover:border-purple-400 hover:bg-white/15 text-sky-100 whitespace-nowrap cursor-pointer transition-all shadow-md backdrop-blur-md"
           >
-            💬 {lang === 'as' ? p.as : p.en}
+            💬 {lang === 'as' ? p.as : lang === 'hi' ? (p.hi || p.en) : p.en}
           </button>
         ))}
       </div>
 
       {/* Chat Messages Box */}
-      <div className="bg-white rounded-3xl border border-sky-100 shadow-sm shadow-sky-900/5 p-4 sm:p-6 min-h-[420px] max-h-[500px] overflow-y-auto space-y-4 flex flex-col justify-between">
+      <div className="glass-card-dark rounded-3xl border border-white/12 shadow-2xl p-4 sm:p-6 min-h-[420px] max-h-[500px] overflow-y-auto space-y-4 flex flex-col justify-between backdrop-blur-md">
         <div className="space-y-4">
           {messages.map(msg => {
             const isUser = msg.sender === 'user';
@@ -139,34 +145,35 @@ export const AIChatCompanion: React.FC = () => {
                 className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'} animate-in fade-in`}
               >
                 {!isUser && (
-                  <div className="w-9 h-9 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-400/30 text-[#c084fc] flex items-center justify-center shrink-0 shadow-sm">
                     <Bot size={20} />
                   </div>
                 )}
 
                 <div
-                  className={`max-w-[80%] rounded-2xl p-4 space-y-1.5 shadow-xs ${
+                  className={`max-w-[80%] rounded-2xl p-4 space-y-1.5 shadow-md ${
                     isUser
-                      ? 'bg-teal-700 text-white rounded-tr-xs'
-                      : 'bg-sky-50 text-slate-900 rounded-tl-xs border border-sky-200'
+                      ? 'bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] text-white rounded-tr-xs border border-purple-400/30'
+                      : 'bg-white/10 text-white rounded-tl-xs border border-white/15 backdrop-blur-md'
                   }`}
                 >
                   <p className="text-sm sm:text-base leading-relaxed">{msg.text}</p>
 
-                  <div className="flex items-center justify-between gap-3 pt-1 text-[11px] opacity-75">
+                  <div className="flex items-center justify-between gap-3 pt-1 text-[11px] text-sky-200/70">
                     <span>{msg.timestamp}</span>
                     {!isUser && (
                       <VoiceNarratorButton
                         textToRead={msg.text}
                         size="sm"
-                        className="bg-white p-1 border-0 shadow-xs"
+                        label=""
+                        className="bg-white/10 hover:bg-white/20 p-1 border border-white/15 shadow-xs text-white"
                       />
                     )}
                   </div>
                 </div>
 
                 {isUser && (
-                  <div className="w-9 h-9 rounded-xl bg-sky-100 text-sky-800 flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-xl bg-indigo-500/30 border border-indigo-400/30 text-indigo-200 flex items-center justify-center shrink-0">
                     <User size={20} />
                   </div>
                 )}
@@ -175,8 +182,8 @@ export const AIChatCompanion: React.FC = () => {
           })}
 
           {isTyping && (
-            <div className="flex items-center gap-2 text-xs text-slate-400 font-semibold p-2">
-              <Sparkles size={14} className="animate-spin text-teal-600" />
+            <div className="flex items-center gap-2 text-xs text-purple-300 font-semibold p-2">
+              <Sparkles size={14} className="animate-spin text-[#c084fc]" />
               <span>Smriti Sathi is thinking...</span>
             </div>
           )}
@@ -184,7 +191,7 @@ export const AIChatCompanion: React.FC = () => {
       </div>
 
       {/* Input Bar */}
-      <div className="bg-white p-3 rounded-2xl border border-sky-200 shadow-md shadow-sky-900/5 flex items-center gap-2">
+      <div className="glass-card-dark p-3 rounded-2xl border border-white/15 shadow-xl flex items-center gap-2 backdrop-blur-md">
         <input
           type="text"
           value={inputValue}
@@ -193,15 +200,17 @@ export const AIChatCompanion: React.FC = () => {
           placeholder={
             lang === 'as'
               ? 'ইয়াত লিখক বা সুধক...'
+              : lang === 'hi'
+              ? 'यहाँ लिखें या पूछें...'
               : 'Ask Smriti Sathi about your routine, medicines, or memories...'
           }
-          className="flex-1 px-4 py-3 bg-transparent text-sm sm:text-base focus:outline-none text-slate-900 placeholder:text-slate-400"
+          className="flex-1 px-4 py-3 bg-transparent text-sm sm:text-base focus:outline-none text-white placeholder:text-sky-200/50"
         />
 
         <button
           onClick={() => handleSend(inputValue)}
           disabled={!inputValue.trim()}
-          className="p-3 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold cursor-pointer transition-colors disabled:opacity-40 shadow-xs"
+          className="p-3 rounded-xl bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] hover:from-[#9333ea] hover:to-[#7c3aed] text-white font-bold cursor-pointer transition-all disabled:opacity-40 shadow-lg shadow-purple-600/30 border border-purple-400/30"
         >
           <Send size={18} />
         </button>

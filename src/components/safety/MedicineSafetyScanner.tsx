@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   AlertTriangle,
   Sparkles,
-  Info,
   ShieldCheck,
   RefreshCw,
   FileText
@@ -77,20 +76,22 @@ export const MedicineSafetyScanner: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-white">
       {/* Header Info */}
-      <div className="bg-white p-6 rounded-3xl border border-sky-100 shadow-sm shadow-sky-900/5 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <h2 className="text-2xl font-extrabold text-slate-900">
-              {lang === 'as'
-                ? 'ঔষধৰ পেকেট চিনাক্তকৰণ আৰু সুৰক্ষা পৰীক্ষা'
-                : lang === 'hi'
-                ? 'दवा पैकेट स्कैनर और सुरक्षा सत्यापन'
-                : 'AI Medicine Packaging Safety Scanner'}
-            </h2>
+      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/14 shadow-2xl relative overflow-hidden flex flex-wrap items-center justify-between gap-4">
+        <div className="max-w-2xl">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/15 border border-purple-400/30 text-purple-300 text-xs font-bold mb-3 shadow-inner">
+            <ShieldCheck size={14} className="text-[#c084fc]" />
+            <span>AI Vision Verification & Safety</span>
           </div>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-2xl">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+            {lang === 'as'
+              ? 'ঔষধৰ পেকেট চিনাক্তকৰণ আৰু সুৰক্ষা পৰীক্ষা'
+              : lang === 'hi'
+              ? 'दवा पैकेट स्कैनर और सुरक्षा सत्यापन'
+              : 'AI Medicine Packaging Safety Scanner'}
+          </h2>
+          <p className="text-xs sm:text-sm text-sky-200/80 mt-1 leading-relaxed">
             {lang === 'as'
               ? 'ঔষধৰ পেকেট বা টেবলেটৰ ছবি স্কেন কৰি ঔষধৰ নাম, মাত্ৰা আৰু সময়সূচীৰ সৈতে মিলিছে নে নাই পৰীক্ষা কৰক।'
               : lang === 'hi'
@@ -108,17 +109,19 @@ export const MedicineSafetyScanner: React.FC = () => {
               : 'Scan your medicine packaging to verify dosage instructions and ensure it matches your prescribed daily schedule.'
           }
           size="md"
+          label={getTranslation('actionListen', lang)}
+          className="bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md shadow-lg font-bold"
         />
       </div>
 
       {/* AI Engine Status Badge */}
-      <div className="p-4 rounded-2xl bg-teal-50 border border-teal-200 flex items-start gap-3">
-        <Sparkles size={20} className="text-teal-600 shrink-0 mt-0.5" />
+      <div className="p-4 rounded-2xl bg-purple-500/15 border border-purple-400/30 flex items-start gap-3 backdrop-blur-md">
+        <Sparkles size={20} className="text-[#c084fc] shrink-0 mt-0.5" />
         <div className="text-xs space-y-1">
-          <p className="font-bold text-teal-950">
+          <p className="font-bold text-white">
             {getTranslation('aiStubBadgeTitle', lang)}
           </p>
-          <p className="text-teal-800">
+          <p className="text-sky-200/80">
             {getTranslation('aiStubBadgeDesc', lang)}
           </p>
         </div>
@@ -127,8 +130,8 @@ export const MedicineSafetyScanner: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Image Selection & Capture */}
         <div className="lg:col-span-5 space-y-4">
-          <div className="bg-white p-5 rounded-3xl border border-sky-100 shadow-sm shadow-sky-900/5 space-y-4">
-            <h3 className="font-bold text-sm text-slate-800">
+          <div className="glass-card-dark p-5 rounded-3xl border border-white/12 space-y-4 shadow-xl">
+            <h3 className="font-bold text-sm text-white">
               {lang === 'as'
                 ? 'ছবি বাছক বা কেমেৰাৰে তোলক'
                 : lang === 'hi'
@@ -137,7 +140,7 @@ export const MedicineSafetyScanner: React.FC = () => {
             </h3>
 
             {/* Preview Box */}
-            <div className="relative w-full h-56 rounded-2xl bg-sky-50 border-2 border-dashed border-sky-300 overflow-hidden flex items-center justify-center">
+            <div className="relative w-full h-56 rounded-2xl bg-purple-950/30 border-2 border-dashed border-purple-400/30 overflow-hidden flex items-center justify-center backdrop-blur-md">
               {selectedImage ? (
                 <img
                   src={selectedImage}
@@ -145,9 +148,9 @@ export const MedicineSafetyScanner: React.FC = () => {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="text-center text-slate-400 p-4">
-                  <Camera size={36} className="mx-auto mb-2 opacity-50 text-sky-400" />
-                  <p className="text-xs">
+                <div className="text-center text-sky-200/50 p-4">
+                  <Camera size={36} className="mx-auto mb-2 opacity-50 text-purple-400" />
+                  <p className="text-xs font-medium">
                     {lang === 'as'
                       ? 'কোনো ছবি বাছি লোৱা হোৱা নাই'
                       : lang === 'hi'
@@ -158,9 +161,9 @@ export const MedicineSafetyScanner: React.FC = () => {
               )}
 
               {isAnalyzing && (
-                <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-xs flex flex-col items-center justify-center text-white gap-2">
-                  <RefreshCw size={32} className="animate-spin text-teal-300" />
-                  <span className="text-xs font-bold uppercase tracking-wider">
+                <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm flex flex-col items-center justify-center text-white gap-2">
+                  <RefreshCw size={32} className="animate-spin text-[#c084fc]" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-purple-200">
                     {lang === 'as'
                       ? 'AI বিশ্লেষণ চলি আছে...'
                       : lang === 'hi'
@@ -173,7 +176,7 @@ export const MedicineSafetyScanner: React.FC = () => {
 
             {/* Action buttons */}
             <div className="space-y-2">
-              <label className="w-full py-3 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-sm transition-colors">
+              <label className="w-full py-3 rounded-xl bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] hover:from-[#9333ea] hover:to-[#7c3aed] text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-purple-600/30 transition-all border border-purple-400/30">
                 <Upload size={16} />
                 <span>{getTranslation('actionUpload', lang)}</span>
                 <input
@@ -187,7 +190,7 @@ export const MedicineSafetyScanner: React.FC = () => {
               <button
                 onClick={() => handleScan(selectedImage)}
                 disabled={isAnalyzing}
-                className="w-full py-3 rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-900 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                className="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50"
               >
                 <Camera size={16} />
                 <span>{getTranslation('actionScan', lang)}</span>
@@ -195,8 +198,8 @@ export const MedicineSafetyScanner: React.FC = () => {
             </div>
 
             {/* Sample Presets */}
-            <div className="pt-2 border-t border-sky-100">
-              <p className="text-xs font-bold text-slate-500 mb-2">
+            <div className="pt-2 border-t border-white/10">
+              <p className="text-xs font-bold text-sky-200/60 mb-2">
                 {lang === 'as'
                   ? 'বা নমুনা ঔষধ বাছক:'
                   : lang === 'hi'
@@ -210,8 +213,8 @@ export const MedicineSafetyScanner: React.FC = () => {
                     onClick={() => handleScan(s.url)}
                     className={`w-full text-left p-2.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer truncate ${
                       selectedImage === s.url
-                        ? 'bg-teal-50 border-teal-500 text-teal-900 font-bold'
-                        : 'border-sky-200 bg-white hover:border-sky-300 text-slate-700'
+                        ? 'bg-purple-950/60 border-purple-400 text-white font-bold shadow-[0_0_15px_rgba(168,85,247,0.3)]'
+                        : 'border-white/15 bg-white/5 hover:border-purple-400/40 text-sky-200/80 hover:text-white'
                     }`}
                   >
                     {lang === 'as' ? s.labelAs : lang === 'hi' ? (s.labelHi || s.label) : s.label}
@@ -224,45 +227,45 @@ export const MedicineSafetyScanner: React.FC = () => {
 
         {/* Right Column: AI Analysis Result Output */}
         <div className="lg:col-span-7">
-          <div className="bg-white p-6 rounded-3xl border border-sky-100 shadow-sm shadow-sky-900/5 min-h-[420px] flex flex-col justify-between">
+          <div className="glass-card-dark p-6 rounded-3xl border border-white/12 shadow-2xl min-h-[420px] flex flex-col justify-between">
             {analysisResult ? (
               <div className="space-y-6 animate-in fade-in">
                 {/* Result Top Banner */}
-                <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-sky-100">
-                  <div className="flex items-center gap-2">
-                    <span className="p-2 bg-emerald-100 text-emerald-700 rounded-xl">
+                <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-white/10">
+                  <div className="flex items-center gap-3">
+                    <span className="p-2.5 bg-purple-500/20 text-[#c084fc] rounded-2xl border border-purple-400/30">
                       <ShieldCheck size={24} />
                     </span>
                     <div>
-                      <h4 className="font-extrabold text-lg text-slate-900">
+                      <h4 className="font-black text-lg text-white">
                         {analysisResult.medicineName}
                       </h4>
-                      <p className="text-xs text-slate-500 font-mono">
+                      <p className="text-xs text-purple-300 font-mono">
                         {analysisResult.genericName} • {analysisResult.identifiedStrength}
                       </p>
                     </div>
                   </div>
 
-                  <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+                  <span className="text-xs font-extrabold px-3.5 py-1.5 rounded-full bg-purple-500/20 text-purple-200 border border-purple-400/30 shadow-xs">
                     {lang === 'hi' ? 'सटीकता:' : lang === 'as' ? 'বিশ্বাসযোগ্যতা:' : 'Confidence:'} {Math.round(analysisResult.confidence * 100)}%
                   </span>
                 </div>
 
                 {/* Schedule Cross-Check Match Badge */}
                 <div
-                  className={`p-4 rounded-2xl border-2 flex items-start gap-3 ${
+                  className={`p-4 rounded-2xl border flex items-start gap-3 backdrop-blur-md shadow-md ${
                     analysisResult.matchesSchedule
-                      ? 'bg-emerald-50 border-emerald-500 text-emerald-950'
-                      : 'bg-amber-50 border-amber-500 text-amber-950'
+                      ? 'bg-purple-950/50 border-purple-400/80 text-white shadow-[0_0_20px_rgba(168,85,247,0.25)]'
+                      : 'bg-amber-950/50 border-amber-400/80 text-white'
                   }`}
                 >
                   {analysisResult.matchesSchedule ? (
-                    <CheckCircle2 size={24} className="text-emerald-600 shrink-0 mt-0.5" />
+                    <CheckCircle2 size={24} className="text-[#c084fc] shrink-0 mt-0.5" />
                   ) : (
-                    <AlertTriangle size={24} className="text-amber-600 shrink-0 mt-0.5" />
+                    <AlertTriangle size={24} className="text-amber-400 shrink-0 mt-0.5" />
                   )}
                   <div>
-                    <h5 className="font-bold text-sm">
+                    <h5 className="font-bold text-sm text-white">
                       {analysisResult.matchesSchedule
                         ? lang === 'as'
                           ? 'সময়সূচীৰ সৈতে মিলিছে (Scheduled Dose Verified)'
@@ -275,7 +278,7 @@ export const MedicineSafetyScanner: React.FC = () => {
                         ? 'समय-सारणी चेतावनी'
                         : 'Schedule Verification Alert'}
                     </h5>
-                    <p className="text-xs mt-0.5 opacity-90">
+                    <p className="text-xs mt-1 text-sky-200/90 leading-relaxed font-medium">
                       {lang === 'as'
                         ? analysisResult.summaryAs
                         : lang === 'hi'
@@ -286,9 +289,9 @@ export const MedicineSafetyScanner: React.FC = () => {
                 </div>
 
                 {/* Elderly-Friendly Instructions */}
-                <div className="p-4 rounded-2xl bg-sky-50/70 border border-sky-100 space-y-2">
+                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2 backdrop-blur-md">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    <p className="text-xs font-bold text-purple-300 uppercase tracking-wider">
                       {lang === 'as'
                         ? 'সহজ ব্যৱহাৰ নিৰ্দেশনা'
                         : lang === 'hi'
@@ -304,9 +307,11 @@ export const MedicineSafetyScanner: React.FC = () => {
                           : `${analysisResult.medicineName}. ${analysisResult.instructions}`
                       }
                       size="sm"
+                      label={getTranslation('actionListen', lang)}
+                      className="bg-purple-500/20 hover:bg-purple-500/30 text-white border border-purple-400/30"
                     />
                   </div>
-                  <p className="text-base font-bold text-slate-900 leading-relaxed">
+                  <p className="text-base font-bold text-white leading-relaxed">
                     {lang === 'as'
                       ? analysisResult.instructionsAs
                       : lang === 'hi'
@@ -317,7 +322,7 @@ export const MedicineSafetyScanner: React.FC = () => {
 
                 {/* Safety Alerts */}
                 <div className="space-y-2">
-                  <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  <p className="text-xs font-bold text-sky-200/60 uppercase tracking-wider">
                     {lang === 'as'
                       ? 'সাৱধানতা আৰু সংৰক্ষণ টোকা'
                       : lang === 'hi'
@@ -333,7 +338,7 @@ export const MedicineSafetyScanner: React.FC = () => {
                     ).map((alert, i) => (
                       <div
                         key={i}
-                        className="text-xs p-2.5 rounded-xl bg-sky-50 border border-sky-100 text-slate-700 font-medium"
+                        className="text-xs p-3 rounded-xl bg-white/5 border border-white/10 text-sky-200/90 font-medium leading-relaxed"
                       >
                         {alert}
                       </div>
@@ -342,19 +347,19 @@ export const MedicineSafetyScanner: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="h-full flex flex-col items-center justify-center text-center p-8 text-slate-400 space-y-4">
-                <div className="w-16 h-16 rounded-full bg-sky-50 border border-sky-200 flex items-center justify-center text-teal-600">
+              <div className="h-full flex flex-col items-center justify-center text-center p-8 text-sky-200/50 space-y-4">
+                <div className="w-16 h-16 rounded-3xl bg-purple-500/20 border border-purple-400/30 flex items-center justify-center text-[#c084fc] shadow-lg shadow-purple-600/25">
                   <FileText size={32} />
                 </div>
                 <div>
-                  <h4 className="text-lg font-bold text-slate-700">
+                  <h4 className="text-lg font-bold text-white">
                     {lang === 'as'
                       ? 'স্কেন কৰিবলৈ প্ৰস্তুত'
                       : lang === 'hi'
                       ? 'दवा पैकेजिंग स्कैन के लिए तैयार'
                       : 'Ready to verify packaging'}
                   </h4>
-                  <p className="text-xs text-slate-500 max-w-sm mt-1">
+                  <p className="text-xs text-sky-200/70 max-w-sm mt-1 leading-relaxed">
                     {lang === 'as'
                       ? 'বাওঁফালৰ পৰা ছবি বাছক বা আপলোড কৰি "স্কেন কৰক" বুটামত টিপক।'
                       : lang === 'hi'

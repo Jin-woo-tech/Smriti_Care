@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GameShell } from './GameShell';
 import { AdaptiveTierConfig } from '../../lib/adaptiveDifficulty';
-import { CheckCircle2, HelpCircle } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 
 interface QuizQuestion {
   id: number;
@@ -122,20 +122,20 @@ const QuizBoard: React.FC<{
   };
 
   return (
-    <div className="w-full max-w-xl space-y-6">
+    <div className="w-full max-w-xl space-y-6 text-white">
       {/* Progress */}
-      <div className="flex justify-between items-center text-xs font-bold text-slate-500">
+      <div className="flex justify-between items-center text-xs font-bold text-sky-200/70">
         <span>Question {currentIdx + 1} of {HERITAGE_QUESTIONS.length}</span>
-        <span className="text-teal-700 font-bold">Heritage Recall</span>
+        <span className="text-[#c084fc] font-bold">Heritage Recall</span>
       </div>
 
       {/* Question Card */}
-      <div className="p-6 rounded-3xl bg-teal-50 border-2 border-teal-500 text-center space-y-3">
+      <div className="glass-card-dark p-6 sm:p-7 rounded-3xl border border-purple-400/30 text-center space-y-3 shadow-2xl backdrop-blur-md">
         <div className="text-4xl">{currentQ.imageHint}</div>
-        <h3 className="text-xl font-extrabold text-slate-900">
+        <h3 className="text-xl font-extrabold text-white">
           {currentQ.questionAs}
         </h3>
-        <p className="text-xs text-slate-600">
+        <p className="text-xs text-sky-200/80 font-medium">
           {currentQ.question}
         </p>
       </div>
@@ -146,12 +146,12 @@ const QuizBoard: React.FC<{
           const isSelected = selectedOption === optIdx;
           const isCorrect = optIdx === currentQ.correctIndex;
 
-          let btnStyle = 'bg-white border-sky-200 text-slate-900 hover:border-teal-500 hover:bg-teal-50/50';
+          let btnStyle = 'glass-card-dark border-white/12 text-white hover:border-purple-400/60 hover:bg-white/10';
           if (showExplanation) {
             if (isCorrect) {
-              btnStyle = 'bg-emerald-100 border-emerald-500 text-emerald-950 font-bold';
+              btnStyle = 'bg-purple-900/80 border-purple-400 text-white font-bold shadow-[0_0_15px_rgba(168,85,247,0.4)]';
             } else if (isSelected) {
-              btnStyle = 'bg-red-100 border-red-400 text-red-950';
+              btnStyle = 'bg-rose-950/70 border-rose-500 text-rose-200';
             }
           }
 
@@ -160,10 +160,10 @@ const QuizBoard: React.FC<{
               key={optIdx}
               disabled={selectedOption !== null}
               onClick={() => handleSelectOption(optIdx)}
-              className={`w-full p-4 rounded-2xl border-2 text-left font-bold text-base transition-all cursor-pointer flex items-center justify-between shadow-xs ${btnStyle}`}
+              className={`w-full p-4 rounded-2xl border text-left font-bold text-base transition-all cursor-pointer flex items-center justify-between shadow-md backdrop-blur-md ${btnStyle}`}
             >
               <span>{optText}</span>
-              {showExplanation && isCorrect && <CheckCircle2 size={20} className="text-emerald-600" />}
+              {showExplanation && isCorrect && <CheckCircle2 size={20} className="text-[#c084fc]" />}
             </button>
           );
         })}
@@ -171,8 +171,8 @@ const QuizBoard: React.FC<{
 
       {/* Explanation Banner */}
       {showExplanation && (
-        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 text-xs sm:text-sm animate-in fade-in">
-          <strong>💡 স্মৃতি টোকা:</strong> {currentQ.triviaFactAs}
+        <div className="p-4 rounded-2xl bg-purple-950/40 border border-purple-400/40 text-sky-100 text-xs sm:text-sm animate-in fade-in backdrop-blur-md">
+          <strong className="text-purple-300">💡 স্মৃতি টোকা:</strong> {currentQ.triviaFactAs}
         </div>
       )}
     </div>
