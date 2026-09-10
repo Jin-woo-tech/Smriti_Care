@@ -31,6 +31,7 @@ import {
 } from 'recharts';
 import { useApp } from '../../context/AppContext';
 import { getTranslation } from '../../lib/i18n';
+import { maskPhoneNumber } from '../../lib/utils';
 import { VoiceNarratorButton } from '../common/VoiceNarratorButton';
 
 export const CaregiverDashboard: React.FC = () => {
@@ -210,7 +211,7 @@ export const CaregiverDashboard: React.FC = () => {
             className="inline-flex items-center gap-2 text-xs font-black text-[#c084fc] hover:text-purple-200 transition-colors"
           >
             <PhoneCall size={14} />
-            <span>Call Minoti (+91 94350 12345)</span>
+            <span>Call Minoti ({maskPhoneNumber('+91 94350 12345')})</span>
           </a>
         </div>
       </div>

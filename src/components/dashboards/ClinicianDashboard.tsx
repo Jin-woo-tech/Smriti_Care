@@ -32,6 +32,7 @@ import { useApp } from '../../context/AppContext';
 import { getTranslation } from '../../lib/i18n';
 import { generateAndDownloadClinicalReport } from '../../lib/pdfReport';
 import { VoiceNarratorButton } from '../common/VoiceNarratorButton';
+import { maskPhoneNumber } from '../../lib/utils';
 
 export const ClinicianDashboard: React.FC = () => {
   const { settings, cognitiveTrends, reminders, gameScores, ashaPatients, activePatient } = useApp();
@@ -153,7 +154,7 @@ export const ClinicianDashboard: React.FC = () => {
                 </span>
               </div>
               <p className="text-xs text-sky-200/70 font-medium mt-1">
-                {activePatient.age} Years • {activePatient.gender === 'F' ? 'Female' : activePatient.gender === 'M' ? 'Male' : 'Other'} • {activePatient.location} • Primary Contact: {activePatient.emergencyContactName || 'Family Caregiver'}
+                {activePatient.age} Years • {activePatient.gender === 'F' ? 'Female' : activePatient.gender === 'M' ? 'Male' : 'Other'} • {activePatient.location} • Primary Contact: {activePatient.emergencyContactName || 'Family Caregiver'} ({maskPhoneNumber(activePatient.emergencyContactPhone || '+91 94350 12345')})
               </p>
             </div>
           </div>
