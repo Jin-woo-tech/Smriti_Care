@@ -11,6 +11,7 @@ import {
   CognitiveDomainTrend,
   AshaPatientRecord,
   SyncQueueItem,
+  PatientProfile,
 } from '../types';
 import {
   STORAGE_KEYS,
@@ -23,6 +24,7 @@ import {
   initialCognitiveTrends,
   initialGameScores,
   initialAshaPatients,
+  initialPatientProfiles,
   addToSyncQueue,
   clearSyncQueue,
 } from '../lib/storage';
@@ -38,6 +40,15 @@ export interface AppContextType {
   toggleHighContrast: () => void;
   toggleReducedMotion: () => void;
   toggleSimulatedOffline: () => void;
+
+  // Patient Profiles
+  patientProfiles: PatientProfile[];
+  activePatientId: string;
+  activePatient: PatientProfile;
+  setActivePatientId: (id: string) => void;
+  addPatientProfile: (profile: Omit<PatientProfile, 'id'>) => void;
+  isProfileModalOpen: boolean;
+  setProfileModalOpen: (open: boolean) => void;
 
   // Reminders
   reminders: Reminder[];
@@ -62,6 +73,7 @@ export interface AppContextType {
 
   // Water / Hydration
   waterGlasses: number;
+  addWaterGlasses: () => void;
   addWaterGlass: () => void;
   resetWaterGlasses: () => void;
 
@@ -87,6 +99,14 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [settings, setSettings] = useState<AppSettings>(() =>
     getStoredData<AppSettings>(STORAGE_KEYS.SETTINGS, initialSettings)
+  );
+
+  const [patientProfiles, setPatientProfiles] = useState<PatientProfile[]>(() =>
+    getStoredData<PatientProfile[]>(STORAGE_KEYS.PATIENT_PROFILES, initialPatientProfiles)
+  );
+
+  const [activePatientId, setActivePatientIdState] = useState<string>(() =>
+    getStoredData<string>(STORAGE_KEYS.ACTIVE_PATIENT_ID, 'pat-ananya-20')
   );
 
   const [reminders, setReminders] = useState<Reminder[]>(() =>
@@ -125,6 +145,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [isSosOpen, setSosOpen] = useState<boolean>(false);
   const [isA11yOpen, setA11yOpen] = useState<boolean>(false);
+  const [isProfileModalOpen, setProfileModalOpen] = useState<boolean>(false);
+
+  // Active patient object lookup
+  const activePatient =
+    patientProfiles.find(p => p.id === activePatientId) || patientProfiles[0] || initialPatientProfiles[0];
 
   // Sync state to LocalStorage and root HTML attributes
   useEffect(() => {
@@ -148,6 +173,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       document.documentElement.classList.remove('reduced-motion');
     }
   }, [settings]);
+
+  useEffect(() => {
+    setStoredData(STORAGE_KEYS.PATIENT_PROFILES, patientProfiles);
+  }, [patientProfiles]);
+
+  useEffect(() => {
+    setStoredData(STORAGE_KEYS.ACTIVE_PATIENT_ID, activePatientId);
+  }, [activePatientId]);
 
   useEffect(() => {
     setStoredData(STORAGE_KEYS.REMINDERS, reminders);
@@ -284,7 +317,36 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setAshaPatients(prev => [newRecord, ...prev]);
   };
 
+  const addPatientProfile = (newProfile: Omit<PatientProfile, 'id'>) => {
+    const id = `pat-${newProfile.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now().toString().slice(-4)}`;
+    const initials = newProfile.name
+      .split(' ')
+      .map(part => part[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2) || 'PT';
+
+    const profile: PatientProfile = {
+      ...newProfile,
+      id,
+      avatarInitials: newProfile.avatarInitials || initials,
+      avatarColor: newProfile.avatarColor || 'from-purple-600 to-indigo-500',
+    };
+
+    setPatientProfiles(prev => [profile, ...prev]);
+    setActivePatientIdState(id);
+  };
+
+  const setActivePatientId = (id: string) => {
+    setActivePatientIdState(id);
+    updateSettings({ activePatientId: id });
+  };
+
   const addWaterGlass = () => {
+    setWaterGlasses(prev => Math.min(prev + 1, 12));
+  };
+
+  const addWaterGlasses = () => {
     setWaterGlasses(prev => Math.min(prev + 1, 12));
   };
 
@@ -326,6 +388,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         toggleHighContrast,
         toggleReducedMotion,
         toggleSimulatedOffline,
+        patientProfiles,
+        activePatientId,
+        activePatient,
+        setActivePatientId,
+        addPatientProfile,
+        isProfileModalOpen,
+        setProfileModalOpen,
         reminders,
         toggleReminderTaken,
         addReminder,
@@ -340,6 +409,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         updateAshaPatient,
         addAshaPatient,
         waterGlasses,
+        addWaterGlasses,
         addWaterGlass,
         resetWaterGlasses,
         syncQueue,

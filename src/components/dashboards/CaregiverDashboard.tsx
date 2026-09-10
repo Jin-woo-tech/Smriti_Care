@@ -34,8 +34,14 @@ import { getTranslation } from '../../lib/i18n';
 import { VoiceNarratorButton } from '../common/VoiceNarratorButton';
 
 export const CaregiverDashboard: React.FC = () => {
-  const { settings, reminders, cognitiveTrends, journal, addJournalEntry } = useApp();
+  const { settings, reminders, cognitiveTrends, journal, addJournalEntry, activePatient } = useApp();
   const lang = settings.language;
+  const patientName =
+    lang === 'as' && activePatient.nameAs
+      ? activePatient.nameAs
+      : lang === 'hi' && activePatient.nameHi
+      ? activePatient.nameHi
+      : activePatient.name;
 
   const [noteText, setNoteText] = useState('');
   const [showNoteModal, setShowNoteModal] = useState(false);
@@ -84,14 +90,14 @@ export const CaregiverDashboard: React.FC = () => {
           </div>
           <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
             {lang === 'as'
-              ? 'অভিভাৱক নিৰীক্ষণ ফলক: বিপিন গগৈ (৭২ বছৰ)'
+              ? `অভিভাৱক নিৰীক্ষণ ফলক: ${patientName} (${activePatient.age} বছৰ)`
               : lang === 'hi'
-              ? 'देखभालकर्ता निगरानी पोर्टल: बिपिन गोगोई (72 वर्ष)'
-              : 'Caregiver Overview: Bipin Gogoi (72 yrs)'}
+              ? `देखभालकर्ता निगरानी पोर्टल: ${patientName} (${activePatient.age} वर्ष)`
+              : `Caregiver Overview: ${patientName} (${activePatient.age} yrs)`}
           </h1>
           <p className="text-sm sm:text-base text-sky-200/80 mt-2 leading-relaxed font-medium">
             {lang === 'as'
-              ? 'দেউতাৰ দৈনিক ঔষধ পালন, মগজুৰ সুস্থতাৰ ধাৰা আৰু দৈনন্দিন টোকা পৰ্যবেক্ষণ কৰক।'
+              ? 'ৰোগীৰ দৈনিক ঔষধ পালন, মগজুৰ সুস্থতাৰ ধাৰা আৰু দৈনন্দিন টোকা পৰ্যবেক্ষণ কৰক।'
               : lang === 'hi'
               ? 'दैनिक दवा अनुपालन, 7-दिवसीय संज्ञानात्मक स्वास्थ्य रुझान और पारिवारिक देखभाल नोट्स देखें।'
               : 'Real-time adherence monitoring, 7-day cognitive trend charts, and family coordination.'}
@@ -102,10 +108,10 @@ export const CaregiverDashboard: React.FC = () => {
           <VoiceNarratorButton
             textToRead={
               lang === 'as'
-                ? 'অভিভাৱক ফলক। দেউতাৰ আজিৰ ঔষধ পালনৰ হাৰ আৰু বিগত ৭ দিনৰ স্মৃতি পৰীক্ষাৰ ধাৰা চাওক।'
+                ? `অভিভাৱক ফলক। ${patientName}ৰ আজিৰ ঔষধ পালনৰ হাৰ আৰু বিগত ৭ দিনৰ স্মৃতি পৰীক্ষাৰ ধাৰা চাওক।`
                 : lang === 'hi'
-                ? 'देखभालकर्ता पोर्टल। आज का दवा अनुपालन और पिछले 7 दिनों का स्मृति रुझान सामान्य और स्थिर है।'
-                : 'Caregiver overview for Bipin Gogoi. Medication adherence is on track with steady visual memory performance.'
+                ? `देखभालकर्ता पोर्टल। ${patientName} का आज का दवा अनुपालन और पिछले 7 दिनों का स्मृति रुझान सामान्य और स्थिर है।`
+                : `Caregiver overview for ${patientName}. Medication adherence is on track with steady visual memory performance.`
             }
             size="lg"
             className="bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md shadow-lg font-bold"

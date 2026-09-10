@@ -15,7 +15,7 @@ import { useApp } from '../../context/AppContext';
 import { Role } from '../../types';
 import { getTranslation } from '../../lib/i18n';
 import { VoiceNarratorButton } from '../common/VoiceNarratorButton';
-import { Anatomical3DHeartVisual } from './Anatomical3DHeartVisual';
+import { Smriti3DLogoVisual } from './Smriti3DLogoVisual';
 import { HologramGlobeVisual } from './HologramGlobeVisual';
 
 interface LandingPageProps {
@@ -134,10 +134,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
 
         {/* TOP INNER NAVIGATION BAR */}
         <header className="relative z-20 flex items-center justify-between pb-6 sm:pb-8 border-b border-white/10">
-          {/* Logo Brand: SmritiCare with Purple Heart */}
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] flex items-center justify-center text-white shadow-md shadow-purple-600/30">
-              <Heart size={18} className="fill-white" />
+          {/* Logo Brand: SmritiCare with Official Logo */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600/30 to-indigo-600/30 border border-purple-400/40 p-1 flex items-center justify-center shadow-lg shadow-purple-600/30 backdrop-blur-md">
+              <img
+                src="/smriti-logo.png"
+                alt="SmritiCare Logo"
+                className="w-full h-full object-contain filter drop-shadow"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.includes('26027-removebg-preview.png')) {
+                    target.src = '/26027-removebg-preview.png';
+                  }
+                }}
+              />
             </div>
             <span className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-1.5">
               <span>SmritiCare</span>
@@ -242,9 +252,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
             </div>
           </div>
 
-          {/* Central 3D Glossy Anatomical Heart Artwork with Purple 'Explore Services' Button */}
+          {/* Central 3D Glossy SmritiCare Logo Artwork with Purple 'Explore Services' Button */}
           <div className="relative z-10 my-2 sm:my-4">
-            <Anatomical3DHeartVisual
+            <Smriti3DLogoVisual
               onExplore={() => scrollToSection('portals-section')}
               exploreLabel={
                 lang === 'as'

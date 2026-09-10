@@ -33,8 +33,14 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
   onNavigateTab,
   onOpenEmergency,
 }) => {
-  const { settings, reminders, photos, waterGlasses } = useApp();
+  const { settings, reminders, photos, waterGlasses, activePatient } = useApp();
   const lang = settings.language;
+  const patientName =
+    lang === 'as' && activePatient.nameAs
+      ? activePatient.nameAs
+      : lang === 'hi' && activePatient.nameHi
+      ? activePatient.nameHi
+      : activePatient.name;
 
   const pendingReminders = reminders.filter(r => !r.taken);
   const nextReminder = pendingReminders[0] || reminders[0];
@@ -70,10 +76,10 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
             </div>
             <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
               {lang === 'as'
-                ? 'নমস্কাৰ, বিপিন গগৈ দেউতা!'
+                ? `নমস্কাৰ, ${patientName}!`
                 : lang === 'hi'
-                ? 'नमस्ते, बिपिन गोगोई जी!'
-                : 'Namaskar, Bipin Gogoi!'}
+                ? `नमस्ते, ${patientName} जी!`
+                : `Namaskar, ${patientName}!`}
             </h1>
             <p className="text-xs sm:text-sm text-sky-100/80 font-medium max-w-xl">
               {lang === 'as'
@@ -87,10 +93,10 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
           <VoiceNarratorButton
             textToRead={
               lang === 'as'
-                ? 'নমস্কাৰ বিপিন গগৈ দেউতা! আজি আপোনাৰ ৪ টা ঔষধৰ ভিতৰত ২ টা খোৱা হ’ল। মন সতেজ ৰাখিবলৈ মগজুৰ খেল খেলক।'
+                ? `নমস্কাৰ ${patientName}! আজি আপোনাৰ ৪ টা ঔষধৰ ভিতৰত ২ টা খোৱা হ’ল। মন সতেজ ৰাখিবলৈ মগজুৰ খেল খেলক।`
                 : lang === 'hi'
-                ? 'नमस्ते बिपिन गोगोई जी! आज आपकी 4 में से 2 दवाइयाँ ली जा चुकी हैं। मन को तरोताजा रखने के लिए दिमागी खेल खेलें।'
-                : 'Namaskar Bipin Gogoi. Welcome to your SmritiCare daily board. Tap any tile below to check medicines, play memory games, or talk with Sathi.'
+                ? `नमस्ते ${patientName} जी! आज आपकी 4 में से 2 दवाइयाँ ली जा चुकी हैं। मन को तरोताजा रखने के लिए दिमागी खेल खेलें।`
+                : `Namaskar ${patientName}. Welcome to your SmritiCare daily board. Tap any tile below to check medicines, play memory games, or talk with Sathi.`
             }
             size="lg"
             className="bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] hover:from-[#9333ea] hover:to-[#7c3aed] text-white border-0 shadow-lg shadow-purple-600/35 font-black"
