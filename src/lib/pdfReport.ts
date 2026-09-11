@@ -248,9 +248,9 @@ export function generateAndDownloadClinicalReport(
 
   <div class="section-title">3. Clinical Summary & Care Observations</div>
   <p style="font-size: 13px; line-height: 1.6;">
-    Patient Bipin Gogoi demonstrates robust episodic and semantic recall with exceptional engagement in cultural memory tasks (94/100).
+    Patient ${patient.name} demonstrates robust episodic and semantic recall with exceptional engagement in cultural memory tasks (94/100).
     A slight deviation is observed in executive trail-making tasks (-5% deviation from baseline).
-    Medication compliance remains high under active family supervision. Regular blood pressure checkups and continuing current anti-hypertensive regimen recommended.
+    Medication compliance remains high under active family supervision. Regular health checkups and continuing current wellness regimen recommended.
   </p>
 
   <div class="disclaimer">

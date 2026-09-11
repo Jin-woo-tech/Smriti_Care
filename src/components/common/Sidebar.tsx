@@ -16,6 +16,7 @@ import {
   WifiOff,
   AlertOctagon,
   ChevronRight,
+  UserCheck,
   X
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
@@ -47,6 +48,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     setA11yOpen,
     setSosOpen,
     toggleSimulatedOffline,
+    activePatient,
+    setProfileModalOpen,
   } = useApp();
 
   const lang = settings.language;
@@ -210,8 +213,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
             }}
             className="flex items-center gap-3 cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#8b5cf6] to-[#a855f7] flex items-center justify-center text-white shadow-lg shadow-purple-600/30 group-hover:scale-105 transition-transform border border-purple-400/30">
-              <Heart size={22} className="fill-white" />
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600/30 to-indigo-600/30 p-1 flex items-center justify-center text-white shadow-lg shadow-purple-600/30 group-hover:scale-105 transition-transform border border-purple-400/40 backdrop-blur-md">
+              <img
+                src="/smriti-logo.png"
+                alt="SmritiCare Logo"
+                className="w-full h-full object-contain filter drop-shadow"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.includes('26027-removebg-preview.png')) {
+                    target.src = '/26027-removebg-preview.png';
+                  }
+                }}
+              />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
@@ -454,52 +467,86 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
 
-        {/* Bottom User Profile Card */}
+        {/* Bottom User Profile Card with Dynamic Switcher Trigger */}
         <div className="p-4 border-t border-white/10 bg-[#080e1c]/70">
-          <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15 shadow-sm flex items-center justify-between gap-3">
+          <div
+            onClick={() => setProfileModalOpen(true)}
+            className="group bg-white/10 hover:bg-white/15 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl border border-white/15 hover:border-purple-400/50 shadow-sm flex items-center justify-between gap-2.5 cursor-pointer transition-all active:scale-98"
+            title="Click to Switch Profile or Add New Patient"
+          >
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="relative">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 text-white flex items-center justify-center font-black text-xs shadow-xs shrink-0 border border-purple-400/30">
+              <div className="relative shrink-0">
+                <div
+                  className={`w-10 h-10 rounded-xl bg-gradient-to-tr ${
+                    currentRole === 'patient'
+                      ? activePatient.avatarColor || 'from-purple-600 to-indigo-500'
+                      : currentRole === 'caregiver'
+                      ? 'from-indigo-600 to-blue-500'
+                      : currentRole === 'clinician'
+                      ? 'from-teal-600 to-emerald-500'
+                      : 'from-amber-600 to-orange-500'
+                  } text-white flex items-center justify-center font-black text-xs shadow-xs border border-white/20`}
+                >
                   {currentRole === 'patient'
-                    ? 'BG'
+                    ? activePatient.avatarInitials || 'AJ'
                     : currentRole === 'caregiver'
                     ? 'PG'
                     : currentRole === 'clinician'
                     ? 'DR'
                     : 'MD'}
                 </div>
-                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#c084fc] border-2 border-[#13243a]" />
+                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#c084fc] border-2 border-[#080e1c]" />
               </div>
 
               <div className="min-w-0">
-                <h4 className="text-xs font-bold text-white truncate">
-                  {currentRole === 'patient'
-                    ? (lang === 'as' ? 'বিপিন গগৈ (৭২)' : lang === 'hi' ? 'बिपिन गोगोई (72)' : 'Bipin Gogoi (72y)')
-                    : currentRole === 'caregiver'
-                    ? 'Priyanka Gogoi'
-                    : currentRole === 'clinician'
-                    ? 'Dr. A. Sarma (MD)'
-                    : 'Minoti Das (ASHA)'}
-                </h4>
-                <p className="text-[10px] text-sky-200/60 truncate">
-                  {currentRole === 'patient'
-                    ? 'Titabor, Jorhat'
-                    : currentRole === 'caregiver'
-                    ? 'Family Caregiver'
-                    : currentRole === 'clinician'
-                    ? 'Neurology PHC'
-                    : 'Titabor Sub-Centre'}
+                <div className="flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold text-white truncate group-hover:text-purple-200 transition-colors">
+                    {currentRole === 'patient'
+                      ? `${
+                          lang === 'as' && activePatient.nameAs
+                            ? activePatient.nameAs
+                            : lang === 'hi' && activePatient.nameHi
+                            ? activePatient.nameHi
+                            : activePatient.name
+                        } (${activePatient.age}y)`
+                      : currentRole === 'caregiver'
+                      ? 'Priyanka Gogoi'
+                      : currentRole === 'clinician'
+                      ? 'Dr. A. Sarma (MD)'
+                      : 'Minoti Das (ASHA)'}
+                  </h4>
+                </div>
+                <p className="text-[10px] text-sky-200/60 truncate flex items-center gap-1">
+                  <span>
+                    {currentRole === 'patient'
+                      ? lang === 'as' && activePatient.locationAs
+                        ? activePatient.locationAs
+                        : lang === 'hi' && activePatient.locationHi
+                        ? activePatient.locationHi
+                        : activePatient.location
+                      : currentRole === 'caregiver'
+                      ? 'Family Caregiver'
+                      : currentRole === 'clinician'
+                      ? 'Neurology PHC'
+                      : 'Titabor Sub-Centre'}
+                  </span>
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 shrink-0">
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-purple-500/20 text-[#c084fc] border border-purple-400/30 group-hover:bg-purple-500/30 transition-all">
+                Switch
+              </span>
               <button
-                onClick={() => setSosOpen(true)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSosOpen(true);
+                }}
                 title="Emergency SOS"
-                className="w-8 h-8 rounded-xl bg-rose-500/20 text-rose-400 hover:bg-rose-600 hover:text-white border border-rose-400/30 flex items-center justify-center transition-colors cursor-pointer"
+                className="w-7 h-7 rounded-lg bg-rose-500/20 text-rose-400 hover:bg-rose-600 hover:text-white border border-rose-400/30 flex items-center justify-center transition-colors cursor-pointer"
               >
-                <AlertOctagon size={16} />
+                <AlertOctagon size={14} />
               </button>
             </div>
           </div>
