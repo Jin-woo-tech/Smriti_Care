@@ -188,5 +188,6 @@ export interface AppSettings {
   reducedMotion: boolean;
   voiceAssistanceEnabled: boolean;
   apiKey: string;
+  apiKeyStatus?: 'valid' | 'invalid' | 'untested';
   isSimulatedOffline: boolean;
 }

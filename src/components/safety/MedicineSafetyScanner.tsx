@@ -115,14 +115,29 @@ export const MedicineSafetyScanner: React.FC = () => {
       </div>
 
       {/* AI Engine Status Badge */}
-      <div className="p-4 rounded-2xl bg-purple-500/15 border border-purple-400/30 flex items-start gap-3 backdrop-blur-md">
-        <Sparkles size={20} className="text-[#c084fc] shrink-0 mt-0.5" />
+      <div className={`p-4 rounded-2xl border flex items-start gap-3 backdrop-blur-md ${
+        settings.apiKeyStatus === 'valid'
+          ? 'bg-emerald-950/40 border-emerald-400/50 shadow-[0_0_15px_rgba(52,211,153,0.2)]'
+          : 'bg-purple-500/15 border-purple-400/30'
+      }`}>
+        <Sparkles size={20} className={settings.apiKeyStatus === 'valid' ? 'text-emerald-400 shrink-0 mt-0.5' : 'text-[#c084fc] shrink-0 mt-0.5'} />
         <div className="text-xs space-y-1">
-          <p className="font-bold text-white">
-            {getTranslation('aiStubBadgeTitle', lang)}
-          </p>
-          <p className="text-sky-200/80">
-            {getTranslation('aiStubBadgeDesc', lang)}
+          <div className="flex items-center gap-2">
+            <p className="font-bold text-white">
+              {settings.apiKeyStatus === 'valid'
+                ? lang === 'as' ? 'লাইভ ক্লদ ৩.৫ ভিজন ইঞ্জিন সক্ৰিয়' : lang === 'hi' ? 'लाइव क्लॉड 3.5 विजन इंजन सक्रिय' : 'Live Claude 3.5 Sonnet Vision Active'
+                : getTranslation('aiStubBadgeTitle', lang)}
+            </p>
+            {settings.apiKeyStatus === 'valid' && (
+              <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/40">
+                Verified
+              </span>
+            )}
+          </div>
+          <p className={settings.apiKeyStatus === 'valid' ? 'text-emerald-100/90' : 'text-sky-200/80'}>
+            {settings.apiKeyStatus === 'valid'
+              ? lang === 'as' ? 'প্ৰকৃত ক্লদ AI দ্বাৰা পেকেট স্কেন আৰু নিৰ্দেশনা বিশ্লেষণ কৰা হৈছে।' : lang === 'hi' ? 'वास्तविक क्लॉड AI द्वारा पैकेट स्कैन और खुराक सत्यापन किया जा रहा है।' : 'Real-time multi-modal Anthropic Vision model verifies medication packaging.'
+              : getTranslation('aiStubBadgeDesc', lang)}
           </p>
         </div>
       </div>
