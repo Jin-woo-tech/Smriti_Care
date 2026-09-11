@@ -180,6 +180,26 @@ export interface AshaPatientRecord {
   notesHi?: string;
 }
 
+export interface PatientProfile {
+  id: string;
+  name: string;
+  nameAs?: string;
+  nameHi?: string;
+  age: number;
+  gender: 'M' | 'F' | 'Other';
+  location: string;
+  locationAs?: string;
+  locationHi?: string;
+  avatarInitials: string;
+  avatarColor?: string;
+  condition?: string;
+  conditionAs?: string;
+  conditionHi?: string;
+  adherenceRate?: number;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+}
+
 export interface AppSettings {
   role: Role;
   language: Language;
@@ -188,5 +208,7 @@ export interface AppSettings {
   reducedMotion: boolean;
   voiceAssistanceEnabled: boolean;
   apiKey: string;
+  apiKeyStatus?: 'valid' | 'invalid' | 'untested';
   isSimulatedOffline: boolean;
+  activePatientId?: string;
 }

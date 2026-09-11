@@ -62,6 +62,19 @@ export const translations = {
     a11yReducedMotion: 'Reduce Animations',
     a11yVoice: 'Voice Assistance & Read Aloud',
 
+    // API Key & Live AI
+    apiKeySectionTitle: 'Anthropic Claude API Key (Optional Live Vision & AI)',
+    apiKeySectionDesc: 'By default, SmritiCare runs on an instant offline-capable intelligent engine. Enter and verify your Claude API key to activate live Claude 3.5 Sonnet / Haiku Vision and real-time empathetic AI conversation.',
+    apiKeyVerifyBtn: 'Verify API Key',
+    apiKeyVerifying: 'Verifying with Anthropic...',
+    apiKeyStatusValid: 'Valid & Active',
+    apiKeyStatusInvalid: 'Invalid API Key',
+    apiKeyStatusUntested: 'Unverified / Demo Mode',
+    apiKeyValidDetails: 'Claude 3.5 Sonnet / Haiku connected. Live AI assistance is active.',
+    apiKeyInvalidDetails: 'Authentication failed. Please verify your sk-ant-... key or check Anthropic credits.',
+    apiKeyClearBtn: 'Clear Key',
+    apiKeyPlaceholder: 'sk-ant-api03-...',
+
     // Offline status
     onlineStatus: 'Online (Connected)',
     offlineStatus: 'Offline Mode Active',
@@ -121,7 +134,7 @@ export const translations = {
     revealStory: 'Listen to the Family Memory Story',
 
     // Caregiver
-    caregiverOverview: 'Patient Care Overview (Bipin Gogoi, Age 72)',
+    caregiverOverview: 'Patient Care & Adherence Overview',
     adherenceRateMed: 'Medicine Adherence',
     adherenceRateHydration: 'Hydration Goal',
     adherenceRateActivity: 'Daily Activity',
@@ -201,6 +214,19 @@ export const translations = {
     a11yContrast: 'उच्च कंट्रास्ट मोड (High Contrast)',
     a11yReducedMotion: 'एनीमेशन कम करें',
     a11yVoice: 'ध्वनि सहायता और बोलकर सुनाएं',
+
+    // API Key & Live AI
+    apiKeySectionTitle: 'एंथ्रोपिक क्लॉड API कुंजी (लाइव AI एवं विजन)',
+    apiKeySectionDesc: 'स्मृति केयर डिफ़ॉल्ट रूप से ऑफलाइन इंटेलिजेंट इंजन पर काम करता है। वास्तविक क्लॉड 3.5 सॉनेट / हाइकू विजन और लाइव संवादी AI सक्रिय करने के लिए अपनी API Key दर्ज और सत्यापित करें।',
+    apiKeyVerifyBtn: 'कुंजी सत्यापित करें (Verify)',
+    apiKeyVerifying: 'सत्यापन जारी है...',
+    apiKeyStatusValid: 'सत्यापित एवं सक्रिय (Valid)',
+    apiKeyStatusInvalid: 'अमान्य कुंजी (Invalid)',
+    apiKeyStatusUntested: 'अ-सत्यापित / डेमो मोड',
+    apiKeyValidDetails: 'क्लॉड 3.5 सफलतापूर्वक कनेक्ट हुआ। लाइव AI साथी सक्रिय है।',
+    apiKeyInvalidDetails: 'सत्यापन विफल। कृपया sk-ant-... कुंजी या इंटरनेट कनेक्शन की जांच करें।',
+    apiKeyClearBtn: 'कुंजी हटाएं',
+    apiKeyPlaceholder: 'sk-ant-api03-...',
 
     // Offline status
     onlineStatus: 'ऑनलाइन (इंटरनेट सक्रिय)',
@@ -341,6 +367,19 @@ export const translations = {
     a11yContrast: 'উচ্চ বৈসাদৃশ্য মোড (High Contrast)',
     a11yReducedMotion: 'এনিমেশ্যন কম কৰক',
     a11yVoice: 'কণ্ঠ সহায়ক আৰু পঢ়ি শুনোৱা সেৱা',
+
+    // API Key & Live AI
+    apiKeySectionTitle: 'Anthropic Claude API Key (প্ৰকৃত লাইভ AI আৰু ভিজন)',
+    apiKeySectionDesc: 'স্মৃতি কেয়াৰ সাধাৰণতে অফলাইন ব্যৱস্থাতো চলিব পৰাকৈ নিৰ্মাণ কৰা হৈছে। প্ৰকৃত Claude 3.5 Sonnet / Haiku ব্যৱহাৰ কৰিবলৈ আপোনাৰ API Key সংযোগ কৰি পৰীক্ষা কৰক।',
+    apiKeyVerifyBtn: 'কী পৰীক্ষা কৰক (Verify)',
+    apiKeyVerifying: 'পৰীক্ষা কৰি থকা হৈছে...',
+    apiKeyStatusValid: 'প্ৰমাণিত আৰু সক্ৰিয় (Valid)',
+    apiKeyStatusInvalid: 'অবৈধ API Key (Invalid)',
+    apiKeyStatusUntested: 'অপৰীক্ষিত / নমুনা মোড',
+    apiKeyValidDetails: 'Claude 3.5 সফলভাৱে সংযোগ হ’ল। লাইভ AI সাথী সক্ৰিয় হৈছে।',
+    apiKeyInvalidDetails: 'পৰীক্ষা বিফল। অনুগ্ৰহ কৰি আপোনাৰ sk-ant-... কী বা ইন্টাৰনেট পৰীক্ষা কৰক।',
+    apiKeyClearBtn: 'কী আঁতৰাওক',
+    apiKeyPlaceholder: 'sk-ant-api03-...',
 
     // Offline status
     onlineStatus: 'অনলাইন (ইন্টাৰনেট সক্ৰিয়)',

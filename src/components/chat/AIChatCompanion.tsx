@@ -87,13 +87,23 @@ export const AIChatCompanion: React.FC = () => {
             <Heart size={28} className="text-[#c084fc]" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <h2 className="text-2xl sm:text-3xl font-black text-white">
                 {lang === 'as' ? 'স্মৃতি সাথী (AI Companion)' : lang === 'hi' ? 'स्मृति साथी (AI Companion)' : 'Smriti Sathi (AI Care Companion)'}
               </h2>
               <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-200 border border-purple-400/30">
                 Trilingual
               </span>
+              {settings.apiKeyStatus === 'valid' ? (
+                <span className="text-[10px] uppercase font-extrabold tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-500/25 text-emerald-200 border border-emerald-400/50 shadow-[0_0_12px_rgba(52,211,153,0.35)] flex items-center gap-1">
+                  <Sparkles size={11} className="text-emerald-300" />
+                  Live Claude 3.5
+                </span>
+              ) : (
+                <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-white/10 text-sky-200/80 border border-white/15">
+                  Offline Engine
+                </span>
+              )}
             </div>
             <p className="text-xs sm:text-sm text-sky-200/80 font-medium mt-1">
               {lang === 'as'
