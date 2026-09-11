@@ -31,6 +31,7 @@ export const initialSettings: AppSettings = {
   reducedMotion: false,
   voiceAssistanceEnabled: true,
   apiKey: '',
+  apiKeyStatus: 'untested',
   isSimulatedOffline: false,
 };
 

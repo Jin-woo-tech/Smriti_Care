@@ -72,6 +72,34 @@ export const LabReportAnalyzer: React.FC = () => {
         />
       </div>
 
+      {/* Engine Status Banner */}
+      <div className={`p-4 rounded-2xl border flex items-start gap-3 backdrop-blur-md ${
+        settings.apiKeyStatus === 'valid'
+          ? 'bg-emerald-950/40 border-emerald-400/50 shadow-[0_0_15px_rgba(52,211,153,0.2)]'
+          : 'bg-purple-500/15 border-purple-400/30'
+      }`}>
+        <Sparkles size={20} className={settings.apiKeyStatus === 'valid' ? 'text-emerald-400 shrink-0 mt-0.5' : 'text-[#c084fc] shrink-0 mt-0.5'} />
+        <div className="text-xs space-y-1">
+          <div className="flex items-center gap-2">
+            <p className="font-bold text-white">
+              {settings.apiKeyStatus === 'valid'
+                ? lang === 'as' ? 'লাইভ ক্লদ ৩.৫ মেডিকেল ডায়গনষ্টিক ইঞ্জিন সক্ৰিয়' : lang === 'hi' ? 'लाइव क्लॉड 3.5 डायग्नोस्टिक इंजन सक्रिय' : 'Live Claude 3.5 Diagnostic Translation Active'
+                : getTranslation('aiStubBadgeTitle', lang)}
+            </p>
+            {settings.apiKeyStatus === 'valid' && (
+              <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/40">
+                Verified
+              </span>
+            )}
+          </div>
+          <p className={settings.apiKeyStatus === 'valid' ? 'text-emerald-100/90' : 'text-sky-200/80'}>
+            {settings.apiKeyStatus === 'valid'
+              ? lang === 'as' ? 'প্ৰকৃত ক্লদ AI দ্বাৰা তেজৰ সূচকসমূহ সহজ ভাষাত ব্যাখ্যা কৰা হৈছে।' : lang === 'hi' ? 'वास्तविक क्लॉड AI द्वारा रक्त रिपोर्ट बायोमार्कर का सरल भाषा में अनुवाद किया जा रहा है।' : 'Real-time Anthropic Claude model translates complex lab markers.'
+              : getTranslation('aiStubBadgeDesc', lang)}
+          </p>
+        </div>
+      </div>
+
       {/* Action Upload Card */}
       <div className="glass-card-dark p-6 rounded-3xl border border-white/12 shadow-xl">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
