@@ -1,38 +1,53 @@
 import React from 'react';
-import { PhoneCall, AlertTriangle, X, ShieldAlert, HeartHandshake } from 'lucide-react';
+import { PhoneCall, AlertTriangle, X, ShieldAlert, HeartHandshake, Sparkles, Volume2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { getTranslation } from '../../lib/i18n';
+import { maskPhoneNumber } from '../../lib/utils';
 
 export const EmergencyModal: React.FC = () => {
-  const { isSosOpen, setSosOpen, settings, narrate } = useApp();
+  const { isSosOpen, setSosOpen, settings, narrate, activePatient } = useApp();
   const lang = settings.language;
 
   if (!isSosOpen) return null;
 
+  const caregiverPhone = activePatient?.emergencyContactPhone || '+91 98640 67890';
+  const ashaPhone = '+91 94350 12345';
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs">
-      <div className="relative w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border-2 border-red-500 text-slate-900 animate-in fade-in zoom-in-95">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-xl animate-in fade-in duration-200">
+      <div className="relative w-full max-w-lg bg-gradient-to-b from-[#181635] via-[#0e1628] to-[#0a101f] border border-purple-500/30 rounded-[32px] p-6 sm:p-8 shadow-2xl shadow-purple-950/60 text-white overflow-hidden animate-in zoom-in-95 duration-200">
+        {/* Glow ambient spots */}
+        <div className="absolute -top-24 -left-24 w-60 h-60 bg-red-600/25 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-60 h-60 bg-purple-600/25 rounded-full blur-3xl pointer-events-none" />
+
         {/* Close Button */}
         <button
           onClick={() => setSosOpen(false)}
-          className="absolute right-4 top-4 rounded-full p-2 text-slate-400 hover:bg-slate-100 cursor-pointer"
+          className="absolute right-4 top-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center text-sky-200 hover:text-white cursor-pointer transition-all active:scale-95"
           aria-label="Close modal"
         >
-          <X size={24} />
+          <X size={20} />
         </button>
 
-        {/* Header */}
-        <div className="flex items-center gap-3 text-red-600 mb-4">
-          <ShieldAlert size={36} className="animate-bounce" />
+        {/* Header with SOS Badge */}
+        <div className="flex items-center gap-3.5 mb-5 pr-8">
+          <div className="w-13 h-13 rounded-2xl bg-rose-500/20 border border-rose-400/40 text-rose-400 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(244,63,94,0.3)] animate-pulse">
+            <ShieldAlert size={28} />
+          </div>
           <div>
-            <h2 className="text-2xl font-bold">
-              {lang === 'as'
-                ? 'জৰুৰীকালীন সহায় (SOS)'
-                : lang === 'hi'
-                ? 'आपातकालीन सहायता (SOS)'
-                : 'Emergency Help & Contacts'}
-            </h2>
-            <p className="text-sm text-slate-600">
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl sm:text-2xl font-black text-white">
+                {lang === 'as'
+                  ? 'জৰুৰীকালীন সহায় (SOS)'
+                  : lang === 'hi'
+                  ? 'आपातकालीन सहायता (SOS)'
+                  : 'Emergency Help & Contacts'}
+              </h2>
+              <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-black border border-rose-400/40">
+                24/7 LIVE
+              </span>
+            </div>
+            <p className="text-xs text-sky-200/70 font-medium mt-0.5">
               {lang === 'as'
                 ? 'তলৰ যিকোনো এটা নম্বৰত স্পৰ্শ কৰি তৎক্ষণাৎ যোগাযোগ কৰক'
                 : lang === 'hi'
@@ -42,97 +57,111 @@ export const EmergencyModal: React.FC = () => {
           </div>
         </div>
 
-        {/* Action Contacts */}
-        <div className="space-y-3.5 my-6">
+        {/* Action Contacts - Frosted Dark Cards */}
+        <div className="space-y-3 my-5">
           {/* Primary Caregiver */}
           <a
-            href="tel:+919864067890"
-            className="flex items-center justify-between p-4 rounded-2xl bg-teal-50 border-2 border-teal-500 hover:bg-teal-100 transition-colors"
+            href={`tel:${caregiverPhone}`}
+            className="group flex items-center justify-between p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-purple-500/30 hover:border-purple-400/60 backdrop-blur-md transition-all shadow-lg hover:shadow-purple-600/20 active:scale-[0.99] cursor-pointer"
           >
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-teal-700 text-white rounded-xl">
+            <div className="flex items-center gap-3.5">
+              <div className="w-12 h-12 rounded-xl bg-purple-500/20 group-hover:bg-purple-500/30 border border-purple-400/30 text-[#c084fc] flex items-center justify-center shrink-0 transition-colors shadow-xs">
                 <HeartHandshake size={24} />
               </div>
               <div>
-                <p className="font-bold text-lg text-teal-950">
-                  {lang === 'as'
-                    ? 'জীয়াৰী প্ৰিয়ংকা (প্ৰাথমিক যত্নকৰ্তা)'
-                    : lang === 'hi'
-                    ? 'बेटी प्रियंका (मुख्य देखभालकर्ता)'
-                    : 'Daughter Priyanka (Caregiver)'}
+                <p className="font-extrabold text-sm sm:text-base text-white group-hover:text-purple-200 transition-colors">
+                  {activePatient?.emergencyContactName ||
+                    (lang === 'as'
+                      ? 'জীয়াৰী প্ৰিয়ংকা (প্ৰাথমিক যত্নকৰ্তা)'
+                      : lang === 'hi'
+                      ? 'बेटी प्रियंका (मुख्य देखभालकर्ता)'
+                      : 'Primary Caregiver')}
                 </p>
-                <p className="text-sm text-teal-800">+91 98640 67890 • Jorhat</p>
+                <p className="text-xs font-mono font-bold text-[#c084fc] mt-0.5">
+                  {maskPhoneNumber(caregiverPhone)} • Jorhat
+                </p>
               </div>
             </div>
-            <PhoneCall size={28} className="text-teal-700" />
+            <div className="w-10 h-10 rounded-xl bg-purple-600/30 group-hover:bg-purple-600 border border-purple-400/40 flex items-center justify-center text-white transition-all shadow-md">
+              <PhoneCall size={18} />
+            </div>
           </a>
 
           {/* ASHA Health Worker */}
           <a
-            href="tel:+919435012345"
-            className="flex items-center justify-between p-4 rounded-2xl bg-sky-50 border-2 border-sky-500 hover:bg-sky-100 transition-colors"
+            href={`tel:${ashaPhone}`}
+            className="group flex items-center justify-between p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-cyan-500/30 hover:border-cyan-400/60 backdrop-blur-md transition-all shadow-lg hover:shadow-cyan-600/20 active:scale-[0.99] cursor-pointer"
           >
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-sky-600 text-white rounded-xl">
-                <PhoneCall size={24} />
+            <div className="flex items-center gap-3.5">
+              <div className="w-12 h-12 rounded-xl bg-cyan-500/20 group-hover:bg-cyan-500/30 border border-cyan-400/30 text-cyan-300 flex items-center justify-center shrink-0 transition-colors shadow-xs">
+                <PhoneCall size={22} />
               </div>
               <div>
-                <p className="font-bold text-lg text-sky-950">
+                <p className="font-extrabold text-sm sm:text-base text-white group-hover:text-cyan-200 transition-colors">
                   {lang === 'as'
                     ? 'মিনতি দাস (আশা স্বাস্থ্য কৰ্মী)'
                     : lang === 'hi'
                     ? 'मिनती दास (आशा स्वास्थ्य कार्यकर्ता)'
-                    : 'Minoti Das (ASHA Health Worker)'}
+                    : 'Minoti Das (ASHA Worker)'}
                 </p>
-                <p className="text-sm text-sky-800">+91 94350 12345 • Titabor Block</p>
+                <p className="text-xs font-mono font-bold text-cyan-300 mt-0.5">
+                  {maskPhoneNumber(ashaPhone)} • Titabor Block
+                </p>
               </div>
             </div>
-            <PhoneCall size={28} className="text-sky-600" />
+            <div className="w-10 h-10 rounded-xl bg-cyan-600/30 group-hover:bg-cyan-600 border border-cyan-400/40 flex items-center justify-center text-white transition-all shadow-md">
+              <PhoneCall size={18} />
+            </div>
           </a>
 
           {/* 108 Assam Emergency Ambulance */}
           <a
             href="tel:108"
-            className="flex items-center justify-between p-4 rounded-2xl bg-red-50 border-2 border-red-600 hover:bg-red-100 transition-colors"
+            className="group flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-rose-950/40 to-red-900/30 hover:from-rose-950/60 hover:to-red-900/50 border border-rose-500/40 hover:border-rose-400/70 backdrop-blur-md transition-all shadow-lg hover:shadow-rose-600/30 active:scale-[0.99] cursor-pointer"
           >
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-red-600 text-white rounded-xl">
+            <div className="flex items-center gap-3.5">
+              <div className="w-12 h-12 rounded-xl bg-rose-500/30 group-hover:bg-rose-500/40 border border-rose-400/50 text-rose-300 flex items-center justify-center shrink-0 transition-colors shadow-xs animate-bounce">
                 <AlertTriangle size={24} />
               </div>
               <div>
-                <p className="font-bold text-lg text-red-950">
+                <p className="font-extrabold text-sm sm:text-base text-white group-hover:text-rose-200 transition-colors">
                   {lang === 'as'
                     ? '১০৮ জৰুৰী এম্বুলেন্স সেৱা (অসম)'
                     : lang === 'hi'
                     ? '108 आपातकालीन एम्बुलेंस सेवा'
                     : '108 Emergency Medical Ambulance'}
                 </p>
-                <p className="text-sm text-red-800">Toll-Free 24/7 Government Helpline</p>
+                <p className="text-xs text-rose-300/80 font-medium mt-0.5">
+                  Toll-Free 24/7 National Health Mission Helpline
+                </p>
               </div>
             </div>
-            <PhoneCall size={28} className="text-red-600" />
+            <div className="w-10 h-10 rounded-xl bg-rose-600 group-hover:bg-rose-500 border border-rose-400/50 flex items-center justify-center text-white transition-all shadow-lg shadow-rose-600/40">
+              <PhoneCall size={18} />
+            </div>
           </a>
         </div>
 
-        {/* Footer */}
-        <div className="flex justify-between items-center pt-2">
+        {/* Footer actions */}
+        <div className="flex justify-between items-center pt-3 border-t border-white/10 mt-2">
           <button
             onClick={() =>
               narrate(
                 lang === 'as'
-                  ? 'জৰুৰীকালীন সহায়: জীয়াৰী প্ৰিয়ংকা, আশা কৰ্মী মিনতি দাস, বা ১০৮ এম্বুলেন্স সেৱাত ফোন কৰক।'
+                  ? 'জৰুৰীকালীন সহায়: জীয়াৰী বা যত্নকৰ্তা, আশা কৰ্মী মিনতি দাস, বা ১০৮ এম্বুলেন্স সেৱাত ফোন কৰক।'
                   : lang === 'hi'
-                  ? 'आपातकालीन सहायता: बेटी प्रियंका, आशा कार्यकर्ता मिनती दास या 108 एम्बुलेंस सेवा पर कॉल करें।'
-                  : 'Emergency Help: You can call your daughter Priyanka, ASHA worker Minoti Das, or 108 Emergency Ambulance.'
+                  ? 'आपातकालीन सहायता: परिवार के देखभालकर्ता, आशा कार्यकर्ता मिनती दास या 108 एम्बुलेंस सेवा पर कॉल करें।'
+                  : 'Emergency Help: You can call your primary caregiver, ASHA worker Minoti Das, or 108 Emergency Ambulance.'
               )
             }
-            className="text-sm font-semibold text-teal-700 hover:underline cursor-pointer"
+            className="flex items-center gap-1.5 text-xs font-bold text-sky-200 hover:text-[#c084fc] cursor-pointer transition-colors"
           >
-            {getTranslation('actionListen', lang)}
+            <Volume2 size={14} className="text-[#c084fc]" />
+            <span>{getTranslation('actionListen', lang)}</span>
           </button>
           <button
             onClick={() => setSosOpen(false)}
-            className="px-6 py-2.5 rounded-xl bg-slate-100 text-slate-800 font-bold hover:bg-slate-200 cursor-pointer"
+            className="px-5 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs border border-white/15 cursor-pointer transition-all active:scale-95"
           >
             {getTranslation('actionCancel', lang)}
           </button>

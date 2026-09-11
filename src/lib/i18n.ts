@@ -134,7 +134,7 @@ export const translations = {
     revealStory: 'Listen to the Family Memory Story',
 
     // Caregiver
-    caregiverOverview: 'Patient Care Overview (Bipin Gogoi, Age 72)',
+    caregiverOverview: 'Patient Care & Adherence Overview',
     adherenceRateMed: 'Medicine Adherence',
     adherenceRateHydration: 'Hydration Goal',
     adherenceRateActivity: 'Daily Activity',

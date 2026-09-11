@@ -16,6 +16,7 @@ import {
   WifiOff,
   AlertOctagon,
   ChevronRight,
+  UserCheck,
   X
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
@@ -47,6 +48,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     setA11yOpen,
     setSosOpen,
     toggleSimulatedOffline,
+    activePatient,
+    setProfileModalOpen,
   } = useApp();
 
   const lang = settings.language;
@@ -210,8 +213,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
             }}
             className="flex items-center gap-3 cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#8b5cf6] to-[#a855f7] flex items-center justify-center text-white shadow-lg shadow-purple-600/30 group-hover:scale-105 transition-transform border border-purple-400/30">
-              <Heart size={22} className="fill-white" />
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600/30 to-indigo-600/30 p-1 flex items-center justify-center text-white shadow-lg shadow-purple-600/30 group-hover:scale-105 transition-transform border border-purple-400/40 backdrop-blur-md">
+              <img
+                src="/smriti-logo.png"
+                alt="SmritiCare Logo"
+                className="w-full h-full object-contain filter drop-shadow"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.includes('26027-removebg-preview.png')) {
+                    target.src = '/26027-removebg-preview.png';
+                  }
+                }}
+              />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
@@ -241,26 +254,52 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
 
-        {/* Scrollable Navigation Sections */}
-        <div className="flex-1 overflow-y-auto px-4 py-5 space-y-6 no-scrollbar">
-          {/* SECTION 1: ROLE PORTALS */}
+        {/* Scrollable Navigation Body */}
+        <div className="flex-1 overflow-y-auto px-4 py-5 space-y-6 scrollbar-thin">
+          {/* Landing / Showcase Architecture Toggle */}
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between px-2 mb-2">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-sky-200/60">
-                {lang === 'as'
-                  ? 'ভূমিকা প’ৰ্টেলসমূহ'
-                  : lang === 'hi'
-                  ? 'भूमिका पोर्टल'
-                  : 'Stakeholder Portals'}
+            <div className="text-[11px] font-bold text-sky-200/60 uppercase tracking-wider px-2">
+              {lang === 'as' ? 'সংক্ষিপ্ত বৰ্ণনা' : lang === 'hi' ? 'अवलोकन' : 'Overview'}
+            </div>
+            <button
+              onClick={() => {
+                onToggleLanding(true);
+                onCloseMobile();
+              }}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
+                showLanding
+                  ? 'bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] text-white shadow-lg shadow-purple-600/30 border border-purple-400/40'
+                  : 'bg-white/5 hover:bg-white/10 text-sky-100 hover:text-white border border-white/10'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <Compass size={17} className={showLanding ? 'text-white' : 'text-[#c084fc]'} />
+                <span>
+                  {lang === 'as'
+                    ? 'SIH 2026 প্ৰজেক্ট ডেমো'
+                    : lang === 'hi'
+                    ? 'SIH 2026 प्रोजेक्ट डेमो'
+                    : 'SIH 2026 Project Showcase'}
+                </span>
+              </div>
+              <ChevronRight size={15} className="opacity-70" />
+            </button>
+          </div>
+
+          {/* Active Role Switcher Selection */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between px-2">
+              <span className="text-[11px] font-bold text-sky-200/60 uppercase tracking-wider">
+                {lang === 'as' ? 'ব্যৱহাৰকাৰী ভূমিকা' : lang === 'hi' ? 'भूमिका चुनें' : 'Active Role Mode'}
               </span>
-              <span className="text-[9px] font-bold text-purple-300 bg-purple-500/15 px-2 py-0.5 rounded-full border border-purple-400/30">
-                4 Roles
+              <span className="text-[10px] text-[#c084fc] font-black bg-purple-500/20 px-2 py-0.5 rounded-full border border-purple-400/30">
+                4 Portals
               </span>
             </div>
 
-            <div className="space-y-1">
-              {roles.map(r => {
-                const isActiveRole = currentRole === r.id && !showLanding;
+            <div className="grid grid-cols-1 gap-1.5">
+              {roles.map((r) => {
+                const isSelected = currentRole === r.id && !showLanding;
                 return (
                   <button
                     key={r.id}
@@ -270,61 +309,44 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       onCloseMobile();
                     }}
                     className={`w-full flex items-center justify-between p-2.5 rounded-2xl text-left transition-all cursor-pointer ${
-                      isActiveRole
-                        ? 'bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] text-white font-black shadow-lg shadow-purple-600/35 border border-purple-400/40'
-                        : 'text-stone-300 hover:bg-white/10 hover:text-white'
+                      isSelected
+                        ? 'bg-purple-600/30 border border-purple-400/50 shadow-md shadow-purple-900/30 text-white'
+                        : 'bg-white/5 hover:bg-white/10 border border-white/8 text-sky-100/90 hover:text-white'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2.5 min-w-0">
                       <div
-                        className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors border ${
-                          isActiveRole ? 'bg-white/20 text-white border-white/30' : r.color + ' border-white/10'
+                        className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border border-white/10 ${
+                          isSelected ? 'bg-gradient-to-tr from-[#a855f7] to-[#8b5cf6] text-white shadow-sm' : r.color
                         }`}
                       >
                         {r.icon}
                       </div>
-                      <div>
-                        <p
-                          className={`text-xs font-bold leading-tight ${
-                            isActiveRole ? 'text-white' : 'text-stone-200'
-                          }`}
-                        >
-                          {getRoleLabel(r)}
-                        </p>
-                        <p
-                          className={`text-[10px] leading-tight ${
-                            isActiveRole ? 'text-purple-100' : 'text-sky-200/60'
-                          }`}
-                        >
+                      <div className="min-w-0">
+                        <div className="text-xs font-bold truncate flex items-center gap-1.5">
+                          <span>{getRoleLabel(r)}</span>
+                        </div>
+                        <div className="text-[10px] text-sky-200/60 truncate font-medium">
                           {getRoleSubtitle(r)}
-                        </p>
+                        </div>
                       </div>
                     </div>
-
-                    {isActiveRole ? (
-                      <span className="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_white]" />
-                    ) : (
-                      <ChevronRight size={14} className="text-sky-200/40" />
-                    )}
+                    {isSelected && <UserCheck size={16} className="text-[#c084fc] shrink-0 ml-1" />}
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* SECTION 2: PATIENT CARE MODULES */}
+          {/* Tab Navigation for Senior / Patient Role */}
           {currentRole === 'patient' && !showLanding && (
             <div className="space-y-1.5 pt-2 border-t border-white/10">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-sky-200/60 px-2 block mb-2">
-                {lang === 'as'
-                  ? 'দৈনিক যত্ন আৰু মডিউল'
-                  : lang === 'hi'
-                  ? 'दैनिक देखभाल मॉड्यूल'
-                  : 'Daily Care Modules'}
-              </span>
+              <div className="text-[11px] font-bold text-sky-200/60 uppercase tracking-wider px-2">
+                {lang === 'as' ? 'ৰোগীৰ সেৱাসমূহ' : lang === 'hi' ? 'रोगी सेवाएँ' : 'Senior Care Modules'}
+              </div>
 
               <div className="space-y-1">
-                {navItems.map(item => {
+                {navItems.map((item) => {
                   const isActive = activeTab === item.id;
                   return (
                     <button
@@ -333,25 +355,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         onSelectTab(item.id);
                         onCloseMobile();
                       }}
-                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left transition-all cursor-pointer ${
+                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
                         isActive
-                          ? 'bg-purple-500/20 text-white font-black border border-purple-400/40 shadow-md backdrop-blur-md shadow-purple-900/30'
-                          : 'text-stone-300 hover:bg-white/10 hover:text-white font-medium'
+                          ? 'bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] text-white shadow-lg shadow-purple-600/30 border border-purple-400/40'
+                          : 'bg-white/5 hover:bg-white/10 text-sky-100 hover:text-white border border-white/6'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
-                        <span className={isActive ? 'text-[#c084fc]' : 'text-sky-200/70'}>
+                      <div className="flex items-center gap-2.5">
+                        <span className={isActive ? 'text-white' : 'text-[#c084fc]'}>
                           {item.icon}
                         </span>
-                        <span className="text-xs">{getNavLabel(item)}</span>
+                        <span>{getNavLabel(item)}</span>
                       </div>
-
                       {item.badge && (
                         <span
-                          className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
+                          className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded-full ${
                             isActive
-                              ? 'bg-[#a855f7] text-white shadow-xs'
-                              : 'bg-white/10 text-sky-200'
+                              ? 'bg-white/25 text-white'
+                              : 'bg-purple-500/20 text-[#c084fc] border border-purple-400/30'
                           }`}
                         >
                           {item.badge}
@@ -364,142 +385,152 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           )}
 
-          {/* SECTION 3: SYSTEM & ARCHITECTURE EXPLORER */}
-          <div className="space-y-1.5 pt-2 border-t border-white/10">
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-sky-200/60 px-2 block mb-2">
-              {lang === 'as'
-                ? 'প্ৰকল্প আৰু সংহতি'
-                : lang === 'hi'
-                ? 'परियोजना एवं सेटिंग्स'
-                : 'Project & System'}
-            </span>
+          {/* Quick Utility Actions */}
+          <div className="pt-2 border-t border-white/10 space-y-2">
+            <div className="text-[11px] font-bold text-sky-200/60 uppercase tracking-wider px-2">
+              {lang === 'as' ? 'সুবিধাসমূহ' : lang === 'hi' ? 'उपकरण' : 'System Quick Toggles'}
+            </div>
 
-            {/* Architecture / Overview Explorer */}
+            {/* Offline Simulator Switch */}
             <button
-              onClick={() => {
-                onToggleLanding(!showLanding);
-                onCloseMobile();
-              }}
-              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left transition-all cursor-pointer ${
-                showLanding
-                  ? 'bg-purple-500/20 text-white font-black border border-purple-400/40'
-                  : 'text-stone-300 hover:bg-white/10 hover:text-white font-medium'
+              onClick={toggleSimulatedOffline}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-2xl text-xs font-bold border transition-all cursor-pointer ${
+                settings.isSimulatedOffline
+                  ? 'bg-amber-500/20 text-amber-200 border-amber-400/40'
+                  : 'bg-white/5 hover:bg-white/10 text-sky-200 border-white/10'
               }`}
             >
-              <div className="flex items-center gap-3">
-                <Compass
-                  size={19}
-                  className={showLanding ? 'text-[#c084fc]' : 'text-sky-200/70'}
-                />
-                <span className="text-xs">
-                  {lang === 'as'
-                    ? 'প্ৰকল্প পৰিচয় ও আৰ্ট'
+              <div className="flex items-center gap-2">
+                {settings.isSimulatedOffline ? <WifiOff size={16} /> : <Wifi size={16} />}
+                <span>
+                  {settings.isSimulatedOffline
+                    ? lang === 'as'
+                      ? 'অফলাইন মড সক্ৰিয়'
+                      : lang === 'hi'
+                      ? 'ऑफलाइन मोड सक्रिय'
+                      : 'Offline Mode Active'
+                    : lang === 'as'
+                    ? 'অনলাইন নেটৱৰ্ক'
                     : lang === 'hi'
-                    ? 'परियोजना परिचय व 3D आर्ट'
-                    : 'Hero Showcase & 3D Art'}
+                    ? 'ऑनलाइन नेटवर्क'
+                    : 'Network Online'}
                 </span>
               </div>
-              <span className="text-[9px] font-bold bg-purple-500/30 text-purple-200 border border-purple-400/40 px-1.5 py-0.5 rounded">
-                Hero
+              <span
+                className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${
+                  settings.isSimulatedOffline ? 'bg-amber-500/30 text-amber-100' : 'bg-white/10 text-sky-200'
+                }`}
+              >
+                {settings.isSimulatedOffline ? 'Offline' : 'Online'}
               </span>
             </button>
 
-            {/* Accessibility Settings Shortcut */}
+            {/* Accessibility Modal Trigger */}
             <button
               onClick={() => {
                 setA11yOpen(true);
                 onCloseMobile();
               }}
-              className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-stone-300 hover:bg-white/10 hover:text-white font-medium transition-all cursor-pointer"
+              className="w-full flex items-center justify-between px-3 py-2 rounded-2xl text-xs font-bold bg-white/5 hover:bg-white/10 text-sky-200 border border-white/10 transition-all cursor-pointer"
             >
-              <div className="flex items-center gap-3">
-                <SlidersHorizontal size={19} className="text-sky-200/70" />
-                <span className="text-xs">
+              <div className="flex items-center gap-2">
+                <SlidersHorizontal size={16} className="text-[#c084fc]" />
+                <span>
                   {lang === 'as'
-                    ? 'দৃষ্টি আৰু ফন্ট সুবিধা'
+                    ? 'ভাষা আৰু প্ৰৱেশাধিকাৰ'
                     : lang === 'hi'
-                    ? 'डिस्प्ले व सुगमता (A11y)'
-                    : 'Display & Accessibility'}
-                </span>
-              </div>
-            </button>
-
-            {/* Simulated Offline Mode Toggle */}
-            <button
-              onClick={toggleSimulatedOffline}
-              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left transition-all cursor-pointer ${
-                settings.isSimulatedOffline
-                  ? 'bg-amber-500/20 text-amber-200 border border-amber-400/30'
-                  : 'text-stone-300 hover:bg-white/10'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                {settings.isSimulatedOffline ? (
-                  <WifiOff size={19} className="text-amber-400" />
-                ) : (
-                  <Wifi size={19} className="text-[#c084fc]" />
-                )}
-                <span className="text-xs font-medium">
-                  {settings.isSimulatedOffline
-                    ? (lang === 'hi' ? 'ऑफ़लाइन मोड (सक्रिय)' : lang === 'as' ? 'অফলাইন মোড (সক্ৰিয়)' : 'Offline Mode (Active)')
-                    : (lang === 'hi' ? 'स्थानीय सिंक (ऑनलाइन)' : lang === 'as' ? 'লোকেল সিংঙ্ক (অনলাইন)' : 'Local Sync (Online)')}
+                    ? 'भाषा व पहुंच सेटिंग्स'
+                    : 'Display & Language'}
                 </span>
               </div>
               <span
-                className={`w-2 h-2 rounded-full ${
-                  settings.isSimulatedOffline ? 'bg-amber-400 animate-pulse' : 'bg-[#c084fc]'
-                }`}
+                className="w-2 h-2 rounded-full bg-[#c084fc]"
+                title="Settings Available"
               />
             </button>
           </div>
         </div>
 
-        {/* Bottom User Profile Card */}
+        {/* Bottom User Profile Card with Dynamic Switcher Trigger */}
         <div className="p-4 border-t border-white/10 bg-[#080e1c]/70">
-          <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15 shadow-sm flex items-center justify-between gap-3">
+          <div
+            onClick={() => setProfileModalOpen(true)}
+            className="group bg-white/10 hover:bg-white/15 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl border border-white/15 hover:border-purple-400/50 shadow-sm flex items-center justify-between gap-2.5 cursor-pointer transition-all active:scale-98"
+            title="Click to Switch Profile or Add New Patient"
+          >
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="relative">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 text-white flex items-center justify-center font-black text-xs shadow-xs shrink-0 border border-purple-400/30">
+              <div className="relative shrink-0">
+                <div
+                  className={`w-10 h-10 rounded-xl bg-gradient-to-tr ${
+                    currentRole === 'patient'
+                      ? activePatient.avatarColor || 'from-purple-600 to-indigo-500'
+                      : currentRole === 'caregiver'
+                      ? 'from-indigo-600 to-blue-500'
+                      : currentRole === 'clinician'
+                      ? 'from-teal-600 to-emerald-500'
+                      : 'from-amber-600 to-orange-500'
+                  } text-white flex items-center justify-center font-black text-xs shadow-xs border border-white/20`}
+                >
                   {currentRole === 'patient'
-                    ? 'BG'
+                    ? activePatient.avatarInitials || 'AJ'
                     : currentRole === 'caregiver'
                     ? 'PG'
                     : currentRole === 'clinician'
                     ? 'DR'
                     : 'MD'}
                 </div>
-                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#c084fc] border-2 border-[#13243a]" />
+                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#c084fc] border-2 border-[#080e1c]" />
               </div>
 
               <div className="min-w-0">
-                <h4 className="text-xs font-bold text-white truncate">
-                  {currentRole === 'patient'
-                    ? (lang === 'as' ? 'বিপিন গগৈ (৭২)' : lang === 'hi' ? 'बिपिन गोगोई (72)' : 'Bipin Gogoi (72y)')
-                    : currentRole === 'caregiver'
-                    ? 'Priyanka Gogoi'
-                    : currentRole === 'clinician'
-                    ? 'Dr. A. Sarma (MD)'
-                    : 'Minoti Das (ASHA)'}
-                </h4>
-                <p className="text-[10px] text-sky-200/60 truncate">
-                  {currentRole === 'patient'
-                    ? 'Titabor, Jorhat'
-                    : currentRole === 'caregiver'
-                    ? 'Family Caregiver'
-                    : currentRole === 'clinician'
-                    ? 'Neurology PHC'
-                    : 'Titabor Sub-Centre'}
+                <div className="flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold text-white truncate group-hover:text-purple-200 transition-colors">
+                    {currentRole === 'patient'
+                      ? `${
+                          lang === 'as' && activePatient.nameAs
+                            ? activePatient.nameAs
+                            : lang === 'hi' && activePatient.nameHi
+                            ? activePatient.nameHi
+                            : activePatient.name
+                        } (${activePatient.age}y)`
+                      : currentRole === 'caregiver'
+                      ? 'Priyanka Gogoi'
+                      : currentRole === 'clinician'
+                      ? 'Dr. A. Sarma (MD)'
+                      : 'Minoti Das (ASHA)'}
+                  </h4>
+                </div>
+                <p className="text-[10px] text-sky-200/60 truncate flex items-center gap-1">
+                  <span>
+                    {currentRole === 'patient'
+                      ? lang === 'as' && activePatient.locationAs
+                        ? activePatient.locationAs
+                        : lang === 'hi' && activePatient.locationHi
+                        ? activePatient.locationHi
+                        : activePatient.location
+                      : currentRole === 'caregiver'
+                      ? 'Family Caregiver'
+                      : currentRole === 'clinician'
+                      ? 'Neurology PHC'
+                      : 'Titabor Sub-Centre'}
+                  </span>
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 shrink-0">
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-purple-500/20 text-[#c084fc] border border-purple-400/30 group-hover:bg-purple-500/30 transition-all">
+                Switch
+              </span>
               <button
-                onClick={() => setSosOpen(true)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSosOpen(true);
+                }}
                 title="Emergency SOS"
-                className="w-8 h-8 rounded-xl bg-rose-500/20 text-rose-400 hover:bg-rose-600 hover:text-white border border-rose-400/30 flex items-center justify-center transition-colors cursor-pointer"
+                className="w-7 h-7 rounded-lg bg-rose-500/20 text-rose-400 hover:bg-rose-600 hover:text-white border border-rose-400/30 flex items-center justify-center transition-colors cursor-pointer"
               >
-                <AlertOctagon size={16} />
+                <AlertOctagon size={14} />
               </button>
             </div>
           </div>

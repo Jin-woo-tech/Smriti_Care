@@ -22,6 +22,7 @@ import { useApp } from '../../context/AppContext';
 import { getTranslation } from '../../lib/i18n';
 import { AshaPatientRecord } from '../../types';
 import { VoiceNarratorButton } from '../common/VoiceNarratorButton';
+import { maskPhoneNumber } from '../../lib/utils';
 
 interface AshaDashboardProps {
   onStartScreening?: (patientId: string) => void;
@@ -327,7 +328,7 @@ export const AshaDashboard: React.FC<AshaDashboardProps> = ({ onStartScreening }
                     href={`tel:${patient.phone}`}
                     className="text-[#c084fc] font-black flex items-center gap-1 hover:text-purple-200 transition-colors"
                   >
-                    <PhoneCall size={12} /> {lang === 'hi' ? 'कॉल' : lang === 'as' ? 'কল' : 'Call'}
+                    <PhoneCall size={12} /> {lang === 'hi' ? 'कॉल' : lang === 'as' ? 'কল' : 'Call'} ({maskPhoneNumber(patient.phone)})
                   </a>
                 </div>
 

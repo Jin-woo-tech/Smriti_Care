@@ -15,7 +15,7 @@ import { useApp } from '../../context/AppContext';
 import { Role } from '../../types';
 import { getTranslation } from '../../lib/i18n';
 import { VoiceNarratorButton } from '../common/VoiceNarratorButton';
-import { Anatomical3DHeartVisual } from './Anatomical3DHeartVisual';
+import { Smriti3DLogoVisual } from './Smriti3DLogoVisual';
 import { HologramGlobeVisual } from './HologramGlobeVisual';
 
 interface LandingPageProps {
@@ -134,10 +134,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
 
         {/* TOP INNER NAVIGATION BAR */}
         <header className="relative z-20 flex items-center justify-between pb-6 sm:pb-8 border-b border-white/10">
-          {/* Logo Brand: SmritiCare with Purple Heart */}
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] flex items-center justify-center text-white shadow-md shadow-purple-600/30">
-              <Heart size={18} className="fill-white" />
+          {/* Logo Brand: SmritiCare with Official Logo */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600/30 to-indigo-600/30 border border-purple-400/40 p-1 flex items-center justify-center shadow-lg shadow-purple-600/30 backdrop-blur-md">
+              <img
+                src="/smriti-logo.png"
+                alt="SmritiCare Logo"
+                className="w-full h-full object-contain filter drop-shadow"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.includes('26027-removebg-preview.png')) {
+                    target.src = '/26027-removebg-preview.png';
+                  }
+                }}
+              />
             </div>
             <span className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-1.5">
               <span>SmritiCare</span>
@@ -242,9 +252,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
             </div>
           </div>
 
-          {/* Central 3D Glossy Anatomical Heart Artwork with Purple 'Explore Services' Button */}
+          {/* Central 3D Glossy SmritiCare Logo Artwork with Purple 'Explore Services' Button */}
           <div className="relative z-10 my-2 sm:my-4">
-            <Anatomical3DHeartVisual
+            <Smriti3DLogoVisual
               onExplore={() => scrollToSection('portals-section')}
               exploreLabel={
                 lang === 'as'
@@ -495,6 +505,43 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
                 : 'Interactive family photo stories, audio reminiscence cues, and empathetic Smriti Sathi conversational AI.'}
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Team StarX Spotlight & SIH 2026 Credits Section */}
+      <section className="glass-card-dark rounded-[32px] p-6 sm:p-8 border border-purple-500/30 text-center relative overflow-hidden">
+        <div className="absolute -top-16 -left-16 w-48 h-48 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-cyan-600/20 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-2xl mx-auto space-y-4">
+          <div className="flex items-center justify-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600/30 to-indigo-600/30 border border-purple-400/40 p-1.5 flex items-center justify-center shadow-lg shadow-purple-600/30 backdrop-blur-md">
+              <img
+                src="/team-starx-logo.png"
+                alt="Team StarX Logo"
+                className="w-full h-full object-contain filter drop-shadow"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.includes('image-removebg-preview.png')) {
+                    target.src = '/image-removebg-preview.png';
+                  }
+                }}
+              />
+            </div>
+            <div className="text-left">
+              <div className="flex items-center gap-2">
+                <h3 className="text-lg sm:text-xl font-black text-white">Built & Designed by Team StarX</h3>
+                <span className="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-[#c084fc] text-[10px] font-black border border-purple-400/30">
+                  SIH 2026
+                </span>
+              </div>
+              <p className="text-xs text-sky-200/70 font-medium">Smart India Hackathon 2026 • Cognitive Healthcare Track</p>
+            </div>
+          </div>
+
+          <p className="text-xs sm:text-sm text-sky-100/80 leading-relaxed">
+            SmritiCare was engineered by <strong className="text-purple-300">Team StarX</strong> to bridge digital geriatric care and community health workers (ASHAs) across Assam with trilingual accessibility, neuro-cognitive exercises, and emergency safety networks.
+          </p>
         </div>
       </section>
 
