@@ -14,6 +14,7 @@ import {
   AlertCircle,
   RefreshCw,
   ShieldCheck,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { getTranslation } from '../../lib/i18n';
@@ -68,28 +69,34 @@ export const A11yModal: React.FC = () => {
   const status = settings.apiKeyStatus || 'untested';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 p-4 backdrop-blur-md">
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2.5rem] bg-slate-900/90 p-6 sm:p-8 shadow-2xl border border-white/15 text-white backdrop-blur-xl animate-in fade-in zoom-in-95">
-        {/* Ambient background glow */}
-        <div className="absolute -top-20 -right-20 w-64 h-64 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-xl animate-in fade-in duration-200">
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-[32px] bg-gradient-to-b from-[#181635] via-[#0e1628] to-[#0a101f] p-6 sm:p-8 shadow-2xl shadow-purple-950/60 border border-purple-500/30 text-white animate-in zoom-in-95 duration-200">
+        {/* Glow ambient spots */}
+        <div className="absolute -top-24 -left-24 w-60 h-60 bg-purple-600/25 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-60 h-60 bg-cyan-600/20 rounded-full blur-3xl pointer-events-none" />
 
         {/* Close Button */}
         <button
           onClick={() => setA11yOpen(false)}
-          className="absolute right-5 top-5 rounded-full p-2 text-sky-200/70 hover:text-white hover:bg-white/10 cursor-pointer transition-colors"
+          className="absolute right-4 top-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center text-sky-200 hover:text-white cursor-pointer transition-all active:scale-95"
           aria-label="Close settings"
         >
-          <X size={22} />
+          <X size={20} />
         </button>
 
         {/* Header */}
-        <div className="flex items-center gap-4 mb-6 pb-4 border-b border-white/10 relative z-10">
-          <div className="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-400/40 text-[#c084fc] flex items-center justify-center shadow-lg shadow-purple-600/25">
-            <Eye size={24} />
+        <div className="flex items-center gap-3.5 mb-6 pb-4 border-b border-white/10">
+          <div className="w-12 h-12 bg-purple-500/20 text-[#c084fc] rounded-2xl border border-purple-400/30 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(168,85,247,0.3)]">
+            <SlidersHorizontal size={24} />
           </div>
           <div>
-            <h2 className="text-xl sm:text-2xl font-black text-white">{getTranslation('a11yTitle', lang)}</h2>
-            <p className="text-xs sm:text-sm text-sky-200/75 font-medium mt-0.5">
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl sm:text-2xl font-black text-white">{getTranslation('a11yTitle', lang)}</h2>
+              <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-[#c084fc] text-[10px] font-black border border-purple-400/30">
+                A11Y
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-sky-200/70 font-medium mt-0.5">
               {lang === 'as'
                 ? 'আপোনাৰ সুবিধা অনুসৰি দৃশ্যমানতা, ভাষা আৰু AI ছেটিংছ সলনি কৰক'
                 : lang === 'hi'
@@ -101,42 +108,44 @@ export const A11yModal: React.FC = () => {
 
         <div className="space-y-6 relative z-10">
           {/* Language Selection */}
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 font-bold text-sm text-purple-200">
+          <div>
+            <label className="flex items-center gap-2 font-black text-sm text-sky-200 mb-2.5">
               <Globe size={16} className="text-[#c084fc]" />
-              {lang === 'as'
-                ? 'ভাষা নিৰ্বাচন (Language Selection)'
-                : lang === 'hi'
-                ? 'भाषा चयन (Language Selection)'
-                : 'Language Selection (भाषा)'}
+              <span>
+                {lang === 'as'
+                  ? 'ভাষা নিৰ্বাচন (Language Selection)'
+                  : lang === 'hi'
+                  ? 'भाषा चयन (Language Selection)'
+                  : 'Language Selection (भाषा)'}
+              </span>
             </label>
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
               <button
                 onClick={() => setLanguage('en')}
-                className={`py-3 px-2 sm:px-3 rounded-2xl font-bold border transition-all text-center cursor-pointer text-xs sm:text-sm ${
+                className={`py-3 px-2 sm:px-3 rounded-2xl font-black border transition-all text-center cursor-pointer text-xs sm:text-sm active:scale-95 ${
                   settings.language === 'en'
-                    ? 'bg-purple-950/70 border-purple-400 text-white shadow-[0_0_15px_rgba(168,85,247,0.35)]'
-                    : 'border-white/12 bg-white/5 text-sky-200/80 hover:border-purple-400/40 hover:text-white'
+                    ? 'border-purple-400/80 bg-gradient-to-r from-purple-600/40 to-indigo-600/40 text-white shadow-lg shadow-purple-600/30 ring-2 ring-purple-400/40'
+                    : 'border-white/10 bg-white/5 text-sky-200/80 hover:bg-white/10 hover:border-white/20'
                 }`}
               >
                 English
               </button>
               <button
                 onClick={() => setLanguage('hi')}
-                className={`py-3 px-2 sm:px-3 rounded-2xl font-bold border transition-all text-center cursor-pointer text-xs sm:text-sm ${
+                className={`py-3 px-2 sm:px-3 rounded-2xl font-black border transition-all text-center cursor-pointer text-xs sm:text-sm active:scale-95 ${
                   settings.language === 'hi'
-                    ? 'bg-purple-950/70 border-purple-400 text-white shadow-[0_0_15px_rgba(168,85,247,0.35)]'
-                    : 'border-white/12 bg-white/5 text-sky-200/80 hover:border-purple-400/40 hover:text-white'
+                    ? 'border-purple-400/80 bg-gradient-to-r from-purple-600/40 to-indigo-600/40 text-white shadow-lg shadow-purple-600/30 ring-2 ring-purple-400/40'
+                    : 'border-white/10 bg-white/5 text-sky-200/80 hover:bg-white/10 hover:border-white/20'
                 }`}
               >
                 हिन्दी (Hindi)
               </button>
               <button
                 onClick={() => setLanguage('as')}
-                className={`py-3 px-2 sm:px-3 rounded-2xl font-bold border transition-all text-center cursor-pointer text-xs sm:text-sm ${
+                className={`py-3 px-2 sm:px-3 rounded-2xl font-black border transition-all text-center cursor-pointer text-xs sm:text-sm active:scale-95 ${
                   settings.language === 'as'
-                    ? 'bg-purple-950/70 border-purple-400 text-white shadow-[0_0_15px_rgba(168,85,247,0.35)]'
-                    : 'border-white/12 bg-white/5 text-sky-200/80 hover:border-purple-400/40 hover:text-white'
+                    ? 'border-purple-400/80 bg-gradient-to-r from-purple-600/40 to-indigo-600/40 text-white shadow-lg shadow-purple-600/30 ring-2 ring-purple-400/40'
+                    : 'border-white/10 bg-white/5 text-sky-200/80 hover:bg-white/10 hover:border-white/20'
                 }`}
               >
                 অসমীয়া (Assamese)
@@ -145,38 +154,38 @@ export const A11yModal: React.FC = () => {
           </div>
 
           {/* Text Scaling */}
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 font-bold text-sm text-purple-200">
+          <div>
+            <label className="flex items-center gap-2 font-black text-sm text-sky-200 mb-2.5">
               <Type size={16} className="text-[#c084fc]" />
-              {getTranslation('a11yTextSize', lang)}
+              <span>{getTranslation('a11yTextSize', lang)}</span>
             </label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
               <button
                 onClick={() => setTextScale('normal')}
-                className={`py-3 px-2 rounded-2xl border transition-all text-xs sm:text-sm cursor-pointer ${
+                className={`py-3 px-2 rounded-2xl font-black border transition-all text-xs sm:text-sm cursor-pointer active:scale-95 ${
                   settings.textScale === 'normal'
-                    ? 'bg-purple-950/70 border-purple-400 text-white font-bold shadow-[0_0_15px_rgba(168,85,247,0.35)]'
-                    : 'border-white/12 bg-white/5 text-sky-200/80 hover:border-purple-400/40 hover:text-white'
+                    ? 'border-purple-400/80 bg-gradient-to-r from-purple-600/40 to-indigo-600/40 text-white shadow-lg shadow-purple-600/30 ring-2 ring-purple-400/40'
+                    : 'border-white/10 bg-white/5 text-sky-200/80 hover:bg-white/10 hover:border-white/20'
                 }`}
               >
                 Aa {getTranslation('a11yNormal', lang)}
               </button>
               <button
                 onClick={() => setTextScale('large')}
-                className={`py-3 px-2 rounded-2xl border transition-all text-sm sm:text-base cursor-pointer ${
+                className={`py-3 px-2 rounded-2xl font-black border transition-all text-sm sm:text-base cursor-pointer active:scale-95 ${
                   settings.textScale === 'large'
-                    ? 'bg-purple-950/70 border-purple-400 text-white font-bold shadow-[0_0_15px_rgba(168,85,247,0.35)]'
-                    : 'border-white/12 bg-white/5 text-sky-200/80 hover:border-purple-400/40 hover:text-white'
+                    ? 'border-purple-400/80 bg-gradient-to-r from-purple-600/40 to-indigo-600/40 text-white shadow-lg shadow-purple-600/30 ring-2 ring-purple-400/40'
+                    : 'border-white/10 bg-white/5 text-sky-200/80 hover:bg-white/10 hover:border-white/20'
                 }`}
               >
                 Aa {getTranslation('a11yLarge', lang)}
               </button>
               <button
                 onClick={() => setTextScale('xl')}
-                className={`py-3 px-2 rounded-2xl border transition-all text-base sm:text-lg cursor-pointer ${
+                className={`py-3 px-2 rounded-2xl font-black border transition-all text-base sm:text-lg cursor-pointer active:scale-95 ${
                   settings.textScale === 'xl'
-                    ? 'bg-purple-950/70 border-purple-400 text-white font-bold shadow-[0_0_15px_rgba(168,85,247,0.35)]'
-                    : 'border-white/12 bg-white/5 text-sky-200/80 hover:border-purple-400/40 hover:text-white'
+                    ? 'border-purple-400/80 bg-gradient-to-r from-purple-600/40 to-indigo-600/40 text-white shadow-lg shadow-purple-600/30 ring-2 ring-purple-400/40'
+                    : 'border-white/10 bg-white/5 text-sky-200/80 hover:bg-white/10 hover:border-white/20'
                 }`}
               >
                 Aa {getTranslation('a11yXLarge', lang)}
@@ -187,12 +196,14 @@ export const A11yModal: React.FC = () => {
           {/* Toggle Switches */}
           <div className="space-y-3 pt-1">
             {/* High Contrast */}
-            <div className="flex items-center justify-between p-3.5 rounded-2xl border border-white/12 bg-white/5">
+            <div className="flex items-center justify-between p-4 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/[0.07] backdrop-blur-md transition-all">
               <div className="flex items-center gap-3">
-                <Eye size={18} className="text-[#c084fc]" />
+                <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-[#c084fc] flex items-center justify-center border border-purple-400/30">
+                  <Eye size={18} />
+                </div>
                 <div>
                   <p className="font-bold text-sm text-white">{getTranslation('a11yContrast', lang)}</p>
-                  <p className="text-xs text-sky-200/70">
+                  <p className="text-xs text-sky-200/60 font-medium">
                     {lang === 'as'
                       ? 'আখৰ আৰু বুটাম স্পষ্টকৈ চাবলৈ'
                       : lang === 'hi'
@@ -203,21 +214,23 @@ export const A11yModal: React.FC = () => {
               </div>
               <button
                 onClick={toggleHighContrast}
-                className={`w-13 h-7 flex items-center rounded-full p-1 cursor-pointer transition-colors ${
-                  settings.highContrast ? 'bg-purple-600 justify-end' : 'bg-white/20 justify-start'
+                className={`w-14 h-8 flex items-center rounded-full p-1 cursor-pointer transition-colors ${
+                  settings.highContrast ? 'bg-gradient-to-r from-purple-500 to-indigo-500 justify-end' : 'bg-white/20 justify-start'
                 }`}
               >
-                <div className="w-5 h-5 rounded-full bg-white shadow-md" />
+                <div className="w-6 h-6 rounded-full bg-white shadow-md" />
               </button>
             </div>
 
             {/* Reduced Motion */}
-            <div className="flex items-center justify-between p-3.5 rounded-2xl border border-white/12 bg-white/5">
+            <div className="flex items-center justify-between p-4 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/[0.07] backdrop-blur-md transition-all">
               <div className="flex items-center gap-3">
-                <Zap size={18} className="text-[#c084fc]" />
+                <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center border border-cyan-400/30">
+                  <Zap size={18} />
+                </div>
                 <div>
                   <p className="font-bold text-sm text-white">{getTranslation('a11yReducedMotion', lang)}</p>
-                  <p className="text-xs text-sky-200/70">
+                  <p className="text-xs text-sky-200/60 font-medium">
                     {lang === 'as'
                       ? 'ঘূৰ্ণন বা দ্ৰুত এনিমেশ্যন বন্ধ কৰক'
                       : lang === 'hi'
@@ -228,21 +241,23 @@ export const A11yModal: React.FC = () => {
               </div>
               <button
                 onClick={toggleReducedMotion}
-                className={`w-13 h-7 flex items-center rounded-full p-1 cursor-pointer transition-colors ${
-                  settings.reducedMotion ? 'bg-purple-600 justify-end' : 'bg-white/20 justify-start'
+                className={`w-14 h-8 flex items-center rounded-full p-1 cursor-pointer transition-colors ${
+                  settings.reducedMotion ? 'bg-gradient-to-r from-cyan-500 to-blue-500 justify-end' : 'bg-white/20 justify-start'
                 }`}
               >
-                <div className="w-5 h-5 rounded-full bg-white shadow-md" />
+                <div className="w-6 h-6 rounded-full bg-white shadow-md" />
               </button>
             </div>
 
             {/* Voice Assistance */}
-            <div className="flex items-center justify-between p-3.5 rounded-2xl border border-white/12 bg-white/5">
+            <div className="flex items-center justify-between p-4 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/[0.07] backdrop-blur-md transition-all">
               <div className="flex items-center gap-3">
-                <Volume2 size={18} className="text-[#c084fc]" />
+                <div className="w-10 h-10 rounded-xl bg-pink-500/20 text-pink-300 flex items-center justify-center border border-pink-400/30">
+                  <Volume2 size={18} />
+                </div>
                 <div>
                   <p className="font-bold text-sm text-white">{getTranslation('a11yVoice', lang)}</p>
-                  <p className="text-xs text-sky-200/70">
+                  <p className="text-xs text-sky-200/60 font-medium">
                     {lang === 'as'
                       ? 'বাৰ্তা আৰু নিৰ্দেশনা পঢ়ি শুনোৱা সেৱা'
                       : lang === 'hi'
@@ -253,18 +268,20 @@ export const A11yModal: React.FC = () => {
               </div>
               <button
                 onClick={() => updateSettings({ voiceAssistanceEnabled: !settings.voiceAssistanceEnabled })}
-                className={`w-13 h-7 flex items-center rounded-full p-1 cursor-pointer transition-colors ${
-                  settings.voiceAssistanceEnabled ? 'bg-purple-600 justify-end' : 'bg-white/20 justify-start'
+                className={`w-14 h-8 flex items-center rounded-full p-1 cursor-pointer transition-colors ${
+                  settings.voiceAssistanceEnabled ? 'bg-gradient-to-r from-purple-500 to-pink-500 justify-end' : 'bg-white/20 justify-start'
                 }`}
               >
-                <div className="w-5 h-5 rounded-full bg-white shadow-md" />
+                <div className="w-6 h-6 rounded-full bg-white shadow-md" />
               </button>
             </div>
 
-            {/* Simulated Offline Mode Toggle */}
-            <div className="flex items-center justify-between p-3.5 rounded-2xl border border-amber-400/30 bg-amber-500/10">
+            {/* Simulated Offline Mode Toggle (Hackathon Demo Feature) */}
+            <div className="flex items-center justify-between p-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/15 backdrop-blur-md transition-all">
               <div className="flex items-center gap-3">
-                <WifiOff size={18} className="text-amber-400" />
+                <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center border border-amber-400/30">
+                  <WifiOff size={18} />
+                </div>
                 <div>
                   <p className="font-bold text-sm text-amber-200">
                     {lang === 'as'
@@ -273,7 +290,7 @@ export const A11yModal: React.FC = () => {
                       ? 'ऑफलाइन मोड सिमुलेशन (Demo)'
                       : 'Simulate Offline Mode (Demo)'}
                   </p>
-                  <p className="text-xs text-amber-300/80">
+                  <p className="text-xs text-amber-300/70 font-medium">
                     {lang === 'as'
                       ? 'ইন্টাৰনেট নথকাৰ অৱস্থাত পৰীক্ষা কৰিবলৈ'
                       : lang === 'hi'
@@ -284,11 +301,11 @@ export const A11yModal: React.FC = () => {
               </div>
               <button
                 onClick={toggleSimulatedOffline}
-                className={`w-13 h-7 flex items-center rounded-full p-1 cursor-pointer transition-colors ${
-                  settings.isSimulatedOffline ? 'bg-amber-500 justify-end' : 'bg-white/20 justify-start'
+                className={`w-14 h-8 flex items-center rounded-full p-1 cursor-pointer transition-colors ${
+                  settings.isSimulatedOffline ? 'bg-gradient-to-r from-amber-500 to-orange-500 justify-end' : 'bg-white/20 justify-start'
                 }`}
               >
-                <div className="w-5 h-5 rounded-full bg-white shadow-md" />
+                <div className="w-6 h-6 rounded-full bg-white shadow-md" />
               </button>
             </div>
           </div>
@@ -412,7 +429,7 @@ export const A11yModal: React.FC = () => {
               updateSettings({ apiKey: inputKey.trim() });
               setA11yOpen(false);
             }}
-            className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] hover:from-[#9333ea] hover:to-[#7c3aed] text-white font-black text-xs sm:text-sm cursor-pointer transition-all shadow-xl shadow-purple-600/35 border border-purple-400/30"
+            className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] hover:from-[#9333ea] hover:to-[#7c3aed] text-white font-black text-xs sm:text-sm cursor-pointer transition-all shadow-xl shadow-purple-600/35 border border-purple-400/30 active:scale-95"
           >
             {getTranslation('actionSave', lang)}
           </button>

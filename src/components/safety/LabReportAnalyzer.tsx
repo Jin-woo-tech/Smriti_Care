@@ -13,8 +13,14 @@ import { getTranslation } from '../../lib/i18n';
 import { VoiceNarratorButton } from '../common/VoiceNarratorButton';
 
 export const LabReportAnalyzer: React.FC = () => {
-  const { settings } = useApp();
+  const { settings, activePatient } = useApp();
   const lang = settings.language;
+  const patientName =
+    lang === 'as' && activePatient.nameAs
+      ? activePatient.nameAs
+      : lang === 'hi' && activePatient.nameHi
+      ? activePatient.nameHi
+      : activePatient.name;
 
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
   const [reportResult, setReportResult] = useState<LabReportResult | null>(null);
@@ -110,10 +116,10 @@ export const LabReportAnalyzer: React.FC = () => {
             <div>
               <h4 className="font-black text-base sm:text-lg text-white">
                 {lang === 'as'
-                  ? 'তিতাবৰ স্বাস্থ্য কেন্দ্ৰৰ শেহতীয়া তেজ পৰীক্ষা ৰিপৰ্ট'
+                  ? `তিতাবৰ স্বাস্থ্য কেন্দ্ৰৰ শেহতীয়া তেজ পৰীক্ষা ৰিপৰ্ট (ৰোগী: ${patientName})`
                   : lang === 'hi'
-                  ? 'तीताबर प्राथमिक स्वास्थ्य केंद्र रक्त परीक्षण रिपोर्ट (मरीज: बिपिन गोगोई)'
-                  : 'PHC Titabor Blood Panel Report (Patient: Bipin Gogoi)'}
+                  ? `तीताबर प्राथमिक स्वास्थ्य केंद्र रक्त परीक्षण रिपोर्ट (मरीज: ${patientName})`
+                  : `PHC Titabor Blood Panel Report (Patient: ${patientName})`}
               </h4>
               <p className="text-xs text-purple-300 font-mono mt-0.5">
                 Sample File: blood_metabolic_panel_sep2026.pdf (1.2 MB)

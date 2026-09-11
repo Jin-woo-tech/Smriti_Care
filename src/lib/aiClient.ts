@@ -322,7 +322,7 @@ export async function analyzeLabReport(
   return {
     id: `lab-${Date.now()}`,
     timestamp: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
-    patientName: 'Ananya Jain (Age 72, Female)',
+    patientName: 'Ananya Jain (Age 20, Female)',
     testName: 'Comprehensive Metabolic & Lipid Panel (PHC Titabor)',
     testNameHi: 'व्यापक मेटाबॉलिक और लिपिड पैनल (पीएचसी तीताबर)',
     testNameAs: 'সামগ্ৰিক মেটাবলিক আৰু চুগাৰ পৰীক্ষা (তিতাবৰ প্ৰাথমিক স্বাস্থ্য কেন্দ্ৰ)',
