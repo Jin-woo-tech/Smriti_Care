@@ -1,7 +1,7 @@
 # 🧠 SmritiCare (স্মৃতি কেয়াৰ / स्मृति केयर)
 ### *AI-Powered Cognitive Care, Medication Safety & Frontline Geriatric Support Platform*
 > **Smart India Hackathon (SIH 2026)** | Project ID: **SIH-2026-SMRITI**  
-> **Geographic Focus**: Titabor, Jorhat District, Assam, India
+> **Developed by**: **Team StarX** | **Geographic Focus**: Titabor, Jorhat District, Assam, India
 
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -15,7 +15,69 @@
 
 **SmritiCare** is a clinical-grade, offline-first, multilingual digital cognitive companion designed to assist elders experiencing mild cognitive impairment (MCI) or early-stage Alzheimer’s, their family caregivers, primary healthcare physicians, and frontline **ASHA (Accredited Social Health Activists)** workers.
 
-The platform combines **neuro-cognitive stimulation games with dynamic 3-tier adaptive difficulty**, **AI Vision medicine package scanner**, **AI lab report translation**, **voice reminiscence photo album**, and **Smriti Sathi** conversational assistant localized in **Assamese (অসমীয়া)**, **Hindi (हिन्दी)**, and **English**.
+The platform combines **neuro-cognitive stimulation games with dynamic 3-tier adaptive difficulty**, **AI Vision medicine package scanner**, **AI lab report biomarker translator**, **voice reminiscence photo album**, and **Smriti Sathi** conversational assistant localized in **Assamese (অসমীয়া)**, **Hindi (हिन्दी)**, and **English**.
+
+---
+
+## 📸 Visual Tour & UI Showcase
+
+### 1. 🌌 Futuristic 3D Landing Showcase & Hero Experience
+*Immersive dark frosted glassmorphism interface with neon purple & cyan lighting, animated 3D SmritiCare emblem, and cross-district clinical reach metrics.*
+
+![SmritiCare 3D Showcase](docs/screenshots/01-landing-hero-showcase.png)
+
+---
+
+### 2. 👵 Senior / Patient Care Dashboard & Multi-Patient Switcher
+*Personalized elder dashboard featuring real-time vitals, daily pill progress, hydration logs, and dynamic patient profile switcher.*
+
+| Senior Home Dashboard | Dynamic Patient Profile Manager |
+| :---: | :---: |
+| ![Patient Dashboard](docs/screenshots/02-patient-home-dashboard.png) | ![Profile Manager](docs/screenshots/03-patient-profile-manager.png) |
+
+---
+
+### 3. 💊 Daily Routine & Smart Pill Adherence Tracker
+*High-contrast schedules for morning/evening medicines, 8-glass hydration counter, courtyard walking timers, and audio prompts.*
+
+![Daily Routine & Pill Reminders](docs/screenshots/04-daily-routine-medications.png)
+
+---
+
+### 4. 🎮 6 Culturally Grounded Cognitive Care Games (3-Tier Adaptive AI)
+*Neuro-cognitive stimulation modules rooted in Assamese heritage (Japi & Gamusa matching, tea-leaf sequencing, Brahmaputra trail making, and village recall) with auto-adjusting difficulty tiers.*
+
+![6 Cognitive Care Games](docs/screenshots/05-cognitive-care-games.png)
+
+---
+
+### 5. 🔬 AI Medicine Packaging Safety Scanner
+*Multimodal computer vision scanner to verify blister packs, tablet strength, dosage frequency, and prescription safety warnings.*
+
+![AI Medicine Packaging Scanner](docs/screenshots/06-ai-medicine-scanner.png)
+
+---
+
+### 6. 🎙️ Smriti Sathi — Multilingual AI Care Companion
+*Empathetic trilingual voice assistant with local memory, providing warm geriatric support, routine reminders, and cultural conversations.*
+
+![Smriti Sathi AI Companion](docs/screenshots/07-smriti-sathi-ai-companion.png)
+
+---
+
+### 7. 👩‍⚕️ Frontline ASHA Health Worker Portal
+*Titabor block rural elder registry, doorstep visit logger, medicine stock countdown, and clinical triage tracking.*
+
+![ASHA Health Worker Portal](docs/screenshots/08-asha-health-worker-portal.png)
+
+---
+
+### 8. ⚙️ Geriatric Accessibility & Live AI Settings (A11y)
+*Comprehensive accessibility suite: Assamese / Hindi / English language toggles, 3-tier font scaling, WCAG AAA high-contrast mode, and live vision API key verification.*
+
+<div align="center">
+  <img src="docs/screenshots/09-accessibility-a11y-modal.png" alt="Accessibility & Display Modal" width="550" />
+</div>
 
 ---
 
@@ -62,6 +124,7 @@ $$\text{Performance Score} = (\text{Accuracy} \times 0.65) + (\text{Speed Factor
 - **Trilingual Localization (`src/lib/i18n.ts`)**: Complete interface translation in **English**, **हिन्दी (Hindi)**, and **অসমীয়া (Assamese)**.
 - **Universal Voice Narrator (`VoiceNarratorButton.tsx`)**: Web Speech API integration with auto-detected phonetic voices.
 - **Geriatric Accessibility**: 3-tier font scaling (Normal / Large / Extra Large), High Contrast mode (WCAG AAA compliant), and Reduced Motion settings.
+- **Privacy First**: Built-in phone number masking (`+91 94******`) across all emergency modals, ASHA rosters, and caregiver cards.
 - **Offline-First Resilience (`OfflineBanner.tsx`)**: LocalStorage persistence with simulated offline sync mode.
 
 ---
@@ -70,19 +133,21 @@ $$\text{Performance Score} = (\text{Accuracy} \times 0.65) + (\text{Speed Factor
 
 ```
 Smriti_care/
+├── docs/
+│   └── screenshots/        # High-resolution UI showcase images
 ├── src/
 │   ├── components/
 │   │   ├── chat/           # Smriti Sathi conversational AI companion
-│   │   ├── common/         # TopHeader, Sidebar, Modals, VoiceNarrator, OfflineBanner
+│   │   ├── common/         # TopHeader, Sidebar, ProfileManager, A11yModal, EmergencyModal
 │   │   ├── dashboards/     # Patient, Caregiver, Clinician, ASHA dashboards
 │   │   ├── games/          # 6 Neuro-cognitive games + GameShell + Adaptive tier
 │   │   ├── journal/        # Voice reminiscence memory journal
-│   │   ├── landing/        # Futuristic 3D anatomical hero showcase (Image #10 & #12)
+│   │   ├── landing/        # Futuristic 3D anatomical hero showcase & 3D logo visual
 │   │   ├── routine/        # Pill schedule, hydration tracker, walking timer
 │   │   ├── safety/         # AI Medicine Packaging & Lab Report Analyzer
 │   │   └── visuals/        # 3D Crystal Organ Visuals (Brain, Lungs, Liver, Kidney)
-│   ├── context/            # Global AppContext (state, role, settings, reminders)
-│   ├── lib/                # i18n, adaptiveDifficulty, aiClient, pdfReport, speech, storage
+│   ├── context/            # Global AppContext (state, role, settings, profile manager)
+│   ├── lib/                # i18n, adaptiveDifficulty, aiClient, pdfReport, speech, storage, utils
 │   ├── types/              # TypeScript schemas & interfaces
 │   ├── App.tsx             # Root layout shell with dynamic glow orbs
 │   └── index.css           # Glassmorphism utilities & cybernetic lighting
@@ -127,8 +192,8 @@ npm run preview
 
 ---
 
-## 👨‍💻 Author & Acknowledgements
+## 🏆 Project Credits
 
-- **Author**: [Jin-woo-tech (Vikas)](https://github.com/Jin-woo-tech)
+- **Team**: **Team StarX**
 - **Initiative**: Smart India Hackathon (SIH 2026)
 - **Community Partner**: Titabor Block Primary Healthcare Network, Jorhat, Assam
