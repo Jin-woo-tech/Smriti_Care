@@ -33,6 +33,7 @@ import { useApp } from '../../context/AppContext';
 import { getTranslation } from '../../lib/i18n';
 import { maskPhoneNumber } from '../../lib/utils';
 import { VoiceNarratorButton } from '../common/VoiceNarratorButton';
+import { ThreeDParticleBackground } from '../common/ThreeDParticleBackground';
 
 export const CaregiverDashboard: React.FC = () => {
   const { settings, reminders, cognitiveTrends, journal, addJournalEntry, activePatient } = useApp();
@@ -78,6 +79,9 @@ export const CaregiverDashboard: React.FC = () => {
     <div className="space-y-8 animate-in fade-in duration-300 text-white">
       {/* Frosted Glass Header Banner - Purple & Blue Aesthetic */}
       <div className="glass-panel p-6 sm:p-9 rounded-[2.5rem] border border-white/14 shadow-2xl relative overflow-hidden flex flex-wrap items-center justify-between gap-6">
+        {/* Dynamic Section 3D Particle Animation */}
+        <ThreeDParticleBackground variant="section" particleCount={25} colorTheme="purple-indigo" />
+
         {/* Ambient background glow */}
         <div className="absolute -top-24 -right-24 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-20 left-1/3 w-64 h-64 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none" />

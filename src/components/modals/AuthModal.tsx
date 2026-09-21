@@ -4,6 +4,7 @@ import { X, Lock, Mail, User, ShieldCheck, Heart, Stethoscope, Users, MapPin, Ph
 import { useApp } from '../../context/AppContext';
 import { t } from '../../lib/i18n';
 import { Role } from '../../types';
+import { ThreeDParticleBackground } from '../common/ThreeDParticleBackground';
 
 export const AuthModal: React.FC = () => {
   const { isAuthModalOpen, setAuthModalOpen, authModalMode, setAuthModalMode, login, register, settings } = useApp();
@@ -82,56 +83,63 @@ export const AuthModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0a0f1d]/70 backdrop-blur-md animate-in fade-in duration-200">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
+        className="relative w-full max-w-lg bg-[#0e1628]/95 rounded-[32px] shadow-2xl shadow-purple-950/70 border border-purple-500/40 overflow-hidden text-white backdrop-blur-2xl"
       >
+        {/* Dynamic Modal 3D Particle Animation */}
+        <ThreeDParticleBackground variant="modal" particleCount={40} colorTheme="purple-indigo" />
+
+        {/* Glow ambient spots */}
+        <div className="absolute -top-24 -left-24 w-60 h-60 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-60 h-60 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none" />
+
         {/* Header */}
-        <div className="flex items-center justify-between p-6 bg-gradient-to-r from-purple-700 via-indigo-700 to-purple-800 text-white">
+        <div className="relative z-10 flex items-center justify-between p-6 bg-gradient-to-r from-purple-700/60 via-indigo-700/60 to-purple-800/60 border-b border-purple-400/30 text-white">
           <div className="flex items-center space-x-3">
-            <div className="p-2.5 bg-white/10 rounded-2xl backdrop-blur-md">
+            <div className="p-2.5 bg-white/10 rounded-2xl backdrop-blur-md border border-white/20">
               <ShieldCheck className="w-6 h-6 text-purple-200" />
             </div>
             <div>
-              <h2 className="text-xl font-bold">
+              <h2 className="text-xl font-black text-white">
                 {authModalMode === 'login'
                   ? (lang === 'hi' ? 'स्मृति केयर में लॉगिन करें' : 'Sign in to SmritiCare')
                   : (lang === 'hi' ? 'नया खाता बनाएं' : 'Create an Account')}
               </h2>
-              <p className="text-xs text-purple-200">
+              <p className="text-xs text-sky-200/80 font-medium mt-0.5">
                 {lang === 'hi' ? 'सुरक्षित एवं देखभाल आधारित मंच' : 'Secure, personalized cognitive wellness portal'}
               </p>
             </div>
           </div>
           <button
             onClick={() => setAuthModalOpen(false)}
-            className="p-2 text-white/80 hover:text-white rounded-full hover:bg-white/10 transition-colors"
+            className="p-2 text-sky-200 hover:text-white rounded-full hover:bg-white/10 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-1">
+        <div className="relative z-10 flex border-b border-white/10 bg-black/20 p-1.5">
           <button
             onClick={() => { setAuthModalMode('login'); setErrorMessage(''); }}
-            className={`flex-1 py-3 text-sm font-semibold rounded-xl transition-all ${
+            className={`flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all cursor-pointer ${
               authModalMode === 'login'
-                ? 'bg-white dark:bg-slate-800 text-purple-700 dark:text-purple-300 shadow-sm'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-600/30 border border-purple-400/30'
+                : 'text-sky-200/70 hover:text-white hover:bg-white/5'
             }`}
           >
             {lang === 'hi' ? 'लॉगिन' : 'Sign In'}
           </button>
           <button
             onClick={() => { setAuthModalMode('register'); setErrorMessage(''); }}
-            className={`flex-1 py-3 text-sm font-semibold rounded-xl transition-all ${
+            className={`flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all cursor-pointer ${
               authModalMode === 'register'
-                ? 'bg-white dark:bg-slate-800 text-purple-700 dark:text-purple-300 shadow-sm'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-600/30 border border-purple-400/30'
+                : 'text-sky-200/70 hover:text-white hover:bg-white/5'
             }`}
           >
             {lang === 'hi' ? 'रजिस्टर (नया मरीज / देखभालकर्ता)' : 'Register Account'}
@@ -140,13 +148,13 @@ export const AuthModal: React.FC = () => {
 
         {/* Error Alert */}
         {errorMessage && (
-          <div className="mx-6 mt-4 p-3.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 rounded-2xl text-rose-700 dark:text-rose-300 text-xs font-medium">
+          <div className="relative z-10 mx-6 mt-4 p-3.5 bg-rose-950/40 border border-rose-500/40 rounded-2xl text-rose-300 text-xs font-medium">
             {errorMessage}
           </div>
         )}
 
         {/* Forms */}
-        <div className="p-6">
+        <div className="relative z-10 p-6">
           {authModalMode === 'login' ? (
             <form onSubmit={handleLoginSubmit} className="space-y-4">
               <div>

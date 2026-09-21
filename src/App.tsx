@@ -28,6 +28,7 @@ import { GameHub } from './components/games/GameHub';
 import { MemoryJournal } from './components/journal/MemoryJournal';
 import { SafetyHub } from './components/safety/SafetyHub';
 import { AIChatCompanion } from './components/chat/AIChatCompanion';
+import { ThreeDParticleBackground } from './components/common/ThreeDParticleBackground';
 
 export const App: React.FC = () => {
   const { currentRole, setRole, settings, setSosOpen, setA11yOpen } = useApp();
@@ -83,7 +84,10 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0c1222] text-white flex font-sans transition-colors duration-200 antialiased selection:bg-[#a855f7] selection:text-white overflow-x-hidden">
+    <div className="relative h-screen w-full bg-[#0c1222] text-white flex font-sans transition-colors duration-200 antialiased selection:bg-[#a855f7] selection:text-white overflow-hidden">
+      {/* Dynamic Interactive 3D Synaptic Particle Background */}
+      <ThreeDParticleBackground />
+
       {/* Ambient Luminous Frosted Glow Orbs in Purple & Deep Blue Theme */}
       <div className="fixed -top-40 -left-40 w-[28rem] h-[28rem] bg-purple-600/20 rounded-full blur-[130px] pointer-events-none z-0" />
       <div className="fixed top-1/4 -right-40 w-[32rem] h-[32rem] bg-indigo-600/15 rounded-full blur-[150px] pointer-events-none z-0" />
@@ -104,18 +108,22 @@ export const App: React.FC = () => {
       />
 
       {/* Main Content Viewport */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-x-hidden min-h-screen">
+      <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden">
         {/* Top Offline Notification Banner */}
-        <OfflineBanner />
+        <div className="shrink-0 z-40">
+          <OfflineBanner />
+        </div>
 
-        {/* Modern Top Header */}
-        <TopHeader
-          onToggleMobileSidebar={() => setIsMobileSidebarOpen(prev => !prev)}
-        />
+        {/* Modern Top Header (Permanently Fixed at Top) */}
+        <div className="shrink-0 z-30">
+          <TopHeader
+            onToggleMobileSidebar={() => setIsMobileSidebarOpen(prev => !prev)}
+          />
+        </div>
 
         {/* Landing / Architecture Overview Banner */}
         {showLanding ? (
-          <div className="bg-purple-500/15 border-b border-purple-400/30 py-2.5 px-4 text-center backdrop-blur-md flex items-center justify-center gap-2">
+          <div className="shrink-0 bg-purple-500/15 border-b border-purple-400/30 py-2.5 px-4 text-center backdrop-blur-md flex items-center justify-center gap-2 z-20">
             <button
               onClick={() => setShowLanding(false)}
               className="inline-flex items-center gap-2 text-xs font-black text-[#c084fc] hover:text-white cursor-pointer transition-colors"
@@ -129,9 +137,9 @@ export const App: React.FC = () => {
             </button>
           </div>
         ) : (
-          /* Horizontal quick-pill tab selector for Patient role on desktop & tablet */
+          /* Horizontal quick-pill tab selector for Patient role on desktop & tablet (Permanently Fixed Sub-Nav) */
           currentRole === 'patient' && (
-            <div className="bg-[#0f172a]/80 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-2.5 z-10 sticky top-[61px]">
+            <div className="shrink-0 bg-[#0f172a]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-2.5 z-20">
               <div className="max-w-7xl mx-auto flex items-center gap-2 overflow-x-auto no-scrollbar">
                 {patientTabs.map(tab => {
                   const isActive = activeTab === tab.id;
@@ -155,88 +163,90 @@ export const App: React.FC = () => {
           )
         )}
 
-        {/* Main Content Area */}
-        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 sm:py-8">
-          {showLanding ? (
-            <LandingPage
-              onSelectRole={(role) => {
-                setRole(role);
-                setShowLanding(false);
-                setActiveTab('dashboard');
-              }}
-            />
-          ) : (
-            <>
-              {currentRole === 'patient' && (
-                <div className="animate-in fade-in duration-200">
-                  {activeTab === 'dashboard' && (
-                    <PatientDashboard
-                      onNavigateTab={(tab) => setActiveTab(tab)}
-                      onOpenEmergency={() => setSosOpen(true)}
-                    />
-                  )}
-                  {activeTab === 'routine' && <DailyRoutine />}
-                  {activeTab === 'games' && <GameHub />}
-                  {activeTab === 'journal' && <MemoryJournal />}
-                  {activeTab === 'safety' && <SafetyHub />}
-                  {activeTab === 'chat' && <AIChatCompanion />}
-                </div>
-              )}
+        {/* Scrollable Main Content Area */}
+        <main className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin">
+          <div className="max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 sm:py-8">
+            {showLanding ? (
+              <LandingPage
+                onSelectRole={(role) => {
+                  setRole(role);
+                  setShowLanding(false);
+                  setActiveTab('dashboard');
+                }}
+              />
+            ) : (
+              <>
+                {currentRole === 'patient' && (
+                  <div className="animate-in fade-in duration-200">
+                    {activeTab === 'dashboard' && (
+                      <PatientDashboard
+                        onNavigateTab={(tab) => setActiveTab(tab)}
+                        onOpenEmergency={() => setSosOpen(true)}
+                      />
+                    )}
+                    {activeTab === 'routine' && <DailyRoutine />}
+                    {activeTab === 'games' && <GameHub />}
+                    {activeTab === 'journal' && <MemoryJournal />}
+                    {activeTab === 'safety' && <SafetyHub />}
+                    {activeTab === 'chat' && <AIChatCompanion />}
+                  </div>
+                )}
 
-              {currentRole === 'caregiver' && <CaregiverDashboard />}
-              {currentRole === 'clinician' && <ClinicianDashboard />}
-              {currentRole === 'asha' && (
-                <AshaDashboard
-                  onStartScreening={() => {
-                    setRole('patient');
-                    setActiveTab('games');
-                  }}
-                />
-              )}
-            </>
-          )}
-        </main>
-
-        {/* Footer */}
-        <footer className="bg-[#0c1222]/90 backdrop-blur-xl border-t border-white/10 mt-12 py-8 px-4 sm:px-8 text-white">
-          <div className="max-w-7xl mx-auto text-center space-y-3.5">
-            {/* Team StarX Branding Badge */}
-            <div className="flex items-center justify-center gap-3">
-              <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-purple-600/30 to-indigo-600/30 border border-purple-400/40 p-1 flex items-center justify-center shadow-lg shadow-purple-600/30 backdrop-blur-md">
-                <img
-                  src="/team-starx-logo.png"
-                  alt="Team StarX Logo"
-                  className="w-full h-full object-contain filter drop-shadow"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    if (!target.src.includes('image-removebg-preview.png')) {
-                      target.src = '/image-removebg-preview.png';
-                    }
-                  }}
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm sm:text-base font-black text-white tracking-wide">
-                  Crafted with <span className="text-rose-400 animate-pulse">❤️</span> by <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-cyan-300 font-extrabold">Team StarX</span>
-                </span>
-                <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-[#c084fc] text-[10px] font-black border border-purple-400/30">
-                  SIH 2026
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-bold text-sky-200">
-              <span className="text-[#c084fc] font-extrabold">SmritiCare (स्मृति केयर)</span>
-              <span>•</span>
-              <span>Smart India Hackathon SIH 2026</span>
-              <span>•</span>
-              <span>Vikas, Aditya, Priyanshu</span>
-            </div>
-
-            <p className="text-[11px] text-sky-200/50 max-w-2xl mx-auto leading-relaxed">
-              Clinical Safety Notice: SmritiCare is a supportive cognitive stimulation and medication adherence companion. It does not provide medical diagnoses of Alzheimer's Disease or related cognitive conditions. In case of acute medical emergencies, contact Emergency Services (108) or your primary healthcare centre immediately.
-            </p>
+                {currentRole === 'caregiver' && <CaregiverDashboard />}
+                {currentRole === 'clinician' && <ClinicianDashboard />}
+                {currentRole === 'asha' && (
+                  <AshaDashboard
+                    onStartScreening={() => {
+                      setRole('patient');
+                      setActiveTab('games');
+                    }}
+                  />
+                )}
+              </>
+            )}
           </div>
-        </footer>
+
+          {/* Footer */}
+          <footer className="bg-[#0c1222]/90 backdrop-blur-xl border-t border-white/10 mt-12 py-8 px-4 sm:px-8 text-white">
+            <div className="max-w-7xl mx-auto text-center space-y-3.5">
+              {/* Team StarX Branding Badge */}
+              <div className="flex items-center justify-center gap-3">
+                <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-purple-600/30 to-indigo-600/30 border border-purple-400/40 p-1 flex items-center justify-center shadow-lg shadow-purple-600/30 backdrop-blur-md">
+                  <img
+                    src="/team-starx-logo.png"
+                    alt="Team StarX Logo"
+                    className="w-full h-full object-contain filter drop-shadow"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      if (!target.src.includes('image-removebg-preview.png')) {
+                        target.src = '/image-removebg-preview.png';
+                      }
+                    }}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm sm:text-base font-black text-white tracking-wide">
+                    Crafted with <span className="text-rose-400 animate-pulse">❤️</span> by <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-cyan-300 font-extrabold">Team StarX</span>
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-[#c084fc] text-[10px] font-black border border-purple-400/30">
+                    SIH 2026
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-bold text-sky-200">
+                <span className="text-[#c084fc] font-extrabold">SmritiCare (स्मृति केयर)</span>
+                <span>•</span>
+                <span>Smart India Hackathon SIH 2026</span>
+                <span>•</span>
+                <span>Vikas, Aditya, Priyanshu</span>
+              </div>
+
+              <p className="text-[11px] text-sky-200/50 max-w-2xl mx-auto leading-relaxed">
+                Clinical Safety Notice: SmritiCare is a supportive cognitive stimulation and medication adherence companion. It does not provide medical diagnoses of Alzheimer's Disease or related cognitive conditions. In case of acute medical emergencies, contact Emergency Services (108) or your primary healthcare centre immediately.
+              </p>
+            </div>
+          </footer>
+        </main>
       </div>
 
       {/* Floating Emergency & Accessibility Triggers */}

@@ -23,6 +23,7 @@ import { getTranslation } from '../../lib/i18n';
 import { AshaPatientRecord } from '../../types';
 import { VoiceNarratorButton } from '../common/VoiceNarratorButton';
 import { maskPhoneNumber } from '../../lib/utils';
+import { ThreeDParticleBackground } from '../common/ThreeDParticleBackground';
 
 interface AshaDashboardProps {
   onStartScreening?: (patientId: string) => void;
@@ -99,6 +100,9 @@ export const AshaDashboard: React.FC<AshaDashboardProps> = ({ onStartScreening }
     <div className="space-y-8 animate-in fade-in duration-300 text-white">
       {/* Frosted Glass Header Banner - Purple & Blue Theme */}
       <div className="glass-panel p-6 sm:p-9 rounded-[2.5rem] border border-white/14 shadow-2xl relative overflow-hidden flex flex-wrap items-center justify-between gap-6">
+        {/* Dynamic Section 3D Particle Animation */}
+        <ThreeDParticleBackground variant="section" particleCount={25} colorTheme="purple-indigo" />
+
         {/* Ambient banner glows */}
         <div className="absolute -top-24 -right-24 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-20 left-1/3 w-64 h-64 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none" />

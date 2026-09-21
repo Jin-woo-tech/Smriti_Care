@@ -3,6 +3,7 @@ import { PhoneCall, AlertTriangle, X, ShieldAlert, HeartHandshake, Sparkles, Vol
 import { useApp } from '../../context/AppContext';
 import { getTranslation } from '../../lib/i18n';
 import { maskPhoneNumber } from '../../lib/utils';
+import { ThreeDParticleBackground } from './ThreeDParticleBackground';
 
 export const EmergencyModal: React.FC = () => {
   const { isSosOpen, setSosOpen, settings, narrate, activePatient } = useApp();
@@ -14,8 +15,11 @@ export const EmergencyModal: React.FC = () => {
   const ashaPhone = '+91 94350 12345';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-xl animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg bg-gradient-to-b from-[#181635] via-[#0e1628] to-[#0a101f] border border-purple-500/30 rounded-[32px] p-6 sm:p-8 shadow-2xl shadow-purple-950/60 text-white overflow-hidden animate-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0f1d]/70 p-4 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-lg bg-gradient-to-b from-[#181635]/95 via-[#0e1628]/95 to-[#0a101f]/95 border border-rose-500/40 rounded-[32px] p-6 sm:p-8 shadow-2xl shadow-rose-950/60 text-white overflow-hidden animate-in zoom-in-95 duration-200 backdrop-blur-2xl">
+        {/* Dynamic Emergency 3D Particles */}
+        <ThreeDParticleBackground variant="modal" particleCount={40} colorTheme="emergency-rose" />
+
         {/* Glow ambient spots */}
         <div className="absolute -top-24 -left-24 w-60 h-60 bg-red-600/25 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -right-24 w-60 h-60 bg-purple-600/25 rounded-full blur-3xl pointer-events-none" />
