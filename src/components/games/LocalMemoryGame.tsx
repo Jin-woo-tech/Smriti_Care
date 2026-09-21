@@ -2,63 +2,64 @@ import React, { useState } from 'react';
 import { GameShell } from './GameShell';
 import { AdaptiveTierConfig } from '../../lib/adaptiveDifficulty';
 import { CheckCircle2 } from 'lucide-react';
+import { useApp } from '../../context/AppContext';
 
 interface QuizQuestion {
   id: number;
   question: string;
-  questionAs: string;
+  questionHi: string;
   imageHint: string;
   options: string[];
-  optionsAs: string[];
+  optionsHi: string[];
   correctIndex: number;
   triviaFact: string;
-  triviaFactAs: string;
+  triviaFactHi: string;
 }
 
 const HERITAGE_QUESTIONS: QuizQuestion[] = [
   {
     id: 1,
-    question: 'Which world-famous National Park in Assam is home to the majestic One-Horned Rhinoceros?',
-    questionAs: 'বিশ্বখ্যাত এশিঙীয়া গঁড়ৰ বাবে অসমৰ কোনখন ৰাষ্ট্ৰীয় উদ্যান বিখ্যাত?',
+    question: 'Which world-famous National Park is renowned for the majestic One-Horned Rhinoceros?',
+    questionHi: 'विश्व प्रसिद्ध कौन सा राष्ट्रीय उद्यान एक सींग वाले गैंडे के लिए जाना जाता है?',
     imageHint: '🦏 🌿',
-    options: ['Kaziranga', 'Manas', 'Dibru-Saikhowa', 'Nameri'],
-    optionsAs: ['কাজিৰঙা ৰাষ্ট্ৰীয় উদ্যান', 'মানাহ ৰাষ্ট্ৰীয় উদ্যান', 'ডিব্ৰু-চৈখোৱা', 'নামেৰি'],
+    options: ['Kaziranga', 'Manas', 'Jim Corbett', 'Sundarbans'],
+    optionsHi: ['काजीरंगा राष्ट्रीय उद्यान', 'मानस राष्ट्रीय उद्यान', 'जिम कॉर्बेट', 'सुंदरबन'],
     correctIndex: 0,
     triviaFact: 'Kaziranga hosts two-thirds of the world\'s great one-horned rhinoceroses and is a UNESCO World Heritage Site.',
-    triviaFactAs: 'কাজিৰঙা সমগ্ৰ বিশ্বৰ দুই-তৃতীয়াংশ এশিঙীয়া গঁড়ৰ বাসস্থান আৰু ই ইউনেস্ক’ৰ বিশ্ব ঐতিহ্য ক্ষেত্ৰ।',
+    triviaFactHi: 'काजीरंगा दुनिया के दो-तिहाई एक सींग वाले गैंडों का घर है और यह यूनेस्को की विश्व धरोहर स्थल है।',
   },
   {
     id: 2,
-    question: 'Which traditional festival in Assam marks the arrival of spring, Bohag, and the Assamese New Year?',
-    questionAs: 'বসন্তৰ আগমন আৰু অসমীয়া নৱবৰ্ষ উপলক্ষে কোনটো বিহু পালন কৰা হয়?',
+    question: 'Which traditional festival marks the arrival of spring and harvest season with joy and music?',
+    questionHi: 'कौन सा पारंपरिक त्योहार वसंत ऋतु और नई फसल के आगमन पर हर्षोल्लास से मनाया जाता है?',
     imageHint: '🌸 🥁',
-    options: ['Rongali / Bohag Bihu', 'Kongali / Kati Bihu', 'Bhogali / Magh Bihu', 'Me-Dam-Me-Phi'],
-    optionsAs: ['ৰঙালী / বহাগ বিহু', 'কঙালী / কাতি বিহু', 'ভোগালী / মাঘ বিহু', 'মে-ডাম-মে-ফি'],
+    options: ['Bihu / Baisakhi', 'Diwali', 'Holi', 'Pongal'],
+    optionsHi: ['बिहू / बैसाखी', 'दीपावली', 'होली', 'पोंगल'],
     correctIndex: 0,
-    triviaFact: 'Rongali Bihu is celebrated with vibrant Husori dancing, Pepa music, and gifting handwoven Gamosa to elders.',
-    triviaFactAs: 'ৰঙালী বিহু হুঁচৰি, পেঁপা আৰু জ্যেষ্ঠজনক সন্মান জনাই গামোচা উপহাৰ দিয়াৰ উৎসৱ।',
+    triviaFact: 'Harvest festivals celebrate nature, agricultural prosperity, and sharing traditional sweets with loved ones.',
+    triviaFactHi: 'फसल उत्सव प्रकृति, कृषि समृद्धि और प्रियजनों के साथ पारंपरिक मिठाइयां बांटने का उत्सव है।',
   },
   {
     id: 3,
-    question: 'What is the name of the world\'s largest inhabited river island located on the Brahmaputra?',
-    questionAs: 'ব্ৰহ্মপুত্ৰৰ বুকুত অৱস্থিত বিশ্বৰ বৃহত্তম নদীদ্বীপ কোনটো?',
+    question: 'What is the name of the world\'s largest inhabited river island located on the Brahmaputra River?',
+    questionHi: 'ब्रह्मपुत्र नदी पर स्थित विश्व का सबसे बड़ा आबाद नदी द्वीप कौन सा है?',
     imageHint: '🏝️ 🛶',
-    options: ['Majuli', 'Umananda', 'Havelock', 'Divar'],
-    optionsAs: ['মাজুলী', 'উমানন্দ', 'হেভলক', 'দিভাৰ'],
+    options: ['Majuli', 'Umananda', 'Havelock', 'Munroe'],
+    optionsHi: ['माजुली', 'उमानंद', 'हैवलॉक', 'मुनरो'],
     correctIndex: 0,
-    triviaFact: 'Majuli is the cultural capital of Neo-Vaishnavite Satra heritage founded by Mahapurush Srimanta Sankardev.',
-    triviaFactAs: 'মাজুলী মহাপুৰুষ শ্ৰীমন্ত শংকৰদেৱৰ নৱবৈষ্ণৱ ধৰ্ম আৰু সত্ৰীয়া সংস্কৃতিৰ প্ৰাণকেন্দ্ৰ।',
+    triviaFact: 'Majuli is celebrated for its spiritual monasteries (Satras), mask-making traditions, and serene natural beauty.',
+    triviaFactHi: 'माजुली अपने आध्यात्मिक सत्रों, मुखौटा निर्माण परंपराओं और शांत प्राकृतिक सुंदरता के लिए प्रसिद्ध है।',
   },
   {
     id: 4,
-    question: 'Assam is globally celebrated for its rare golden silk. What is this silk traditionally called?',
-    questionAs: 'সোণালী উজ্জ্বলতাৰ বাবে বিশ্ববিখ্যাত অসমৰ থলুৱা পাট-ৰেচমৰ নাম কি?',
+    question: 'Which natural shimmering golden silk is known for its durability and rich natural glow?',
+    questionHi: 'प्राकृतिक चमक और मजबूती के लिए कौन सा दुर्लभ सुनहरा रेशम जाना जाता है?',
     imageHint: '✨ 👘',
     options: ['Muga Silk', 'Mulberry Silk', 'Tussar Silk', 'Pashmina'],
-    optionsAs: ['মুগা ৰেচম (Muga)', 'পাট ৰেচম', 'তচৰ ৰেচম', 'পশ্মিনা'],
+    optionsHi: ['मूगा रेशम (Muga)', 'शहतूत रेशम', 'तसर रेशम', 'पश्मीना'],
     correctIndex: 0,
-    triviaFact: 'Muga silk is known for its natural golden shimmer and durability, becoming more lustrous with every wash.',
-    triviaFactAs: 'মুগা ৰেচমৰ উজ্জ্বলতা ধুলে অধিক বৃদ্ধি পায় আৰু ই অসমৰ এক অনন্য গৌৰৱ।',
+    triviaFact: 'Muga silk is known for its natural golden sheen and longevity, becoming more lustrous with time and washing.',
+    triviaFactHi: 'मूगा रेशम अपनी प्राकृतिक सुनहरी चमक और मजबूती के लिए प्रसिद्ध है, जो समय के साथ और निखरती है।',
   },
 ];
 
@@ -67,9 +68,9 @@ export const LocalMemoryGame: React.FC<{ onBack: () => void }> = ({ onBack }) =>
     <GameShell
       gameId="local-memory"
       title="Local Heritage Memory"
-      titleAs="থলুৱা ঐতিহ্য স্মৃতি"
-      instructions="Answer engaging trivia questions celebrating Assam's culture, festivals, and landmarks."
-      instructionsAs="অসমৰ প্ৰাকৃতিক সৌন্দৰ্য, ইতিহাস আৰু বিহু উৎসৱৰ স্মৃতি সম্পৰ্কীয় সহজ প্ৰশ্নৰ উত্তৰ দিয়ক।"
+      titleHi="स्थानीय सांस्कृतिक धरोहर"
+      instructions="Answer engaging trivia questions celebrating regional culture, festivals, and landmarks."
+      instructionsHi="संस्कृति, प्रमुख धरोहरों और पारंपरिक त्योहारों से जुड़े रोचक प्रश्नों के उत्तर दें।"
       onBack={onBack}
     >
       {({ tierConfig, onGameOver, isGameActive }) => (
@@ -84,6 +85,9 @@ const QuizBoard: React.FC<{
   onGameOver: (score: number, maxScore: number, accuracy: number, reactionTimeMs: number) => void;
   isGameActive: boolean;
 }> = ({ tierConfig, onGameOver }) => {
+  const { settings } = useApp();
+  const lang = settings.language;
+
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [correctAnswers, setCorrectAnswers] = useState<number>(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -121,28 +125,37 @@ const QuizBoard: React.FC<{
     }, 2400);
   };
 
+  const questionTitle = lang === 'hi' ? currentQ.questionHi : currentQ.question;
+  const questionSubtitle = lang === 'hi' ? currentQ.question : currentQ.questionHi;
+  const options = lang === 'hi' ? currentQ.optionsHi : currentQ.options;
+  const triviaFact = lang === 'hi' ? currentQ.triviaFactHi : currentQ.triviaFact;
+
   return (
     <div className="w-full max-w-xl space-y-6 text-white">
       {/* Progress */}
       <div className="flex justify-between items-center text-xs font-bold text-sky-200/70">
-        <span>Question {currentIdx + 1} of {HERITAGE_QUESTIONS.length}</span>
-        <span className="text-[#c084fc] font-bold">Heritage Recall</span>
+        <span>
+          {lang === 'hi' ? 'प्रश्न' : 'Question'} {currentIdx + 1} {lang === 'hi' ? 'का' : 'of'} {HERITAGE_QUESTIONS.length}
+        </span>
+        <span className="text-[#c084fc] font-bold">
+          {lang === 'hi' ? 'सांस्कृतिक स्मृति' : 'Heritage Recall'}
+        </span>
       </div>
 
       {/* Question Card */}
       <div className="glass-card-dark p-6 sm:p-7 rounded-3xl border border-purple-400/30 text-center space-y-3 shadow-2xl backdrop-blur-md">
         <div className="text-4xl">{currentQ.imageHint}</div>
         <h3 className="text-xl font-extrabold text-white">
-          {currentQ.questionAs}
+          {questionTitle}
         </h3>
         <p className="text-xs text-sky-200/80 font-medium">
-          {currentQ.question}
+          {questionSubtitle}
         </p>
       </div>
 
       {/* Options */}
       <div className="space-y-3">
-        {currentQ.optionsAs.map((optText, optIdx) => {
+        {options.map((optText, optIdx) => {
           const isSelected = selectedOption === optIdx;
           const isCorrect = optIdx === currentQ.correctIndex;
 
@@ -172,7 +185,7 @@ const QuizBoard: React.FC<{
       {/* Explanation Banner */}
       {showExplanation && (
         <div className="p-4 rounded-2xl bg-purple-950/40 border border-purple-400/40 text-sky-100 text-xs sm:text-sm animate-in fade-in backdrop-blur-md">
-          <strong className="text-purple-300">💡 স্মৃতি টোকা:</strong> {currentQ.triviaFactAs}
+          <strong className="text-purple-300">💡 {lang === 'hi' ? 'रोचक तथ्य:' : 'Trivia Fact:'}</strong> {triviaFact}
         </div>
       )}
     </div>

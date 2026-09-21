@@ -39,17 +39,13 @@ export const DailyRoutine: React.FC = () => {
     addReminder({
       type,
       title,
-      titleAs: title,
       titleHi: title,
       time,
       dose,
-      doseAs: dose,
       doseHi: dose,
       frequency: 'Daily',
-      frequencyAs: 'দৈনিক',
       frequencyHi: 'दैनिक',
       notes,
-      notesAs: notes,
       notesHi: notes,
       taken: false,
     });
@@ -70,7 +66,6 @@ export const DailyRoutine: React.FC = () => {
   const progressPercent = Math.round((completedCount / (reminders.length || 1)) * 100);
 
   const getRemTitle = (rem: typeof reminders[0]) => {
-    if (lang === 'as') return rem.titleAs;
     if (lang === 'hi') return rem.titleHi || rem.title;
     return rem.title;
   };
@@ -89,16 +84,12 @@ export const DailyRoutine: React.FC = () => {
             <span>Daily Schedule & Medication Adherence</span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
-            {lang === 'as'
-              ? 'দৈনিক সময়সূচী আৰু ঔষধ সোঁৱৰণী'
-              : lang === 'hi'
+            {lang === 'hi'
               ? 'दैनिक समय-सारणी और दवा अनुसूची'
               : 'Daily Routine & Pill Reminders'}
           </h1>
           <p className="text-sm sm:text-base text-sky-200/80 leading-relaxed max-w-2xl mt-1.5">
-            {lang === 'as'
-              ? 'সময়মতে ঔষধ খাওক, পানী খাওক আৰু শাৰীৰিক ব্যায়ামৰ নিয়ম মানি চলক।'
-              : lang === 'hi'
+            {lang === 'hi'
               ? 'समय पर दवा लें, पर्याप्त पानी पिएं और हल्की सैर का नियम बनाए रखें।'
               : 'Clear, high-contrast dark frosted reminders with audio prompts for medicines, meals, and hydration.'}
           </p>
@@ -107,9 +98,7 @@ export const DailyRoutine: React.FC = () => {
         <div className="relative z-10 flex items-center gap-3">
           <VoiceNarratorButton
             textToRead={
-              lang === 'as'
-                ? `আজিৰ ${reminders.length} টা সোঁৱৰণীৰ ভিতৰত ${completedCount} টা সম্পূৰ্ণ হৈছে।`
-                : lang === 'hi'
+              lang === 'hi'
                 ? `आज के ${reminders.length} में से ${completedCount} कार्य पूरे हो चुके हैं।`
                 : `You have completed ${completedCount} out of ${reminders.length} daily reminders today.`
             }
@@ -135,9 +124,7 @@ export const DailyRoutine: React.FC = () => {
             <span className="flex items-center gap-1.5">
               <CalendarCheck size={16} className="text-[#c084fc]" />
               <span>
-                {lang === 'as'
-                  ? 'ঔষধ পালনৰ হাৰ'
-                  : lang === 'hi'
+                {lang === 'hi'
                   ? 'आज का दवा अनुपालन'
                   : "Today's Adherence"}
               </span>
@@ -216,8 +203,8 @@ export const DailyRoutine: React.FC = () => {
             {walkDone ? <CheckCircle2 size={16} className="text-[#c084fc]" /> : <Circle size={16} />}
             <span>
               {walkDone
-                ? (lang === 'as' ? '২০ মিনিট খোজ কঢ়া সম্পূৰ্ণ' : lang === 'hi' ? '20 मिनट टहलना पूरा हुआ' : '20 Mins Walk Done')
-                : (lang === 'as' ? '২০ মিনিট খোজ কঢ়া সম্পূৰ্ণ বুলি চিহ্নিত কৰক' : lang === 'hi' ? '20 मिनट टहलना पूरा मार्क करें' : 'Mark 20 Mins Walk Done')}
+                ? (lang === 'hi' ? '20 मिनट टहलना पूरा हुआ' : '20 Mins Walk Done')
+                : (lang === 'hi' ? '20 मिनट टहलना पूरा मार्क करें' : 'Mark 20 Mins Walk Done')}
             </span>
           </button>
 
@@ -235,9 +222,7 @@ export const DailyRoutine: React.FC = () => {
               <Pill size={18} />
             </div>
             <span>
-              {lang === 'as'
-                ? 'আজিৰ ঔষধ আৰু কাৰ্যসূচী'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'आज की दवाइयां और समय-सारणी'
                 : "Today's Schedule & Medications"}
             </span>
@@ -293,9 +278,7 @@ export const DailyRoutine: React.FC = () => {
 
                   <VoiceNarratorButton
                     textToRead={
-                      lang === 'as'
-                        ? `${rem.titleAs}. সময় ${rem.time}. ${rem.dose || ''}`
-                        : lang === 'hi'
+                      lang === 'hi'
                         ? `${rem.titleHi || rem.title}. समय ${rem.time}. ${rem.dose || ''}`
                         : `${rem.title}. At ${rem.time}. ${rem.dose || ''}`
                     }
@@ -322,9 +305,7 @@ export const DailyRoutine: React.FC = () => {
                       <>
                         <CheckCircle2 size={16} className="text-[#c084fc]" />
                         <span>
-                          {lang === 'as'
-                            ? 'খোৱা হ’ল (Taken)'
-                            : lang === 'hi'
+                          {lang === 'hi'
                             ? 'ले ली गई (Taken)'
                             : 'Taken'}
                         </span>
@@ -333,9 +314,7 @@ export const DailyRoutine: React.FC = () => {
                       <>
                         <Circle size={16} />
                         <span>
-                          {lang === 'as'
-                            ? 'খোৱা বুলি চিহ্নিত কৰক'
-                            : lang === 'hi'
+                          {lang === 'hi'
                             ? 'दवा ली मार्क करें'
                             : 'Mark as Taken'}
                         </span>
@@ -361,9 +340,7 @@ export const DailyRoutine: React.FC = () => {
               <h3 className="text-xl font-extrabold text-white flex items-center gap-2">
                 <BellRing size={20} className="text-[#c084fc]" />
                 <span>
-                  {lang === 'as'
-                    ? 'নতুন সোঁৱৰণী যোগ কৰক'
-                    : lang === 'hi'
+                  {lang === 'hi'
                     ? 'नया रिमाइंडर जोड़ें'
                     : 'Add Daily Reminder'}
                 </span>
@@ -373,9 +350,7 @@ export const DailyRoutine: React.FC = () => {
             <form onSubmit={handleAddSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-sky-200/80 uppercase mb-1.5">
-                  {lang === 'as'
-                    ? 'ঔষধ বা কাৰ্যৰ নাম'
-                    : lang === 'hi'
+                  {lang === 'hi'
                     ? 'दवा या कार्य का नाम'
                     : 'Medication / Task Name'}
                 </label>
@@ -392,7 +367,7 @@ export const DailyRoutine: React.FC = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-sky-200/80 uppercase mb-1.5">
-                    {lang === 'as' ? 'সময়' : lang === 'hi' ? 'समय' : 'Scheduled Time'}
+                    {lang === 'hi' ? 'समय' : 'Scheduled Time'}
                   </label>
                   <input
                     type="text"
@@ -405,7 +380,7 @@ export const DailyRoutine: React.FC = () => {
 
                 <div>
                   <label className="block text-xs font-bold text-sky-200/80 uppercase mb-1.5">
-                    {lang === 'as' ? 'মাত্ৰা' : lang === 'hi' ? 'मात्रा' : 'Dose (Optional)'}
+                    {lang === 'hi' ? 'मात्रा' : 'Dose (Optional)'}
                   </label>
                   <input
                     type="text"
@@ -419,7 +394,7 @@ export const DailyRoutine: React.FC = () => {
 
               <div>
                 <label className="block text-xs font-bold text-sky-200/80 uppercase mb-1.5">
-                  {lang === 'as' ? 'খোৱাৰ নিয়ম' : lang === 'hi' ? 'लेने का समय / निर्देश' : 'Meal Timing / Note'}
+                  {lang === 'hi' ? 'लेने का समय / निर्देश' : 'Meal Timing / Note'}
                 </label>
                 <input
                   type="text"

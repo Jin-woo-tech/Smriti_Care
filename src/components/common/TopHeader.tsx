@@ -7,6 +7,10 @@ import {
   ChevronDown,
   Check,
   PhoneCall,
+  User,
+  LogIn,
+  LogOut,
+  ShieldCheck,
   Sparkles
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
@@ -27,16 +31,21 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
     setA11yOpen,
     setSosOpen,
     toggleSimulatedOffline,
+    currentUser,
+    logout,
+    setAuthModalOpen,
+    setAuthModalMode,
   } = useApp();
 
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const lang = settings.language;
 
+  // Strict Bilingual: English and Hindi
   const languages: { id: Language; label: string; subLabel: string }[] = [
     { id: 'en', label: 'English', subLabel: 'English (India)' },
-    { id: 'hi', label: 'हिन्दी', subLabel: 'Hindi' },
-    { id: 'as', label: 'অসমীয়া', subLabel: 'Assamese' },
+    { id: 'hi', label: 'हिन्दी', subLabel: 'Hindi (National)' },
   ];
 
   const currentLangObj = languages.find(l => l.id === lang) || languages[0];
@@ -55,7 +64,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
             <Menu size={20} />
           </button>
 
-          {/* Search Pill Input matching Image #10 glass aesthetic */}
+          {/* Search Pill Input */}
           <div className="relative w-full">
             <Search
               size={18}
@@ -66,9 +75,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder={
-                lang === 'as'
-                  ? 'ঔষধ, দিনচৰ্যা, মগজুৰ খেল, লেব ৰিপৰ্ট বিচাৰক...'
-                  : lang === 'hi'
+                lang === 'hi'
                   ? 'दवाइयां, दिनचर्या, खेल, लैब रिपोर्ट खोजें...'
                   : 'Search medicines, routines, memory games, lab reports...'
               }
@@ -82,6 +89,60 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
 
         {/* Right Side Controls */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* User Account / Auth Indicator */}
+          {currentUser ? (
+            <div className="relative">
+              <button
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-purple-500/15 border border-purple-400/40 text-white text-xs font-bold hover:bg-purple-500/25 transition-all shadow-sm"
+              >
+                <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-[10px] font-extrabold text-white">
+                  {currentUser.fullName ? currentUser.fullName.charAt(0).toUpperCase() : 'U'}
+                </div>
+                <span className="hidden md:inline font-semibold">{currentUser.fullName?.split(' ')[0] || currentUser.username}</span>
+                <span className="text-[9px] uppercase px-1.5 py-0.2 bg-purple-500/30 rounded text-purple-200 font-mono">
+                  {currentUser.role}
+                </span>
+                <ChevronDown size={13} className="text-purple-200" />
+              </button>
+
+              {isUserMenuOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setIsUserMenuOpen(false)} />
+                  <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-[#172c44] p-2.5 shadow-2xl border border-white/20 z-50 backdrop-blur-2xl text-white animate-in fade-in zoom-in-95">
+                    <div className="px-3 py-2 border-b border-white/10 mb-1.5">
+                      <p className="text-xs font-bold text-white">{currentUser.fullName}</p>
+                      <p className="text-[10px] text-purple-300 capitalize">{currentUser.role} Account</p>
+                      <p className="text-[10px] text-sky-300/70 font-mono truncate">{currentUser.email || currentUser.username}</p>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-rose-300 hover:bg-rose-500/20 transition-all"
+                    >
+                      <LogOut size={14} />
+                      <span>{lang === 'hi' ? 'लॉगआउट करें' : 'Sign Out'}</span>
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                setAuthModalMode('login');
+                setAuthModalOpen(true);
+              }}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 border border-purple-400/40 text-white text-xs font-bold shadow-md shadow-purple-600/30 transition-all"
+            >
+              <LogIn size={14} />
+              <span>{lang === 'hi' ? 'साइन इन / रजिस्टर' : 'Sign In'}</span>
+            </button>
+          )}
+
           {/* Language Switcher Pill */}
           <div className="relative">
             <button
@@ -103,7 +164,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
                 />
                 <div className="absolute right-0 mt-2 w-48 rounded-2xl bg-[#172c44] p-2 shadow-2xl border border-white/20 z-50 backdrop-blur-2xl animate-in fade-in zoom-in-95 text-white">
                   <p className="px-3 py-1.5 text-[10px] font-extrabold text-sky-300 uppercase tracking-wider">
-                    Language / भाषा / ভাষা
+                    Language / भाषा
                   </p>
                   {languages.map(l => {
                     const isSelected = settings.language === l.id;

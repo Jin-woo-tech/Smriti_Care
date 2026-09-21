@@ -72,16 +72,16 @@ export const AshaDashboard: React.FC<AshaDashboardProps> = ({ onStartScreening }
 
     addAshaPatient({
       name: newName,
-      nameAs: newName,
+      nameHi: newName,
       age: newAge,
       gender: 'M',
       village: newVillage,
-      villageAs: newVillage,
+      villageHi: newVillage,
       lastVisitDate: 'Never',
       cognitiveStatus: 'stable',
       adherenceRate: 85,
       notes: 'Initial registration by ASHA Minoti Das.',
-      notesAs: 'প্ৰাথমিক পঞ্জীয়ন সম্পন্ন।',
+      notesHi: 'आशा कार्यकर्ता मिनोती दास द्वारा प्रारंभिक पंजीकरण संपन्न।',
       phone: newPhone || '+91 94350 00000',
       caregiverName: 'Family Member',
       caregiverPhone: '+91 94350 11111',
@@ -110,17 +110,13 @@ export const AshaDashboard: React.FC<AshaDashboardProps> = ({ onStartScreening }
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
-            {lang === 'as'
-              ? 'তিতাবৰ ব্লক গাঁও ৰষ্টাৰ (ASHA)'
-              : lang === 'hi'
+            {lang === 'hi'
               ? 'तीताबर ब्लॉक ग्रामीण रोस्टर (आशा फील्ड पोर्टल)'
               : 'Titabor Block Village Roster'}
           </h1>
 
           <p className="text-sm sm:text-base text-sky-200/80 mt-2 leading-relaxed font-medium">
-            {lang === 'as'
-              ? 'গাঁওসমূহত জ্যেষ্ঠ নাগৰিকসকলৰ গৃহ পৰিদৰ্শন, ঔষধ পৰীক্ষা আৰু প্ৰাথমিক স্ক্ৰীনিং পৰিচালনা কৰক।'
-              : lang === 'hi'
+            {lang === 'hi'
               ? 'ग्रामीण क्षेत्र में वरिष्ठ नागरिकों की घर-घर जांच, दवा स्टॉक सत्यापन और संज्ञानात्मक स्क्रीनिंग।'
               : 'Empowering frontline healthcare workers with offline field screening, home visit logs, and elder rosters.'}
           </p>
@@ -129,9 +125,7 @@ export const AshaDashboard: React.FC<AshaDashboardProps> = ({ onStartScreening }
         <div className="relative z-10 flex items-center gap-3 shrink-0">
           <VoiceNarratorButton
             textToRead={
-              lang === 'as'
-                ? 'আশা কৰ্মী ফিল্ড পৰ্টেল। তিতাবৰ অঞ্চলৰ ৩ জন জ্যেষ্ঠ নাগৰিকৰ তালিকা আৰু গৃহ পৰিদৰ্শন লিপি চাওক।'
-                : lang === 'hi'
+              lang === 'hi'
                 ? 'आशा फील्ड पोर्टल। तीताबर क्षेत्र के वरिष्ठ नागरिकों की सूची, घर-घर भेंट और त्वरित स्क्रीनिंग उपलब्ध है।'
                 : 'ASHA frontline portal. Manage your elder cohort, record home visits, and conduct rapid field screenings.'
             }
@@ -145,9 +139,7 @@ export const AshaDashboard: React.FC<AshaDashboardProps> = ({ onStartScreening }
           >
             <Plus size={18} className="stroke-[3]" />
             <span>
-              {lang === 'as'
-                ? 'নতুন জ্যেষ্ঠ পঞ্জীয়ন'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'नया बुजुर्ग पंजीकृत करें'
                 : 'Register Elder'}
             </span>
@@ -226,9 +218,7 @@ export const AshaDashboard: React.FC<AshaDashboardProps> = ({ onStartScreening }
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder={
-              lang === 'as'
-                ? 'নাম বা গাঁও বিচাৰক (যেনে: বিপিন, তিতাবৰ)...'
-                : lang === 'hi'
+              lang === 'hi'
                 ? 'बुजुर्ग का नाम या गांव खोजें (जैसे: बिपिन, तीताबर)...'
                 : 'Search elder by name or village (e.g. Bipin, Titabor)...'
             }
@@ -273,12 +263,12 @@ export const AshaDashboard: React.FC<AshaDashboardProps> = ({ onStartScreening }
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <h3 className="text-xl font-black text-white group-hover:text-[#c084fc] transition-colors">
-                      {lang === 'as' ? patient.nameAs : lang === 'hi' ? (patient.nameHi || patient.name) : patient.name}
+                      {lang === 'hi' ? (patient.nameHi || patient.name) : patient.name}
                     </h3>
                     <p className="text-xs text-sky-200/70 font-medium flex items-center gap-1.5 mt-1">
                       <MapPin size={14} className="text-[#c084fc]" />
-                      {lang === 'as' ? patient.villageAs : lang === 'hi' ? (patient.villageHi || patient.village) : patient.village} • {patient.age}{' '}
-                      {lang === 'as' ? 'বছৰ' : lang === 'hi' ? 'वर्ष' : 'yrs'}
+                      {lang === 'hi' ? (patient.villageHi || patient.village) : patient.village} • {patient.age}{' '}
+                      {lang === 'hi' ? 'वर्ष' : 'yrs'}
                     </p>
                   </div>
 
@@ -308,9 +298,9 @@ export const AshaDashboard: React.FC<AshaDashboardProps> = ({ onStartScreening }
 
                 <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 text-xs text-sky-100/90 leading-relaxed font-medium">
                   <span className="font-extrabold block text-purple-300 mb-0.5">
-                    {lang === 'as' ? 'আশা টোকা:' : lang === 'hi' ? 'आशा कार्यकर्ता नोट:' : 'ASHA Note:'}
+                    {lang === 'hi' ? 'आशा कार्यकर्ता नोट:' : 'ASHA Note:'}
                   </span>
-                  {lang === 'as' ? patient.notesAs : lang === 'hi' ? (patient.notesHi || patient.notes) : patient.notes}
+                  {lang === 'hi' ? (patient.notesHi || patient.notes) : patient.notes}
                 </div>
               </div>
 
@@ -318,9 +308,7 @@ export const AshaDashboard: React.FC<AshaDashboardProps> = ({ onStartScreening }
               <div className="pt-3.5 border-t border-white/10 space-y-2.5">
                 <div className="flex items-center justify-between text-[11px] text-sky-200/60 pb-1">
                   <span className="font-medium">
-                    {lang === 'as'
-                      ? `অন্তিম সাক্ষাৎ: ${patient.lastVisitDate}`
-                      : lang === 'hi'
+                    {lang === 'hi'
                       ? `अंतिम भेंट: ${patient.lastVisitDate}`
                       : `Last Visit: ${patient.lastVisitDate}`}
                   </span>
@@ -328,7 +316,7 @@ export const AshaDashboard: React.FC<AshaDashboardProps> = ({ onStartScreening }
                     href={`tel:${patient.phone}`}
                     className="text-[#c084fc] font-black flex items-center gap-1 hover:text-purple-200 transition-colors"
                   >
-                    <PhoneCall size={12} /> {lang === 'hi' ? 'कॉल' : lang === 'as' ? 'কল' : 'Call'} ({maskPhoneNumber(patient.phone)})
+                    <PhoneCall size={12} /> {lang === 'hi' ? 'कॉल' : 'Call'} ({maskPhoneNumber(patient.phone)})
                   </a>
                 </div>
 
@@ -337,14 +325,14 @@ export const AshaDashboard: React.FC<AshaDashboardProps> = ({ onStartScreening }
                     onClick={() => setSelectedPatientForVisit(patient)}
                     className="w-full py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-extrabold text-xs border border-white/15 cursor-pointer transition-all shadow-xs"
                   >
-                    {lang === 'as' ? 'সাক্ষাৎ লিপি' : lang === 'hi' ? 'भेंट दर्ज करें' : 'Log Visit'}
+                    {lang === 'hi' ? 'भेंट दर्ज करें' : 'Log Visit'}
                   </button>
 
                   <button
                     onClick={() => onStartScreening && onStartScreening(patient.id)}
                     className="w-full py-2.5 rounded-2xl bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] hover:from-[#9333ea] hover:to-[#7c3aed] text-white font-extrabold text-xs cursor-pointer shadow-lg shadow-purple-600/30 transition-all active:scale-95 flex items-center justify-center gap-1.5 border border-purple-400/30"
                   >
-                    <span>{lang === 'as' ? 'স্ক্ৰীনিং খেল' : lang === 'hi' ? 'स्क्रीनिंग टेस्ट' : 'Screen Game'}</span>
+                    <span>{lang === 'hi' ? 'स्क्रीनिंग टेस्ट' : 'Screen Game'}</span>
                     <ArrowUpRight size={14} className="text-white" />
                   </button>
                 </div>
