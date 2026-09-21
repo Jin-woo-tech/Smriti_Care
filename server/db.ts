@@ -662,3 +662,10 @@ function seedInitialData() {
     'डॉ. हितेश बरुआ के साथ 11:30 बजे परामर्श निर्धारित है।'
   );
 }
+
+// Automatically initialize SQLite tables and seed data upon module load
+try {
+  initDatabase();
+} catch (error) {
+  console.error('Failed to initialize database schema:', error);
+}
