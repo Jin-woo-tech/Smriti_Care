@@ -10,51 +10,58 @@ export interface ApiKeyVerificationResult {
 }
 
 /**
- * Verify AI Service Connection & API Key Format
- * Validates format and checks backend proxy availability for secure server-side execution.
+ * Verify AI Service Connection & API Key
+ * Validates against live upstream AI provider via backend endpoint.
  */
 export async function verifyApiKey(apiKey?: string): Promise<ApiKeyVerificationResult> {
   const cleanKey = apiKey?.trim() || '';
 
-  // If testing key format directly
-  if (cleanKey && (!cleanKey.startsWith('sk-') && cleanKey.length < 15)) {
+  if (!cleanKey) {
     return {
       valid: false,
-      message: 'Invalid Key Format',
-      messageHi: 'अमान्य कुंजी प्रारूप',
-      errorDetail: 'API keys must follow standard secure provider token formats.',
+      message: 'Offline Safe Mode Active',
+      messageHi: 'ऑफलाइन सुरक्षित मोड सक्रिय',
+      model: 'SmritiCare Local Offline Clinical Engine',
+      errorDetail: 'No API key configured. SmritiCare is operating in zero-cloud offline mode.',
+    };
+  }
+
+  // Quick sanity check for standard key token lengths
+  if (cleanKey.length < 10) {
+    return {
+      valid: false,
+      message: 'Invalid API Key Length',
+      messageHi: 'अमान्य कुंजी लंबाई',
+      errorDetail: 'API keys must be valid token strings provided by Anthropic, OpenAI, Groq, or Gemini.',
     };
   }
 
   try {
-    // Ping backend AI chat gateway to check status
-    const testResponse = await api.ai.chat('Health check ping', 'en');
-    if (testResponse && testResponse.reply) {
+    const res = await api.ai.verifyKey(cleanKey);
+
+    if (res.valid) {
       return {
         valid: true,
-        message: 'Backend AI Active & Ready',
-        messageHi: 'सुरक्षित AI सर्वर सक्रिय और तैयार',
-        model: 'SmritiCare Enterprise AI Gateway',
-        errorDetail: 'Connected securely via backend AI proxy. All patient data is protected.',
+        message: res.message || 'AI Gateway Verified & Active',
+        messageHi: res.messageHi || 'सुरक्षित AI गेटवे सत्यापित और सक्रिय',
+        model: res.provider ? `${res.provider} • ${res.model || ''}` : 'Enterprise AI Gateway',
       };
     }
-  } catch {
-    // Graceful local fallback indication
+
     return {
-      valid: true,
-      message: 'Offline AI Engine Active',
-      messageHi: 'ऑफलाइन AI इंजन सक्रिय',
-      model: 'SmritiCare Local Offline Neural Engine',
-      errorDetail: 'Backend proxy unreachable; local on-device fallback is active for offline continuity.',
+      valid: false,
+      message: res.message || 'Authentication Failed',
+      messageHi: res.messageHi || 'प्रमाणीकरण विफल (अमान्य API कुंजी)',
+      errorDetail: res.errorDetail || 'The API key was rejected by the upstream provider. Please check credentials.',
+    };
+  } catch (err: any) {
+    return {
+      valid: false,
+      message: 'Connection Failed',
+      messageHi: 'सर्वर से संपर्क विफल',
+      errorDetail: err?.message || 'Could not contact the verification gateway. Local clinical rules remain active.',
     };
   }
-
-  return {
-    valid: true,
-    message: 'AI Service Connected',
-    messageHi: 'AI सेवा कनेक्टेड',
-    model: 'Enterprise AI Gateway',
-  };
 }
 
 /**
@@ -64,10 +71,10 @@ export async function verifyApiKey(apiKey?: string): Promise<ApiKeyVerificationR
 export async function analyzeMedicinePhoto(
   imageDataUrl: string,
   scheduledReminders: Reminder[],
-  _apiKey?: string
+  apiKey?: string
 ): Promise<SafetyAnalysisResult> {
   try {
-    const ocrResponse = await api.ai.medicineOcr({ imageBase64: imageDataUrl });
+    const ocrResponse = await api.ai.medicineOcr({ imageBase64: imageDataUrl }, apiKey);
     if (ocrResponse && ocrResponse.medication) {
       const med = ocrResponse.medication;
       const matchedReminder = scheduledReminders.find(r =>
@@ -111,7 +118,7 @@ export async function analyzeMedicinePhoto(
   }
 
   // Simulated High-Accuracy Local Fallback
-  await new Promise(resolve => setTimeout(resolve, 900));
+  await new Promise(resolve => setTimeout(resolve, 800));
 
   const bpReminder = scheduledReminders.find(r =>
     r.title.toLowerCase().includes('telmisartan') || r.title.toLowerCase().includes('pressure')
@@ -153,13 +160,13 @@ export async function analyzeMedicinePhoto(
  */
 export async function analyzeLabReport(
   fileData: string,
-  _apiKey?: string
+  apiKey?: string
 ): Promise<LabReportResult> {
   try {
     const reportRes = await api.ai.analyzeLab({
       reportText: fileData || 'Comprehensive Metabolic & Lipid Panel. FBS 138 mg/dL, HbA1c 6.8%, Creatinine 1.02 mg/dL, Hemoglobin 13.4 g/dL.',
       testName: 'Comprehensive Metabolic Panel',
-    });
+    }, apiKey);
 
     if (reportRes && reportRes.biomarkers) {
       return {
@@ -245,15 +252,16 @@ export async function analyzeLabReport(
 
 /**
  * Conversational Sathi Assistant responses in English and Hindi
- * Uses secure backend AI proxy with instant intelligent offline fallbacks.
+ * Uses secure backend AI proxy with dynamic history and intelligent offline fallbacks.
  */
 export async function getSathiAIResponse(
   userQuery: string,
   language: Language = 'en',
-  _apiKey?: string
+  apiKey?: string,
+  conversationHistory: any[] = []
 ): Promise<string> {
   try {
-    const aiRes = await api.ai.chat(userQuery, language);
+    const aiRes = await api.ai.chat(userQuery, language, conversationHistory, apiKey);
     if (aiRes && aiRes.reply) {
       return aiRes.reply;
     }
@@ -268,29 +276,29 @@ export async function getSathiAIResponse(
 
   if (language === 'hi') {
     if (queryLower.includes('दवा') || queryLower.includes('medicine') || queryLower.includes('रात') || queryLower.includes('dinner')) {
-      return 'नमस्ते! आज रात के खाने के साथ आपकी मेटफॉर्मिन (500mg) की गोली निर्धारित है। भोजन करने के बाद एक गिलास ताजे पानी के साथ इसे लें। आपकी सुबह की ब्लड प्रेशर की दवा पहले ही ली जा चुकी है।';
+      return 'नमस्ते! आपकी नियमित निर्धारित दवाइयां समय पर लेना बहुत महत्वपूर्ण है। रात के भोजन के बाद ताजे पानी के साथ अपनी निर्धारित गोली लें।';
     }
     if (queryLower.includes('त्योहार') || queryLower.includes('उत्सव') || queryLower.includes('खुशी')) {
       return 'पारिवारिक त्योहार और उत्सव हमारे जीवन में खुशियां भरते हैं। आपकी स्मृति एल्बम में परिवार के साथ मनाए गए उत्सवों की सुंदर तस्वीरें मौजूद हैं!';
     }
     if (queryLower.includes('भूल') || queryLower.includes('confused') || queryLower.includes('परेशान') || queryLower.includes('याद')) {
-      return 'बिल्कुल चिंता न करें। कभी-कभी थोड़ा भूलना या थकान महसूस होना स्वाभाविक है। थोड़ा आराम करें और एक घूंट पानी पिएं। क्या आप 2 मिनट का कोई हल्का दिमागी खेल खेलना चाहेंगे?';
+      return 'बिल्कुल चिंता न करें। कभी-कभी थोड़ा भूलना या थकान महसूस होना स्वाभाविक है। थोड़ा आराम करें और एक घूंट पानी पिएं। मैं हमेशा आपके साथ हूँ।';
     }
     if (queryLower.includes('शुगर') || queryLower.includes('रिपोर्ट') || queryLower.includes('sugar') || queryLower.includes('blood')) {
-      return 'आपकी नवीनतम लैब रिपोर्ट के अनुसार आपका 3 महीने का HbA1c औसत 6.8% है, जो आपकी उम्र के अनुसार बहुत अच्छा नियंत्रित है। डॉक्टर ने नियमित टहलने और समय पर दवा लेने की सलाह दी है।';
+      return 'आपकी नवीनतम लैब रिपोर्ट के अनुसार आपका 3 महीने का HbA1c औसत 6.8% है, जो बहुत अच्छा नियंत्रित है। डॉक्टर ने नियमित टहलने और समय पर दवा लेने की सलाह दी है।';
     }
     return 'नमस्ते! मैं स्मृति साथी हूँ। मैं आपकी दैनिक दवा अनुसूची, पारिवारिक यादों, आसान दिमागी खेलों और स्वास्थ्य संबंधी जानकारियों में मदद के लिए यहाँ हूँ। मैं आपकी क्या सहायता करूँ?';
   }
 
   // English responses
   if (queryLower.includes('medicine') || queryLower.includes('dinner') || queryLower.includes('night') || queryLower.includes('tonight')) {
-    return 'Good evening! With tonight\'s dinner, you have Metformin (500mg) scheduled. Take it after finishing your meal with a glass of water. Your morning medication was already marked as taken. Well done!';
+    return 'Good evening! Please remember to take your scheduled evening medication after dinner with a glass of water. Staying consistent with your routine is key to healthy days.';
   }
   if (queryLower.includes('festival') || queryLower.includes('celebration') || queryLower.includes('family')) {
     return 'Family celebrations bring such warmth and vitality to life! In your Memory Album, there are beautiful photos of your family gatherings and festive celebrations to revisit anytime.';
   }
   if (queryLower.includes('forget') || queryLower.includes('confused') || queryLower.includes('lost')) {
-    return 'Please do not worry. It is completely normal to feel a bit tired or forgetful occasionally. Take a few deep breaths and have a sip of warm water. Would you like to play a gentle 2-minute memory game?';
+    return 'Please do not worry. It is completely normal to feel a bit tired or forgetful occasionally. Take a few deep breaths and have a sip of warm water. I am right here with you.';
   }
   if (queryLower.includes('sugar') || queryLower.includes('report') || queryLower.includes('blood')) {
     return 'Your latest lab report shows your 3-month HbA1c average is 6.8%, which is well-managed for your age. Fasting blood sugar was 138 mg/dL. Your physician recommends continuing your morning walk and regular meals.';
