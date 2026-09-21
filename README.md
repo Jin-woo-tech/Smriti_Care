@@ -81,6 +81,29 @@ The platform combines **neuro-cognitive stimulation games with dynamic 3-tier ad
 
 ---
 
+### 9. 👨‍👩‍👧 Family Caregiver Portal & Longitudinal Analytics
+*Real-time medication compliance tracking, 7-day multi-domain cognitive performance curves, assigned ASHA contact, and family observation notes.*
+
+![Caregiver Portal](docs/screenshots/10-caregiver-portal.png)
+
+---
+
+### 10. 🩺 Clinician Assessment & Multi-Domain Radar Portal
+*Multi-axial cognitive radar chart comparing current performance against personal baselines, domain stability diagnostics, and 1-click clinical PDF export.*
+
+![Clinician Portal](docs/screenshots/11-clinician-portal.png)
+
+---
+
+### 11. 🚨 One-Touch Emergency SOS & Offline Geo-Location
+*High-visibility emergency modal broadcasting live GPS coordinates, local police/ambulance speed dials, and primary family contact dispatch.*
+
+<div align="center">
+  <img src="docs/screenshots/12-emergency-sos-modal.png" alt="Emergency SOS Modal" width="550" />
+</div>
+
+---
+
 ## 👥 4 Tailored Stakeholder Portals
 
 | Portal | Primary User | Key Capabilities |
