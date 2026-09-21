@@ -37,10 +37,19 @@ router.post('/register', (req, res: Response): void => {
       return;
     }
 
-    const effectiveUsername = username || (email ? email.split('@')[0] : `user_${Date.now()}`);
+    const rawFullName = fullName.trim();
+    const rawUsername = username ? username.trim() : '';
+    const rawEmail = email ? email.trim() : '';
 
-    // Check if user already exists
-    const existing = db.prepare('SELECT id FROM users WHERE username = ? OR (email IS NOT NULL AND email = ?)').get(effectiveUsername, email || '') as { id: string } | undefined;
+    const effectiveUsername = rawUsername || (rawEmail ? rawEmail.split('@')[0] : rawFullName.toLowerCase().replace(/\s+/g, '_'));
+
+    // Check if user already exists (case-insensitive)
+    const existing = db.prepare(`
+      SELECT id FROM users
+      WHERE LOWER(TRIM(username)) = LOWER(?)
+         OR (email IS NOT NULL AND LOWER(TRIM(email)) = LOWER(?))
+    `).get(effectiveUsername, rawEmail || '') as { id: string } | undefined;
+
     if (existing) {
       res.status(409).json({ error: 'An account with this username or email already exists.' });
       return;
@@ -57,10 +66,10 @@ router.post('/register', (req, res: Response): void => {
     `).run(
       userId,
       effectiveUsername,
-      email || null,
+      rawEmail || null,
       passwordHash,
       role,
-      fullName,
+      rawFullName,
       dateOfBirth || null,
       phone || null,
       preferredLanguage,
@@ -70,7 +79,7 @@ router.post('/register', (req, res: Response): void => {
     );
 
     // Insert profile
-    const initials = fullName.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'SC';
+    const initials = rawFullName.split(' ').map((n: string) => n[0]).filter(Boolean).join('').substring(0, 2).toUpperCase() || 'SC';
     db.prepare(`
       INSERT INTO profiles (user_id, age, gender, location, condition, notes, avatar_initials, avatar_color, voice_assistance)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
@@ -126,9 +135,9 @@ router.post('/register', (req, res: Response): void => {
       {
         id: userId,
         username: effectiveUsername,
-        email,
+        email: rawEmail || undefined,
         role,
-        fullName,
+        fullName: rawFullName,
         preferredLanguage,
       },
       JWT_SECRET,
@@ -152,7 +161,7 @@ router.post('/register', (req, res: Response): void => {
   }
 });
 
-// Login
+// Login (Supports case-insensitive username, email, or full name matching)
 router.post('/login', (req, res: Response): void => {
   try {
     const { usernameOrEmail, password } = req.body;
@@ -162,9 +171,18 @@ router.post('/login', (req, res: Response): void => {
       return;
     }
 
+    const rawInput = usernameOrEmail.trim();
+    const cleanLower = rawInput.toLowerCase();
+
+    // Query user case-insensitively by username, email, or full name
     const user = db.prepare(`
-      SELECT * FROM users WHERE username = ? OR email = ?
-    `).get(usernameOrEmail, usernameOrEmail) as any;
+      SELECT * FROM users
+      WHERE LOWER(TRIM(username)) = ?
+         OR (email IS NOT NULL AND LOWER(TRIM(email)) = ?)
+         OR LOWER(TRIM(full_name)) = ?
+         OR username = ?
+         OR full_name = ?
+    `).get(cleanLower, cleanLower, cleanLower, rawInput, rawInput) as any;
 
     if (!user) {
       res.status(401).json({ error: 'Invalid credentials. User not found.' });
@@ -358,6 +376,74 @@ router.post('/demo-switch', (req, res: Response): void => {
     });
   } catch (error: any) {
     res.status(500).json({ error: error.message || 'Failed to switch demo role' });
+  }
+});
+
+// Delete current authenticated user and all related records
+router.delete('/me', authenticateToken, (req: AuthenticatedRequest, res: Response): void => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      res.status(401).json({ error: 'Unauthorized: User not authenticated' });
+      return;
+    }
+
+    const deleteTx = db.transaction(() => {
+      db.prepare('DELETE FROM medication_logs WHERE user_id = ?').run(userId);
+      db.prepare('DELETE FROM medications WHERE user_id = ?').run(userId);
+      db.prepare('DELETE FROM game_sessions WHERE user_id = ?').run(userId);
+      db.prepare('DELETE FROM cognitive_metrics WHERE user_id = ?').run(userId);
+      db.prepare('DELETE FROM memories WHERE user_id = ?').run(userId);
+      db.prepare('DELETE FROM lab_reports WHERE user_id = ?').run(userId);
+      db.prepare('DELETE FROM appointments WHERE patient_id = ?').run(userId);
+      db.prepare('DELETE FROM caregiver_relationships WHERE patient_id = ? OR caregiver_id = ?').run(userId, userId);
+      db.prepare('DELETE FROM asha_visits WHERE asha_user_id = ? OR patient_id = ?').run(userId, userId);
+      db.prepare('DELETE FROM asha_patient_records WHERE asha_user_id = ?').run(userId);
+      db.prepare('DELETE FROM ai_conversations WHERE user_id = ?').run(userId);
+      db.prepare('DELETE FROM notifications WHERE user_id = ?').run(userId);
+      db.prepare('DELETE FROM profiles WHERE user_id = ?').run(userId);
+      db.prepare('DELETE FROM users WHERE id = ?').run(userId);
+    });
+
+    deleteTx();
+    res.json({ message: 'User account and all associated data deleted successfully.' });
+  } catch (error: any) {
+    console.error('Delete user error:', error);
+    res.status(500).json({ error: error.message || 'Failed to delete user account' });
+  }
+});
+
+// Delete user or profile by ID
+router.delete('/users/:id', (req, res: Response): void => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      res.status(400).json({ error: 'User ID is required' });
+      return;
+    }
+
+    const deleteTx = db.transaction(() => {
+      db.prepare('DELETE FROM medication_logs WHERE user_id = ?').run(id);
+      db.prepare('DELETE FROM medications WHERE user_id = ?').run(id);
+      db.prepare('DELETE FROM game_sessions WHERE user_id = ?').run(id);
+      db.prepare('DELETE FROM cognitive_metrics WHERE user_id = ?').run(id);
+      db.prepare('DELETE FROM memories WHERE user_id = ?').run(id);
+      db.prepare('DELETE FROM lab_reports WHERE user_id = ?').run(id);
+      db.prepare('DELETE FROM appointments WHERE patient_id = ?').run(id);
+      db.prepare('DELETE FROM caregiver_relationships WHERE patient_id = ? OR caregiver_id = ?').run(id, id);
+      db.prepare('DELETE FROM asha_visits WHERE asha_user_id = ? OR patient_id = ?').run(id, id);
+      db.prepare('DELETE FROM asha_patient_records WHERE asha_user_id = ?').run(id);
+      db.prepare('DELETE FROM ai_conversations WHERE user_id = ?').run(id);
+      db.prepare('DELETE FROM notifications WHERE user_id = ?').run(id);
+      db.prepare('DELETE FROM profiles WHERE user_id = ?').run(id);
+      db.prepare('DELETE FROM users WHERE id = ?').run(id);
+    });
+
+    deleteTx();
+    res.json({ message: 'Profile and associated records deleted successfully.' });
+  } catch (error: any) {
+    console.error('Delete user by id error:', error);
+    res.status(500).json({ error: error.message || 'Failed to delete profile' });
   }
 });
 

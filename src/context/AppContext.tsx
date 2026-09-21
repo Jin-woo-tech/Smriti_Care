@@ -62,6 +62,8 @@ export interface AppContextType {
   activePatient: PatientProfile;
   setActivePatientId: (id: string) => void;
   addPatientProfile: (profile: Omit<PatientProfile, 'id'>) => void;
+  deletePatientProfile: (id: string) => Promise<boolean>;
+  deleteUserAccount: () => Promise<boolean>;
   isProfileModalOpen: boolean;
   setProfileModalOpen: (open: boolean) => void;
 
@@ -659,6 +661,64 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setActivePatientIdState(id);
   };
 
+  const deletePatientProfile = async (id: string): Promise<boolean> => {
+    try {
+      // Check if this profile belongs to a server user or the current user
+      const isCurrentServerUser = currentUser && (
+        id === `pat-user-${currentUser.id}` ||
+        id === `pat-user-${currentUser.username}` ||
+        id === currentUser.id
+      );
+
+      // If user profile starts with pat-user-, extract possible user id
+      if (id.startsWith('pat-user-')) {
+        const rawUserId = id.replace('pat-user-', '');
+        try {
+          await api.auth.deleteUser(rawUserId);
+        } catch (err) {
+          console.warn('Backend user delete warning:', err);
+        }
+      }
+
+      // If it was the logged-in user, clear user session
+      if (isCurrentServerUser) {
+        api.setToken(null);
+        localStorage.removeItem('smriticare_user_session');
+        setCurrentUser(null);
+      }
+
+      // Remove from patientProfiles
+      const remainingProfiles = patientProfiles.filter(p => p.id !== id);
+      setPatientProfiles(remainingProfiles);
+      setStoredData(STORAGE_KEYS.PATIENT_PROFILES, remainingProfiles);
+
+      // If active patient was deleted, switch to the first remaining profile
+      if (activePatientId === id) {
+        const nextActiveId = remainingProfiles.length > 0 ? remainingProfiles[0].id : 'pat-bipin';
+        setActivePatientIdState(nextActiveId);
+        setStoredData(STORAGE_KEYS.ACTIVE_PATIENT_ID, nextActiveId);
+      }
+
+      return true;
+    } catch (err) {
+      console.error('Failed to delete patient profile:', err);
+      return false;
+    }
+  };
+
+  const deleteUserAccount = async (): Promise<boolean> => {
+    try {
+      if (currentUser?.id) {
+        await api.auth.deleteMe();
+      }
+      logout();
+      return true;
+    } catch (err) {
+      console.error('Failed to delete account:', err);
+      throw err;
+    }
+  };
+
   const setActivePatientId = (id: string) => {
     setActivePatientIdState(id);
     updateSettings({ activePatientId: id });
@@ -724,6 +784,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         activePatient,
         setActivePatientId,
         addPatientProfile,
+        deletePatientProfile,
+        deleteUserAccount,
         isProfileModalOpen,
         setProfileModalOpen,
         reminders,
