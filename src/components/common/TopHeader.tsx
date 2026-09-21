@@ -35,10 +35,16 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
     logout,
     setAuthModalOpen,
     setAuthModalMode,
+    patientProfiles,
+    activePatientId,
+    activePatient,
+    setActivePatientId,
+    setProfileModalOpen,
   } = useApp();
 
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isPatientMenuOpen, setIsPatientMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const lang = settings.language;
 
@@ -89,6 +95,90 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
 
         {/* Right Side Controls */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Patient Profile Quick Switcher */}
+          <div className="relative">
+            <button
+              onClick={() => setIsPatientMenuOpen(!isPatientMenuOpen)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-purple-500/15 border border-purple-400/40 text-white text-xs font-bold hover:bg-purple-500/25 transition-all shadow-xs cursor-pointer"
+              title={lang === 'hi' ? 'सक्रिय मरीज प्रोफ़ाइल बदलें' : 'Switch Active Patient Profile'}
+            >
+              <div
+                className={`w-6 h-6 rounded-lg bg-gradient-to-tr ${
+                  activePatient?.avatarColor || 'from-purple-600 to-indigo-600'
+                } flex items-center justify-center text-[10px] font-extrabold text-white shadow-xs`}
+              >
+                {activePatient?.avatarInitials || 'P'}
+              </div>
+              <div className="text-left hidden lg:block max-w-[120px] truncate">
+                <span className="font-semibold block truncate">
+                  {lang === 'hi' && activePatient?.nameHi ? activePatient.nameHi : (activePatient?.name || 'Patient')}
+                </span>
+              </div>
+              <ChevronDown size={13} className="text-purple-200" />
+            </button>
+
+            {isPatientMenuOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setIsPatientMenuOpen(false)} />
+                <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-[#172c44] p-2.5 shadow-2xl border border-white/20 z-50 backdrop-blur-2xl text-white animate-in fade-in zoom-in-95">
+                  <div className="px-2.5 py-1.5 border-b border-white/10 mb-1.5 flex items-center justify-between">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-purple-300">
+                      {lang === 'hi' ? 'सक्रिय मरीज' : 'Active Patient'}
+                    </span>
+                    <button
+                      onClick={() => {
+                        setIsPatientMenuOpen(false);
+                        setProfileModalOpen(true);
+                      }}
+                      className="text-[10px] font-bold text-sky-300 hover:text-white underline cursor-pointer"
+                    >
+                      {lang === 'hi' ? 'सभी प्रबंधित करें' : 'Manage All'}
+                    </button>
+                  </div>
+
+                  <div className="space-y-1 max-h-60 overflow-y-auto pr-1">
+                    {patientProfiles.map(p => {
+                      const isSelected = p.id === activePatientId;
+                      return (
+                        <button
+                          key={p.id}
+                          onClick={() => {
+                            setActivePatientId(p.id);
+                            setIsPatientMenuOpen(false);
+                          }}
+                          className={`w-full flex items-center justify-between p-2 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
+                            isSelected
+                              ? 'bg-purple-600/30 text-white border border-purple-400/40 shadow-xs'
+                              : 'text-stone-200 hover:bg-white/10'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 min-w-0">
+                            <div
+                              className={`w-7 h-7 rounded-lg bg-gradient-to-tr ${
+                                p.avatarColor || 'from-purple-600 to-indigo-600'
+                              } flex items-center justify-center text-[10px] font-black text-white shrink-0`}
+                            >
+                              {p.avatarInitials}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="truncate text-xs font-bold">
+                                {lang === 'hi' && p.nameHi ? p.nameHi : p.name}
+                              </p>
+                              <p className="text-[10px] text-sky-300/70 font-normal truncate">
+                                {p.age}y • {p.condition ? (lang === 'hi' && p.conditionHi ? p.conditionHi : p.condition) : 'Patient'}
+                              </p>
+                            </div>
+                          </div>
+                          {isSelected && <Check size={14} className="text-[#c084fc] shrink-0" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
           {/* User Account / Auth Indicator */}
           {currentUser ? (
             <div className="relative">

@@ -287,16 +287,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
               </div>
             </div>
 
-            {/* 2. Center Feature Card: Doctor Spotlight + 92% Satisfaction */}
+            {/* 2. Center Feature Card: Clinical Spotlight + 92% Satisfaction */}
             <div className="glass-card-dark rounded-3xl p-4 sm:p-5 shadow-2xl flex items-center gap-4 hover:border-purple-400/40 transition-all">
-              {/* Doctor Avatar */}
-              <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-gradient-to-tr from-purple-600 to-indigo-500 shrink-0 border border-white/30">
-                <img
-                  src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=300"
-                  alt="Dr. Emma Roberts / Dr. Priyam Baruah"
-                  className="w-full h-full object-cover"
-                />
-                <span className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-emerald-400 border-2 border-white" />
+              {/* Glowing Icon Avatar Container */}
+              <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center bg-gradient-to-br from-indigo-600/40 via-purple-600/50 to-pink-500/30 border border-purple-400/40 shadow-xl shadow-purple-600/30 text-purple-100 shrink-0 backdrop-blur-md">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-[#c084fc] shadow-inner">
+                  <Stethoscope className="w-6 h-6 sm:w-7 sm:h-7" />
+                </div>
+                <span className="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-[#161233] shadow-sm shadow-emerald-400/50 animate-pulse" />
               </div>
 
               <div className="space-y-1">
@@ -308,11 +306,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
                     {lang === 'hi' ? 'मरीज संतुष्टि दर' : 'Patient Satisfaction Rate'}
                   </span>
                 </div>
-                <h4 className="text-xs sm:text-sm font-bold text-white">
-                  {lang === 'hi' ? 'डॉ. प्रियम बरुआ (MD)' : 'Dr. Emma Roberts (MD)'}
+                <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+                  <span>{lang === 'hi' ? 'क्लिनिकल न्यूरो केयर' : 'Clinical Neuro Care'}</span>
+                  <Sparkles size={12} className="text-amber-300" />
                 </h4>
                 <p className="text-[10px] font-extrabold text-[#c084fc] tracking-wider uppercase">
-                  15+ YEARS EXPERIENCE
+                  {lang === 'hi' ? '15+ वर्ष विशेषज्ञ अनुभव' : '15+ YEARS EXPERIENCE'}
                 </p>
               </div>
             </div>

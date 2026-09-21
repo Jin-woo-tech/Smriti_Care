@@ -183,12 +183,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Main Sidebar Container matching Dark Frosted Glass theme */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-[#0c1427]/90 backdrop-blur-2xl border-r border-white/10 flex flex-col justify-between transition-transform duration-300 ease-in-out lg:translate-x-0 text-white ${
-          isOpenMobile ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:static lg:shadow-none'
+        className={`fixed top-0 bottom-0 left-0 z-50 w-72 h-screen bg-[#0c1427]/95 backdrop-blur-2xl border-r border-white/10 flex flex-col justify-between transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:h-full lg:shrink-0 text-white ${
+          isOpenMobile ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:shadow-none'
         }`}
       >
         {/* Top Header / Logo Section */}
-        <div className="p-5 border-b border-white/10 flex items-center justify-between">
+        <div className="p-5 border-b border-white/10 flex items-center justify-between shrink-0">
           <div
             onClick={() => {
               onToggleLanding(false);
@@ -422,59 +422,69 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Bottom User Profile Card with Dynamic Switcher Trigger */}
-        <div className="p-4 border-t border-white/10 bg-[#080e1c]/70">
-          {currentUser ? (
-            <div
-              onClick={() => setProfileModalOpen(true)}
-              className="group bg-white/10 hover:bg-white/15 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl border border-white/15 hover:border-purple-400/50 shadow-sm flex items-center justify-between gap-2.5 cursor-pointer transition-all active:scale-98"
-              title="Click to Switch Profile"
-            >
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="relative shrink-0">
-                  <div
-                    className={`w-10 h-10 rounded-xl bg-gradient-to-tr ${
-                      currentRole === 'patient'
-                        ? 'from-purple-600 to-indigo-500'
-                        : currentRole === 'caregiver'
-                        ? 'from-indigo-600 to-blue-500'
-                        : currentRole === 'clinician'
-                        ? 'from-teal-600 to-emerald-500'
-                        : 'from-amber-600 to-orange-500'
-                    } text-white flex items-center justify-center font-black text-xs shadow-xs border border-white/20`}
-                  >
-                    {currentUser.fullName ? currentUser.fullName.substring(0, 2).toUpperCase() : 'SC'}
-                  </div>
-                  <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#c084fc] border-2 border-[#080e1c]" />
+        <div className="p-4 border-t border-white/10 bg-[#080e1c]/70 space-y-2 shrink-0">
+          {/* Active Patient Card with 1-Click Switch */}
+          <div
+            onClick={() => setProfileModalOpen(true)}
+            className="group bg-gradient-to-r from-purple-950/40 via-indigo-950/30 to-purple-950/40 hover:from-purple-900/50 hover:to-indigo-900/50 backdrop-blur-md p-2.5 rounded-2xl border border-purple-500/30 hover:border-purple-400/60 shadow-sm flex items-center justify-between gap-2.5 cursor-pointer transition-all active:scale-98"
+            title={lang === 'hi' ? 'सक्रिय मरीज बदलें' : 'Click to Switch Patient Profile'}
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="relative shrink-0">
+                <div
+                  className={`w-9 h-9 rounded-xl bg-gradient-to-tr ${
+                    activePatient?.avatarColor || 'from-purple-600 to-indigo-500'
+                  } text-white flex items-center justify-center font-black text-xs shadow-xs border border-white/20`}
+                >
+                  {activePatient?.avatarInitials || 'P'}
                 </div>
-
-                <div className="min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <h4 className="text-xs font-bold text-white truncate group-hover:text-purple-200 transition-colors">
-                      {currentUser.fullName || currentUser.username}
-                    </h4>
-                  </div>
-                  <p className="text-[10px] text-sky-200/60 truncate capitalize">
-                    {currentUser.role} Account
-                  </p>
-                </div>
+                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#c084fc] border-2 border-[#080e1c]" />
               </div>
 
-              <div className="flex items-center gap-1 shrink-0">
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-purple-500/20 text-[#c084fc] border border-purple-400/30 group-hover:bg-purple-500/30 transition-all">
-                  Profile
-                </span>
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[9px] uppercase font-mono px-1.5 py-0.2 bg-purple-500/30 rounded text-purple-200 font-bold">
+                    {lang === 'hi' ? 'सक्रिय मरीज' : 'Active Patient'}
+                  </span>
+                </div>
+                <h4 className="text-xs font-black text-white truncate group-hover:text-purple-200 transition-colors">
+                  {lang === 'hi' && activePatient?.nameHi ? activePatient.nameHi : (activePatient?.name || 'Patient')}
+                </h4>
+                <p className="text-[10px] text-sky-200/60 truncate font-medium">
+                  {activePatient?.age ? `${activePatient.age}y • ` : ''}{lang === 'hi' && activePatient?.conditionHi ? activePatient.conditionHi : (activePatient?.condition || 'Care Plan')}
+                </p>
               </div>
             </div>
-          ) : (
+
+            <div className="flex items-center gap-1 shrink-0">
+              <span className="text-[10px] font-bold px-2 py-1 rounded-lg bg-purple-500/25 text-[#c084fc] border border-purple-400/30 group-hover:bg-purple-500/40 transition-all">
+                {lang === 'hi' ? 'बदलें' : 'Switch'}
+              </span>
+            </div>
+          </div>
+
+          {/* User Auth state if logged in */}
+          {currentUser && (
+            <div className="flex items-center justify-between px-2.5 py-1.5 rounded-xl bg-white/5 border border-white/10 text-[11px] text-sky-200/80">
+              <span className="truncate font-semibold text-white">
+                {currentUser.fullName || currentUser.username}
+              </span>
+              <span className="text-[9px] uppercase px-1.5 py-0.2 bg-white/10 rounded text-purple-300 font-mono">
+                {currentUser.role}
+              </span>
+            </div>
+          )}
+
+          {!currentUser && (
             <button
               onClick={() => {
                 setAuthModalMode('login');
                 setAuthModalOpen(true);
                 onCloseMobile();
               }}
-              className="w-full bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 text-white font-bold p-3 rounded-2xl flex items-center justify-center gap-2 text-xs shadow-lg transition-all"
+              className="w-full bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 text-white font-bold p-2.5 rounded-xl flex items-center justify-center gap-2 text-xs shadow-lg transition-all cursor-pointer"
             >
-              <LogIn size={15} />
+              <LogIn size={14} />
               <span>{lang === 'hi' ? 'लॉगिन / रजिस्टर' : 'Sign In / Register'}</span>
             </button>
           )}

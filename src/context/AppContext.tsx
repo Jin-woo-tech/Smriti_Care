@@ -29,6 +29,8 @@ import {
   initialPatientProfiles,
   addToSyncQueue,
   clearSyncQueue,
+  getPatientScopedData,
+  savePatientScopedData,
 } from '../lib/storage';
 import { speakText, stopSpeech } from '../lib/speech';
 import { api } from '../lib/api';
@@ -206,33 +208,30 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     return getStoredData<string>(STORAGE_KEYS.ACTIVE_PATIENT_ID, 'pat-ananya-20');
   });
 
-  const [reminders, setReminders] = useState<Reminder[]>(() =>
-    getStoredData<Reminder[]>(STORAGE_KEYS.REMINDERS, initialReminders)
+  const initialScopedData = getPatientScopedData(
+    (function () {
+      const savedUser = localStorage.getItem('smriticare_user_session');
+      if (savedUser) {
+        try {
+          const u = JSON.parse(savedUser);
+          if (u && (u.id || u.username)) {
+            return `pat-user-${u.id || u.username}`;
+          }
+        } catch {}
+      }
+      return getStoredData<string>(STORAGE_KEYS.ACTIVE_PATIENT_ID, 'pat-ananya-20');
+    })()
   );
 
-  const [photos, setPhotos] = useState<PhotoMemory[]>(() =>
-    getStoredData<PhotoMemory[]>(STORAGE_KEYS.PHOTOS, initialPhotoMemories)
-  );
-
-  const [journal, setJournal] = useState<JournalEntry[]>(() =>
-    getStoredData<JournalEntry[]>(STORAGE_KEYS.JOURNAL, initialJournal)
-  );
-
-  const [gameScores, setGameScores] = useState<GameScoreRecord[]>(() =>
-    getStoredData<GameScoreRecord[]>(STORAGE_KEYS.GAME_SCORES, initialGameScores)
-  );
-
-  const [cognitiveTrends, setCognitiveTrends] = useState<CognitiveDomainTrend[]>(() =>
-    getStoredData<CognitiveDomainTrend[]>(STORAGE_KEYS.COGNITIVE_TRENDS, initialCognitiveTrends)
-  );
-
+  const [reminders, setReminders] = useState<Reminder[]>(initialScopedData.reminders);
+  const [photos, setPhotos] = useState<PhotoMemory[]>(initialScopedData.photos);
+  const [journal, setJournal] = useState<JournalEntry[]>(initialScopedData.journal);
+  const [gameScores, setGameScores] = useState<GameScoreRecord[]>(initialScopedData.gameScores);
+  const [cognitiveTrends, setCognitiveTrends] = useState<CognitiveDomainTrend[]>(initialScopedData.cognitiveTrends);
   const [ashaPatients, setAshaPatients] = useState<AshaPatientRecord[]>(() =>
     getStoredData<AshaPatientRecord[]>(STORAGE_KEYS.ASHA_PATIENTS, initialAshaPatients)
   );
-
-  const [waterGlasses, setWaterGlasses] = useState<number>(() =>
-    getStoredData<number>(STORAGE_KEYS.WATER_INTAKE, 5)
-  );
+  const [waterGlasses, setWaterGlasses] = useState<number>(initialScopedData.waterGlasses);
 
   const [syncQueue, setSyncQueue] = useState<SyncQueueItem[]>(() =>
     getStoredData<SyncQueueItem[]>(STORAGE_KEYS.SYNC_QUEUE, [])
@@ -289,6 +288,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       setGameScores([]);
       setCognitiveTrends(freshCognitiveTrends);
       setReminders([]);
+      savePatientScopedData(profileId, {
+        reminders: [],
+        cognitiveTrends: freshCognitiveTrends,
+        gameScores: [],
+        waterGlasses: 0,
+        photos: [],
+        journal: [],
+      });
     }
   };
 
@@ -373,23 +380,28 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   useEffect(() => {
     setStoredData(STORAGE_KEYS.REMINDERS, reminders);
-  }, [reminders]);
+    savePatientScopedData(activePatientId, { reminders });
+  }, [reminders, activePatientId]);
 
   useEffect(() => {
     setStoredData(STORAGE_KEYS.PHOTOS, photos);
-  }, [photos]);
+    savePatientScopedData(activePatientId, { photos });
+  }, [photos, activePatientId]);
 
   useEffect(() => {
     setStoredData(STORAGE_KEYS.JOURNAL, journal);
-  }, [journal]);
+    savePatientScopedData(activePatientId, { journal });
+  }, [journal, activePatientId]);
 
   useEffect(() => {
     setStoredData(STORAGE_KEYS.GAME_SCORES, gameScores);
-  }, [gameScores]);
+    savePatientScopedData(activePatientId, { gameScores });
+  }, [gameScores, activePatientId]);
 
   useEffect(() => {
     setStoredData(STORAGE_KEYS.COGNITIVE_TRENDS, cognitiveTrends);
-  }, [cognitiveTrends]);
+    savePatientScopedData(activePatientId, { cognitiveTrends });
+  }, [cognitiveTrends, activePatientId]);
 
   useEffect(() => {
     setStoredData(STORAGE_KEYS.ASHA_PATIENTS, ashaPatients);
@@ -397,7 +409,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   useEffect(() => {
     setStoredData(STORAGE_KEYS.WATER_INTAKE, waterGlasses);
-  }, [waterGlasses]);
+    savePatientScopedData(activePatientId, { waterGlasses });
+  }, [waterGlasses, activePatientId]);
 
   const updateSettings = (partial: Partial<AppSettings>) => {
     setSettings(prev => ({ ...prev, ...partial }));
@@ -456,6 +469,32 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   };
 
+  const setActivePatientId = (id: string) => {
+    // 1. Save current active patient's dataset to their scoped storage
+    savePatientScopedData(activePatientId, {
+      reminders,
+      cognitiveTrends,
+      gameScores,
+      waterGlasses,
+      photos,
+      journal,
+    });
+
+    // 2. Set new active patient
+    setActivePatientIdState(id);
+    setStoredData(STORAGE_KEYS.ACTIVE_PATIENT_ID, id);
+    updateSettings({ activePatientId: id });
+
+    // 3. Load target patient's scoped dataset
+    const targetData = getPatientScopedData(id);
+    setReminders(targetData.reminders);
+    setCognitiveTrends(targetData.cognitiveTrends);
+    setGameScores(targetData.gameScores);
+    setWaterGlasses(targetData.waterGlasses);
+    setPhotos(targetData.photos);
+    setJournal(targetData.journal);
+  };
+
   const logout = () => {
     api.setToken(null);
     localStorage.removeItem('smriticare_user_session');
@@ -463,7 +502,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setCurrentUser(null);
     setSettings(s => ({ ...s, role: 'patient' }));
     if (patientProfiles.length > 0) {
-      setActivePatientIdState(patientProfiles[0].id);
+      setActivePatientId(patientProfiles[0].id);
     }
   };
 
@@ -694,9 +733,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
       // If active patient was deleted, switch to the first remaining profile
       if (activePatientId === id) {
-        const nextActiveId = remainingProfiles.length > 0 ? remainingProfiles[0].id : 'pat-bipin';
-        setActivePatientIdState(nextActiveId);
-        setStoredData(STORAGE_KEYS.ACTIVE_PATIENT_ID, nextActiveId);
+        const nextActiveId = remainingProfiles.length > 0 ? remainingProfiles[0].id : 'pat-ananya-20';
+        setActivePatientId(nextActiveId);
       }
 
       return true;
@@ -717,11 +755,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       console.error('Failed to delete account:', err);
       throw err;
     }
-  };
-
-  const setActivePatientId = (id: string) => {
-    setActivePatientIdState(id);
-    updateSettings({ activePatientId: id });
   };
 
   const addWaterGlass = () => {
