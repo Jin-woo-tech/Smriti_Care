@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { initDatabase } from './db';
 import authRoutes from './routes/auth';
 import medicationRoutes from './routes/medications';
 import gameRoutes from './routes/games';
@@ -15,6 +16,9 @@ import aiRoutes from './routes/ai';
 
 // Initialize environment
 dotenv.config();
+
+// Ensure SQLite tables & default seed records are initialized
+initDatabase();
 
 const app = express();
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
