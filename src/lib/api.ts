@@ -158,6 +158,16 @@ class ApiClient {
         method: 'POST',
         body: JSON.stringify({ role }),
       }),
+
+    deleteMe: () =>
+      this.request<{ message: string }>('/auth/me', {
+        method: 'DELETE',
+      }),
+
+    deleteUser: (id: string) =>
+      this.request<{ message: string }>(`/auth/users/${id}`, {
+        method: 'DELETE',
+      }),
   };
 
   // Medications APIs
