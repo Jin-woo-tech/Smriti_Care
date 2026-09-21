@@ -2,14 +2,7 @@ import React, { useState } from 'react';
 import {
   Heart,
   Plus,
-  Volume2,
   Calendar,
-  Sparkles,
-  Smile,
-  Meh,
-  Frown,
-  Coffee,
-  CheckCircle2,
   Image as ImageIcon,
   BookOpen
 } from 'lucide-react';
@@ -42,7 +35,7 @@ export const MemoryJournal: React.FC = () => {
       date: 'Today, ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       mood: selectedMood,
       text: newNote,
-      textAs: newNote,
+      textHi: newNote,
     });
     setNewNote('');
     setShowAddForm(false);
@@ -70,16 +63,12 @@ export const MemoryJournal: React.FC = () => {
             <span>Family Photo & Reminiscence Therapy</span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
-            {lang === 'as'
-              ? 'পৰিয়াল আৰু স্মৃতি এলবাম'
-              : lang === 'hi'
+            {lang === 'hi'
               ? 'पारिवारिक स्मृति एल्बम एवं कहानियां'
               : 'Family Album & Memory Reflections'}
           </h1>
           <p className="text-sm sm:text-base text-sky-200/80 leading-relaxed max-w-2xl mt-1.5">
-            {lang === 'as'
-              ? 'চিনাকি মুখ, পুৰণি তিথি-উৎসৱ আৰু সোণোৱালী স্মৃতিসমূহ পুনৰ উপভোগ কৰক।'
-              : lang === 'hi'
+            {lang === 'hi'
               ? 'अपनों के चेहरे, पुराने त्योहार और सुनहरी यादों को याद करके मन प्रसन्न रखें।'
               : 'Reminisce through family milestones, tea gardens, and festivals with voice memory narrations.'}
           </p>
@@ -88,9 +77,7 @@ export const MemoryJournal: React.FC = () => {
         <div className="relative z-10">
           <VoiceNarratorButton
             textToRead={
-              lang === 'as'
-                ? 'পৰিয়াল আৰু স্মৃতি এলবাম। আপোনাৰ প্ৰিয়জনৰ ফটো আৰু স্মৃতিৰ কাহিনী শুনক।'
-                : lang === 'hi'
+              lang === 'hi'
                 ? 'पारिवारिक स्मृति एल्बम। अपनी पारिवारिक तस्वीरों और कहानियों को सुनकर पुरानी यादें ताजा करें।'
                 : 'Family Album and Memory Reflections. Relive precious memories and listen to family stories.'
             }
@@ -108,9 +95,7 @@ export const MemoryJournal: React.FC = () => {
               <h3 className="font-extrabold text-lg sm:text-xl text-white flex items-center gap-2">
                 <ImageIcon size={20} className="text-[#c084fc]" />
                 <span>
-                  {lang === 'as'
-                    ? 'স্মৃতি ফটো পৰীক্ষা (Memory Cue)'
-                    : lang === 'hi'
+                  {lang === 'hi'
                     ? 'यह फोटो किसकी है? (स्मृति स्मरण)'
                     : 'Who is in this photo?'}
                 </span>
@@ -137,9 +122,7 @@ export const MemoryJournal: React.FC = () => {
             {!isRevealed ? (
               <div className="text-center p-6 sm:p-7 bg-purple-950/20 border-2 border-dashed border-purple-400/30 rounded-2xl space-y-3.5 backdrop-blur-md">
                 <p className="text-sm font-bold text-sky-200">
-                  {lang === 'as'
-                    ? 'ফটোখন চিনাকি লাগিছে নে? মনত পেলাই চাওকচোন!'
-                    : lang === 'hi'
+                  {lang === 'hi'
                     ? 'क्या आप इस तस्वीर या अवसर को पहचान पा रहे हैं? याद करने का प्रयास करें!'
                     : 'Take a moment to recall this moment or person.'}
                 </p>
@@ -147,9 +130,7 @@ export const MemoryJournal: React.FC = () => {
                   onClick={() => toggleReveal(activePhoto.id)}
                   className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] hover:from-[#9333ea] hover:to-[#7c3aed] text-white font-extrabold text-sm shadow-lg shadow-purple-600/35 cursor-pointer transition-all active:scale-95 border border-purple-400/30"
                 >
-                  {lang === 'as'
-                    ? 'স্মৃতি কাহিনী শুনক'
-                    : lang === 'hi'
+                  {lang === 'hi'
                     ? 'पारिवारिक कहानी व विवरण देखें'
                     : 'Reveal Family Story & Details'}
                 </button>
@@ -159,16 +140,12 @@ export const MemoryJournal: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-extrabold text-lg sm:text-xl text-white">
-                      {lang === 'as'
-                        ? activePhoto.titleAs
-                        : lang === 'hi'
+                      {lang === 'hi'
                         ? (activePhoto.titleHi || activePhoto.title)
                         : activePhoto.title}
                     </h4>
                     <p className="text-xs font-bold text-[#c084fc] mt-0.5">
-                      {lang === 'as'
-                        ? activePhoto.relationAs
-                        : lang === 'hi'
+                      {lang === 'hi'
                         ? (activePhoto.relationHi || activePhoto.relation)
                         : activePhoto.relation}
                     </p>
@@ -176,9 +153,7 @@ export const MemoryJournal: React.FC = () => {
 
                   <VoiceNarratorButton
                     textToRead={
-                      lang === 'as'
-                        ? `${activePhoto.titleAs}. ${activePhoto.voiceNoteTextAs || activePhoto.descriptionAs}`
-                        : lang === 'hi'
+                      lang === 'hi'
                         ? `${activePhoto.titleHi || activePhoto.title}. ${activePhoto.voiceNoteTextHi || activePhoto.descriptionHi || activePhoto.description}`
                         : `${activePhoto.title}. ${activePhoto.voiceNoteText || activePhoto.description}`
                     }
@@ -188,9 +163,7 @@ export const MemoryJournal: React.FC = () => {
                 </div>
 
                 <p className="text-sm text-sky-100/90 leading-relaxed font-medium">
-                  {lang === 'as'
-                    ? activePhoto.descriptionAs
-                    : lang === 'hi'
+                  {lang === 'hi'
                     ? (activePhoto.descriptionHi || activePhoto.description)
                     : activePhoto.description}
                 </p>
@@ -226,9 +199,7 @@ export const MemoryJournal: React.FC = () => {
               <h3 className="font-extrabold text-lg sm:text-xl text-white flex items-center gap-2">
                 <BookOpen size={20} className="text-[#c084fc]" />
                 <span>
-                  {lang === 'as'
-                    ? 'দৈনিক অনুভৱ আৰু টোকা'
-                    : lang === 'hi'
+                  {lang === 'hi'
                     ? 'दैनिक मनोभाव एवं डायरी'
                     : 'Daily Feelings & Notes'}
                 </span>
@@ -239,7 +210,7 @@ export const MemoryJournal: React.FC = () => {
               >
                 <Plus size={14} />
                 <span>
-                  {lang === 'as' ? 'লিখক' : lang === 'hi' ? 'नोट लिखें' : 'Write Note'}
+                  {lang === 'hi' ? 'नोट लिखें' : 'Write Note'}
                 </span>
               </button>
             </div>
@@ -248,9 +219,7 @@ export const MemoryJournal: React.FC = () => {
             {showAddForm && (
               <div className="p-4 sm:p-5 rounded-2xl bg-[#0e172a]/80 border border-purple-500/30 space-y-3.5 animate-in fade-in backdrop-blur-xl">
                 <label className="text-xs font-bold text-sky-200/80 uppercase tracking-wider block">
-                  {lang === 'as'
-                    ? 'আজি আপোনাৰ মন কেনে?'
-                    : lang === 'hi'
+                  {lang === 'hi'
                     ? 'आज आप कैसा महसूस कर रहे हैं?'
                     : 'How are you feeling today?'}
                 </label>
@@ -274,9 +243,7 @@ export const MemoryJournal: React.FC = () => {
                   value={newNote}
                   onChange={e => setNewNote(e.target.value)}
                   placeholder={
-                    lang === 'as'
-                      ? 'আজিৰ কোনো ভাল লগা মুহূৰ্ত বা কথা লিখক...'
-                      : lang === 'hi'
+                    lang === 'hi'
                       ? 'आज के दिन के बारे में कोई सुखद विचार या बात लिखें...'
                       : 'Write a few words about your day, breakfast, or memories...'
                   }
@@ -317,7 +284,7 @@ export const MemoryJournal: React.FC = () => {
                     </span>
                   </div>
                   <p className="text-xs sm:text-sm text-sky-100/90 leading-relaxed">
-                    {lang === 'as' ? entry.textAs || entry.text : lang === 'hi' ? (entry.textHi || entry.text) : entry.text}
+                    {lang === 'hi' ? (entry.textHi || entry.text) : entry.text}
                   </p>
                 </div>
               ))}

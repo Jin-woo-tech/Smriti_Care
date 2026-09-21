@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { GameShell } from './GameShell';
 import { AdaptiveTierConfig } from '../../lib/adaptiveDifficulty';
+import { useApp } from '../../context/AppContext';
 
 interface CardItem {
   id: number;
   symbol: string;
   name: string;
-  nameAs: string;
+  nameHi: string;
   icon: string;
 }
 
 const SYMBOL_ITEMS: Omit<CardItem, 'id'>[] = [
-  { symbol: 'japi', name: 'Japi (Assamese Hat)', nameAs: 'জাপি', icon: '👒' },
-  { symbol: 'gamosa', name: 'Gamosa (Handwoven)', nameAs: 'গামোচা', icon: '🧣' },
-  { symbol: 'rhino', name: 'One-Horned Rhino', nameAs: 'এশিঙীয়া গঁড়', icon: '🦏' },
-  { symbol: 'xorai', name: 'Xorai (Brass Stand)', nameAs: 'শৰাই', icon: '🏆' },
-  { symbol: 'tea', name: 'Assam Tea Leaves', nameAs: 'চাহ পাত', icon: '🍃' },
-  { symbol: 'hornbill', name: 'Hornbill Bird', nameAs: 'ধনেশ পক্ষী', icon: '🦜' },
-  { symbol: 'pepa', name: 'Bihu Pepa (Flute)', nameAs: 'পেঁপা', icon: '🎺' },
-  { symbol: 'dheki', name: 'Dheki Rice Pounder', nameAs: 'ঢেঁকী', icon: '🌾' },
+  { symbol: 'japi', name: 'Japi Hat', nameHi: 'जापी टोपी', icon: '👒' },
+  { symbol: 'gamosa', name: 'Gamosa Cloth', nameHi: 'गमोसा अंगवस्त्र', icon: '🧣' },
+  { symbol: 'rhino', name: 'One-Horned Rhino', nameHi: 'एक सींग वाला गैंडा', icon: '🦏' },
+  { symbol: 'xorai', name: 'Xorai Brass Stand', nameHi: 'शराई पीतल पात्र', icon: '🏆' },
+  { symbol: 'tea', name: 'Tea Leaves', nameHi: 'चाय की पत्तियां', icon: '🍃' },
+  { symbol: 'hornbill', name: 'Hornbill Bird', nameHi: 'धनेश पक्षी', icon: '🦜' },
+  { symbol: 'flute', name: 'Traditional Flute', nameHi: 'बांसुरी', icon: '🎺' },
+  { symbol: 'harvest', name: 'Harvest Grain', nameHi: 'अन्न की बाली', icon: '🌾' },
 ];
 
 export const RememberMatchGame: React.FC<{ onBack: () => void }> = ({ onBack }) => {
@@ -26,9 +27,9 @@ export const RememberMatchGame: React.FC<{ onBack: () => void }> = ({ onBack }) 
     <GameShell
       gameId="remember-match"
       title="Remember & Match"
-      titleAs="মনত ৰাখক আৰু মিলাওক"
-      instructions="Flip and match identical pairs of traditional Assamese heritage symbols."
-      instructionsAs="অসমৰ পৰম্পৰাগত প্ৰতীক যেনে জাপি, গামোচা আদিৰ যোৰ মিলাই স্মৃতিশক্তি পৰীক্ষা কৰক।"
+      titleHi="याद रखें और मिलान करें"
+      instructions="Flip and match identical pairs of traditional cultural symbols."
+      instructionsHi="सांस्कृतिक प्रतीकों के कार्ड पलटें और उनके सही जोड़ों का मिलान करें।"
       onBack={onBack}
     >
       {({ tierConfig, onGameOver, isGameActive }) => (
@@ -43,6 +44,8 @@ const MatchBoard: React.FC<{
   onGameOver: (score: number, maxScore: number, accuracy: number, reactionTimeMs: number) => void;
   isGameActive: boolean;
 }> = ({ tierConfig, onGameOver }) => {
+  const { settings } = useApp();
+  const lang = settings.language;
   const pairCount = tierConfig.tier === 1 ? 3 : tierConfig.tier === 2 ? 4 : 6;
 
   const [cards, setCards] = useState<CardItem[]>([]);
@@ -116,14 +119,21 @@ const MatchBoard: React.FC<{
   return (
     <div className="w-full max-w-2xl space-y-6 text-white">
       <div className="flex justify-between items-center px-2 text-sm font-bold text-sky-200/80">
-        <span>Moves Made: <strong className="text-[#c084fc] font-mono">{moves}</strong></span>
-        <span>Pairs Matched: <strong className="text-purple-300 font-mono">{matchedSymbols.length} / {pairCount}</strong></span>
+        <span>
+          {lang === 'hi' ? 'कुल प्रयास:' : 'Moves Made:'}{' '}
+          <strong className="text-[#c084fc] font-mono">{moves}</strong>
+        </span>
+        <span>
+          {lang === 'hi' ? 'मिले जोड़े:' : 'Pairs Matched:'}{' '}
+          <strong className="text-purple-300 font-mono">{matchedSymbols.length} / {pairCount}</strong>
+        </span>
       </div>
 
       <div className={`grid ${gridColsClass} gap-3 sm:gap-4`}>
         {cards.map((card, idx) => {
           const isFlipped = flippedIndices.includes(idx) || matchedSymbols.includes(card.symbol);
           const isMatched = matchedSymbols.includes(card.symbol);
+          const cardName = lang === 'hi' ? card.nameHi : card.name;
 
           return (
             <button
@@ -140,7 +150,7 @@ const MatchBoard: React.FC<{
               {isFlipped ? (
                 <>
                   <span className="text-3xl sm:text-4xl mb-1">{card.icon}</span>
-                  <span className="text-[10px] sm:text-xs font-bold leading-tight line-clamp-1">{card.nameAs}</span>
+                  <span className="text-[10px] sm:text-xs font-bold leading-tight line-clamp-1">{cardName}</span>
                 </>
               ) : (
                 <span className="text-2xl text-purple-300 font-black">?</span>

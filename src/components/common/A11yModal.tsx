@@ -97,9 +97,7 @@ export const A11yModal: React.FC = () => {
               </span>
             </div>
             <p className="text-xs sm:text-sm text-sky-200/70 font-medium mt-0.5">
-              {lang === 'as'
-                ? 'আপোনাৰ সুবিধা অনুসৰি দৃশ্যমানতা, ভাষা আৰু AI ছেটিংছ সলনি কৰক'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'अपनी पसंद के अनुसार फॉन्ट आकार, कंट्रास्ट, भाषा और AI सेटिंग्स बदलें।'
                 : 'Personalize font sizes, contrast, language, and AI verification.'}
             </p>
@@ -112,14 +110,12 @@ export const A11yModal: React.FC = () => {
             <label className="flex items-center gap-2 font-black text-sm text-sky-200 mb-2.5">
               <Globe size={16} className="text-[#c084fc]" />
               <span>
-                {lang === 'as'
-                  ? 'ভাষা নিৰ্বাচন (Language Selection)'
-                  : lang === 'hi'
+                {lang === 'hi'
                   ? 'भाषा चयन (Language Selection)'
                   : 'Language Selection (भाषा)'}
               </span>
             </label>
-            <div className="grid grid-cols-3 gap-2 sm:gap-3">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
               <button
                 onClick={() => setLanguage('en')}
                 className={`py-3 px-2 sm:px-3 rounded-2xl font-black border transition-all text-center cursor-pointer text-xs sm:text-sm active:scale-95 ${
@@ -139,16 +135,6 @@ export const A11yModal: React.FC = () => {
                 }`}
               >
                 हिन्दी (Hindi)
-              </button>
-              <button
-                onClick={() => setLanguage('as')}
-                className={`py-3 px-2 sm:px-3 rounded-2xl font-black border transition-all text-center cursor-pointer text-xs sm:text-sm active:scale-95 ${
-                  settings.language === 'as'
-                    ? 'border-purple-400/80 bg-gradient-to-r from-purple-600/40 to-indigo-600/40 text-white shadow-lg shadow-purple-600/30 ring-2 ring-purple-400/40'
-                    : 'border-white/10 bg-white/5 text-sky-200/80 hover:bg-white/10 hover:border-white/20'
-                }`}
-              >
-                অসমীয়া (Assamese)
               </button>
             </div>
           </div>
@@ -204,9 +190,7 @@ export const A11yModal: React.FC = () => {
                 <div>
                   <p className="font-bold text-sm text-white">{getTranslation('a11yContrast', lang)}</p>
                   <p className="text-xs text-sky-200/60 font-medium">
-                    {lang === 'as'
-                      ? 'আখৰ আৰু বুটাম স্পষ্টকৈ চাবলৈ'
-                      : lang === 'hi'
+                    {lang === 'hi'
                       ? 'गहरे काले और स्पष्ट बॉर्डर वाला उच्च कंट्रास्ट मोड'
                       : 'Deep black & high-contrast bright borders'}
                   </p>
@@ -231,9 +215,7 @@ export const A11yModal: React.FC = () => {
                 <div>
                   <p className="font-bold text-sm text-white">{getTranslation('a11yReducedMotion', lang)}</p>
                   <p className="text-xs text-sky-200/60 font-medium">
-                    {lang === 'as'
-                      ? 'ঘূৰ্ণন বা দ্ৰুত এনিমেশ্যন বন্ধ কৰক'
-                      : lang === 'hi'
+                    {lang === 'hi'
                       ? 'वरिष्ठ नागरिकों के आराम के लिए गतिशील ग्राफिक्स कम करें'
                       : 'Minimizes moving graphics for senior comfort'}
                   </p>
@@ -258,9 +240,7 @@ export const A11yModal: React.FC = () => {
                 <div>
                   <p className="font-bold text-sm text-white">{getTranslation('a11yVoice', lang)}</p>
                   <p className="text-xs text-sky-200/60 font-medium">
-                    {lang === 'as'
-                      ? 'বাৰ্তা আৰু নিৰ্দেশনা পঢ়ি শুনোৱা সেৱা'
-                      : lang === 'hi'
+                    {lang === 'hi'
                       ? 'कार्ड और निर्देशों को बोलकर सुनाने की ध्वनि सेवा'
                       : 'Enable audio narrators on cards and prompts'}
                   </p>
@@ -284,16 +264,12 @@ export const A11yModal: React.FC = () => {
                 </div>
                 <div>
                   <p className="font-bold text-sm text-amber-200">
-                    {lang === 'as'
-                      ? 'অফলাইন মোড পৰীক্ষা (Simulate Offline)'
-                      : lang === 'hi'
+                    {lang === 'hi'
                       ? 'ऑफलाइन मोड सिमुलेशन (Demo)'
                       : 'Simulate Offline Mode (Demo)'}
                   </p>
                   <p className="text-xs text-amber-300/70 font-medium">
-                    {lang === 'as'
-                      ? 'ইন্টাৰনেট নথকাৰ অৱস্থাত পৰীক্ষা কৰিবলৈ'
-                      : lang === 'hi'
+                    {lang === 'hi'
                       ? 'बिना इंटरनेट के लोकल स्टोरेज और म्यूटेशन सिंक का परीक्षण करें'
                       : 'Test offline mutation queues and local storage sync'}
                   </p>
@@ -410,11 +386,9 @@ export const A11yModal: React.FC = () => {
                     {getTranslation('apiKeyStatusUntested', lang)}
                   </span>
                   <p className="text-sky-200/70 leading-relaxed">
-                    {lang === 'as'
-                      ? 'অফলাইন বুদ্ধিমত্তা ইঞ্জিন ব্যৱহৃত হৈছে। প্ৰকৃত ক্লাউড AI পৰীক্ষাৰ বাবে "Verify" বুটামত টিপক।'
-                      : lang === 'hi'
-                      ? 'लोकल ऑफलाइन इंटेलिजेंट इंजन सक्रिय है। लाइव क्लॉड AI कॉल के लिए "Verify" बटन दबाएं।'
-                      : 'SmritiCare is utilizing the local intelligent engine. Verify your key above to enable real-time Claude 3.5 API calls.'}
+                    {lang === 'hi'
+                      ? 'लोकल इंटेलिजेंट इंजन सक्रिय है। लाइव AI कॉल के लिए "Verify" बटन दबाएं।'
+                      : 'SmritiCare is utilizing the local intelligent engine. Verify your key above to enable real-time API calls.'}
                   </p>
                 </div>
               </div>

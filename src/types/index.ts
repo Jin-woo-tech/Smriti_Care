@@ -1,46 +1,120 @@
 export type Role = 'patient' | 'caregiver' | 'clinician' | 'asha';
-export type Language = 'en' | 'hi' | 'as';
+export type UserRole = Role;
+export type Language = 'en' | 'hi';
 export type TextScale = 'normal' | 'large' | 'xl';
 
 export type ReminderType = 'medicine' | 'hydration' | 'walking' | 'appointment';
+export type MedicationLogStatus = 'scheduled' | 'taken' | 'skipped' | 'missed';
+
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  role: Role;
+  fullName: string;
+  dateOfBirth?: string;
+  phone?: string;
+  preferredLanguage: Language;
+  address?: string;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+  createdAt: string;
+  profile?: UserProfile;
+}
+
+export interface UserProfile {
+  userId: string;
+  age?: number;
+  gender?: 'M' | 'F' | 'Other';
+  location?: string;
+  condition?: string;
+  notes?: string;
+  avatarInitials: string;
+  avatarColor?: string;
+  highContrast?: boolean;
+  textScale?: TextScale;
+  reducedMotion?: boolean;
+  voiceAssistance?: boolean;
+}
+
+export interface AuthState {
+  user: User | null;
+  token: string | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+}
 
 export interface Reminder {
   id: string;
   type: ReminderType;
   title: string;
-  titleAs: string;
   titleHi?: string;
   dose?: string;
-  doseAs?: string;
   doseHi?: string;
   time: string; // e.g. "08:00 AM"
   frequency: string; // e.g. "Daily", "Twice a day", "Once a week"
-  frequencyAs: string;
   frequencyHi?: string;
   taken: boolean;
   takenAt?: string;
   notes?: string;
-  notesAs?: string;
   notesHi?: string;
   iconName?: string;
+  status?: MedicationLogStatus;
+}
+
+export interface Medication {
+  id: string;
+  userId: string;
+  name: string;
+  genericName?: string;
+  dosage: string;
+  dosageHi?: string;
+  frequency: string;
+  frequencyHi?: string;
+  times: string[]; // e.g. ["08:00 AM", "08:00 PM"]
+  duration?: string;
+  instructions?: string;
+  instructionsHi?: string;
+  notes?: string;
+  active: boolean;
+  createdAt: string;
+}
+
+export interface MedicationLog {
+  id: string;
+  userId: string;
+  medicationId?: string;
+  scheduledTime: string;
+  actualTime?: string;
+  status: MedicationLogStatus;
+  date: string;
+  notes?: string;
+}
+
+export interface MedicationAdherence {
+  totalScheduled: number;
+  totalTaken: number;
+  totalSkipped: number;
+  totalMissed: number;
+  adherencePercentage: number;
+  streakDays: number;
+  recentLogs: MedicationLog[];
 }
 
 export interface PhotoMemory {
   id: string;
   imageUrl: string;
   title: string;
-  titleAs: string;
   titleHi?: string;
   relation: string;
-  relationAs: string;
   relationHi?: string;
   description: string;
-  descriptionAs: string;
   descriptionHi?: string;
   year?: string;
   voiceNoteText?: string;
-  voiceNoteTextAs?: string;
   voiceNoteTextHi?: string;
+  tags?: string[];
+  createdAt?: string;
 }
 
 export interface JournalEntry {
@@ -48,10 +122,10 @@ export interface JournalEntry {
   date: string;
   mood: 'happy' | 'peaceful' | 'nostalgic' | 'tired' | 'confused';
   text: string;
-  textAs?: string;
   textHi?: string;
   photoUrl?: string;
   audioDuration?: string;
+  createdAt?: string;
 }
 
 export type GameId =
@@ -65,13 +139,10 @@ export type GameId =
 export interface GameMetadata {
   id: GameId;
   title: string;
-  titleAs: string;
   titleHi?: string;
   description: string;
-  descriptionAs: string;
   descriptionHi?: string;
   domain: string;
-  domainAs: string;
   domainHi?: string;
   icon: string;
   estimatedMinutes: number;
@@ -79,6 +150,7 @@ export interface GameMetadata {
 
 export interface GameScoreRecord {
   id: string;
+  userId?: string;
   gameId: GameId;
   date: string;
   score: number;
@@ -87,17 +159,74 @@ export interface GameScoreRecord {
   reactionTimeMs: number;
   difficultyTier: 1 | 2 | 3;
   durationSeconds: number;
+  domain?: string;
 }
 
 export interface CognitiveDomainTrend {
   domain: string;
-  domainAs: string;
   domainHi?: string;
   score: number; // 0 - 100
   baselineScore: number;
   status: 'stable' | 'watch' | 'review';
   trendDirection: 'improving' | 'stable' | 'slight-decline';
   lastTestedDate: string;
+  history?: { date: string; score: number }[];
+}
+
+export interface Doctor {
+  id: string;
+  name: string;
+  nameHi?: string;
+  specialty: string;
+  specialtyHi?: string;
+  hospital: string;
+  hospitalHi?: string;
+  phone?: string;
+  email?: string;
+  availableDays: string[];
+  availableTimeSlots: string[];
+  rating: number;
+  location: string;
+}
+
+export type AppointmentStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
+
+export interface Appointment {
+  id: string;
+  patientId: string;
+  patientName?: string;
+  doctorId: string;
+  doctorName?: string;
+  doctorSpecialty?: string;
+  date: string;
+  timeSlot: string;
+  reason: string;
+  status: AppointmentStatus;
+  notes?: string;
+  doctorNotes?: string;
+  createdAt: string;
+}
+
+export interface CaregiverRelationship {
+  id: string;
+  patientId: string;
+  caregiverId: string;
+  patientName?: string;
+  patientPhone?: string;
+  status: 'pending' | 'authorized' | 'revoked';
+  permissions: string[];
+  createdAt: string;
+}
+
+export interface CaregiverPatientSummary {
+  patient: User;
+  profile?: UserProfile;
+  todayMedications: Reminder[];
+  adherenceRate: number;
+  cognitiveTrend: CognitiveDomainTrend[];
+  upcomingAppointments: Appointment[];
+  hydrationCount: number;
+  recentActivity: { timestamp: string; action: string; status: string }[];
 }
 
 export interface SafetyAnalysisResult {
@@ -106,19 +235,17 @@ export interface SafetyAnalysisResult {
   medicineName: string;
   genericName: string;
   identifiedStrength: string;
+  dosageSchedule?: string;
   isRecognized: boolean;
   confidence: number;
   instructions: string;
-  instructionsAs: string;
   instructionsHi?: string;
   matchesSchedule: boolean;
   scheduledTime?: string;
   safetyAlerts: string[];
-  safetyAlertsAs: string[];
   safetyAlertsHi?: string[];
   source: 'demo' | 'live';
   summary: string;
-  summaryAs: string;
   summaryHi?: string;
 }
 
@@ -127,31 +254,27 @@ export interface LabReportResult {
   timestamp: string;
   patientName: string;
   testName: string;
-  testNameAs: string;
   testNameHi?: string;
   keyFindings: {
     parameter: string;
-    parameterAs: string;
     parameterHi?: string;
     value: string;
     referenceRange: string;
     status: 'normal' | 'elevated' | 'low';
     explanation: string;
-    explanationAs: string;
     explanationHi?: string;
   }[];
   plainLanguageSummary: string;
-  plainLanguageSummaryAs: string;
   plainLanguageSummaryHi?: string;
   doctorRecommendation: string;
-  doctorRecommendationAs: string;
   doctorRecommendationHi?: string;
   source: 'demo' | 'live';
+  fileUrl?: string;
 }
 
 export interface SyncQueueItem {
   id: string;
-  action: 'create_reminder' | 'update_reminder' | 'save_game_score' | 'add_journal' | 'asha_visit_log';
+  action: 'create_reminder' | 'update_reminder' | 'save_game_score' | 'add_journal' | 'asha_visit_log' | 'save_medication_log';
   payload: any;
   timestamp: string;
   synced: boolean;
@@ -159,13 +282,12 @@ export interface SyncQueueItem {
 
 export interface AshaPatientRecord {
   id: string;
+  ashaUserId?: string;
   name: string;
-  nameAs: string;
   nameHi?: string;
   age: number;
   gender: 'M' | 'F' | 'Other';
   village: string;
-  villageAs: string;
   villageHi?: string;
   phone: string;
   caregiverName: string;
@@ -176,24 +298,33 @@ export interface AshaPatientRecord {
   medicationStockDays: number;
   nextScheduledVisit: string;
   notes: string;
-  notesAs: string;
   notesHi?: string;
+}
+
+export interface AshaVisitRecord {
+  id: string;
+  ashaUserId: string;
+  patientId: string;
+  visitDate: string;
+  bloodPressure?: string;
+  bloodSugar?: string;
+  medicationStockDays: number;
+  adherenceStatus: string;
+  notes: string;
+  followUpDate?: string;
 }
 
 export interface PatientProfile {
   id: string;
   name: string;
-  nameAs?: string;
   nameHi?: string;
   age: number;
   gender: 'M' | 'F' | 'Other';
   location: string;
-  locationAs?: string;
   locationHi?: string;
   avatarInitials: string;
   avatarColor?: string;
   condition?: string;
-  conditionAs?: string;
   conditionHi?: string;
   adherenceRate?: number;
   emergencyContactName?: string;
@@ -211,4 +342,14 @@ export interface AppSettings {
   apiKeyStatus?: 'valid' | 'invalid' | 'untested';
   isSimulatedOffline: boolean;
   activePatientId?: string;
+}
+
+export interface AIChatMessage {
+  id: string;
+  sender: 'user' | 'assistant' | 'system';
+  text: string;
+  textHi?: string;
+  timestamp: string;
+  audioUrl?: string;
+  suggestedActions?: { label: string; action: string }[];
 }

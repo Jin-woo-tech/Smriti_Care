@@ -23,9 +23,7 @@ export const SafetyHub: React.FC = () => {
         >
           <Pill size={18} className={activeTab === 'medicine' ? 'text-white' : 'text-[#c084fc]'} />
           <span>
-            {lang === 'as'
-              ? 'ঔষধৰ পেকেট স্কেন'
-              : lang === 'hi'
+            {lang === 'hi'
               ? 'दवा पैकेट स्कैनर'
               : 'Medicine Packaging'}
           </span>
@@ -41,9 +39,7 @@ export const SafetyHub: React.FC = () => {
         >
           <FileText size={18} className={activeTab === 'lab' ? 'text-white' : 'text-sky-300'} />
           <span>
-            {lang === 'as'
-              ? 'লেব ৰিপৰ্ট ব্যাখ্যা'
-              : lang === 'hi'
+            {lang === 'hi'
               ? 'लैब रिपोर्ट अनुवाद'
               : 'Lab Reports'}
           </span>

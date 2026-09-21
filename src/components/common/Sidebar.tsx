@@ -17,6 +17,7 @@ import {
   AlertOctagon,
   ChevronRight,
   UserCheck,
+  LogIn,
   X
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
@@ -49,20 +50,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
     setSosOpen,
     toggleSimulatedOffline,
     activePatient,
+    currentUser,
     setProfileModalOpen,
+    setAuthModalOpen,
+    setAuthModalMode,
   } = useApp();
 
   const lang = settings.language;
 
-  // Role Definitions matching Frosted Glass Purple & Blue aesthetic
+  // Role Definitions (Bilingual: English & Hindi)
   const roles: {
     id: Role;
     labelEn: string;
     labelHi: string;
-    labelAs: string;
     subtitleEn: string;
     subtitleHi: string;
-    subtitleAs: string;
     icon: React.ReactNode;
     color: string;
   }[] = [
@@ -70,10 +72,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'patient',
       labelEn: 'Senior / Patient',
       labelHi: 'वरिष्ठ / मरीज',
-      labelAs: 'জ্যেষ্ঠ নাগৰিক',
       subtitleEn: 'Daily Care & Memory',
       subtitleHi: 'दवा व स्मरण',
-      subtitleAs: 'দৈনিক যত্ন ও স্মৃতি',
       icon: <User size={18} />,
       color: 'text-[#c084fc] bg-purple-500/15',
     },
@@ -81,10 +81,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'caregiver',
       labelEn: 'Family Caregiver',
       labelHi: 'देखभालकर्ता',
-      labelAs: 'পৰিয়ালৰ তত্ত্বাৱধায়ক',
       subtitleEn: 'Adherence & 7D Trends',
       subtitleHi: 'दवा ट्रैकिंग व रुझान',
-      subtitleAs: 'ঔষধ অনুসৰণ ও ধাৰা',
       icon: <Users size={18} />,
       color: 'text-sky-300 bg-sky-500/15',
     },
@@ -92,10 +90,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'clinician',
       labelEn: 'Clinician / Doctor',
       labelHi: 'चिकित्सक / डॉक्टर',
-      labelAs: 'চিকিৎসক পৰ্টেল',
       subtitleEn: 'Cognitive Radar & PDF',
       subtitleHi: 'रडार व मेडिकल रिपोर्ट',
-      subtitleAs: 'কগনিটিভ ৰাডাৰ ও ৰিপোৰ্ট',
       icon: <Stethoscope size={18} />,
       color: 'text-purple-300 bg-purple-500/15',
     },
@@ -103,10 +99,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'asha',
       labelEn: 'ASHA Health Worker',
       labelHi: 'आशा कार्यकर्ता',
-      labelAs: 'আশা স্বাস্থ্য কৰ্মী',
       subtitleEn: 'Field Triage & Visits',
       subtitleHi: 'फील्ड स्क्रीनिंग व भेंट',
-      subtitleAs: 'ফিল্ড স্ক্ৰীনিং ও সাক্ষাৎ',
       icon: <Activity size={18} />,
       color: 'text-amber-300 bg-amber-500/15',
     },
@@ -117,7 +111,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     id: PatientTab;
     labelEn: string;
     labelHi: string;
-    labelAs: string;
     icon: React.ReactNode;
     badge?: string;
   }[] = [
@@ -125,14 +118,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'dashboard',
       labelEn: 'Home Dashboard',
       labelHi: 'मुख्य डैशबोर्ड',
-      labelAs: 'মূল ডেচবৰ্ড',
       icon: <LayoutDashboard size={19} />,
     },
     {
       id: 'routine',
       labelEn: 'Medicines & Routine',
       labelHi: 'दैनिक दिनचर्या व दवा',
-      labelAs: 'দৈনিক ঔষধ ও নিয়ম',
       icon: <Pill size={19} />,
       badge: 'Daily',
     },
@@ -140,7 +131,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'games',
       labelEn: '6 Memory Games',
       labelHi: '6 दिमागी स्वास्थ्य खेल',
-      labelAs: 'মগজুৰ ৬ টা খেল',
       icon: <Brain size={19} />,
       badge: '6 Games',
     },
@@ -148,14 +138,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'journal',
       labelEn: 'Family Photo Album',
       labelHi: 'पारिवारिक स्मृति एल्बम',
-      labelAs: 'পৰিয়াল স্মৃতি এলবাম',
       icon: <Heart size={19} />,
     },
     {
       id: 'safety',
       labelEn: 'Medicine & Lab Safety',
       labelHi: 'दवा पैकेट व लैब सुरक्षा',
-      labelAs: 'ঔষধ ও লেব সুৰক্ষা',
       icon: <ShieldCheck size={19} />,
       badge: 'AI Vision',
     },
@@ -163,26 +151,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'chat',
       labelEn: 'Smriti Sathi (AI Chat)',
       labelHi: 'स्मृति साथी (AI साथी)',
-      labelAs: 'স্মৃতি সাথী (AI কথা)',
       icon: <MessageSquare size={19} />,
       badge: 'Voice',
     },
   ];
 
   const getRoleLabel = (r: typeof roles[0]) => {
-    if (lang === 'as') return r.labelAs;
     if (lang === 'hi') return r.labelHi;
     return r.labelEn;
   };
 
   const getRoleSubtitle = (r: typeof roles[0]) => {
-    if (lang === 'as') return r.subtitleAs;
     if (lang === 'hi') return r.subtitleHi;
     return r.subtitleEn;
   };
 
   const getNavLabel = (item: typeof navItems[0]) => {
-    if (lang === 'as') return item.labelAs;
     if (lang === 'hi') return item.labelHi;
     return item.labelEn;
   };
@@ -229,16 +213,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="text-lg font-black tracking-tight text-white">
-                  {lang === 'as' ? 'স্মৃতি কেয়াৰ' : lang === 'hi' ? 'स्मृति केयर' : 'SmritiCare'}
+                  {lang === 'hi' ? 'स्मृति केयर' : 'SmritiCare'}
                 </span>
                 <span className="text-[9px] font-black uppercase tracking-wider bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded border border-purple-400/30">
                   SIH 2026
                 </span>
               </div>
               <p className="text-[11px] text-sky-200/70 font-medium">
-                {lang === 'as'
-                  ? 'জ্ঞানীয় যত্ন আৰু ঔষধ সুৰক্ষা'
-                  : lang === 'hi'
+                {lang === 'hi'
                   ? 'संज्ञानात्मक देखभाल व सुरक्षा'
                   : 'Cognitive Care & Safety'}
               </p>
@@ -259,7 +241,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Landing / Showcase Architecture Toggle */}
           <div className="space-y-1.5">
             <div className="text-[11px] font-bold text-sky-200/60 uppercase tracking-wider px-2">
-              {lang === 'as' ? 'সংক্ষিপ্ত বৰ্ণনা' : lang === 'hi' ? 'अवलोकन' : 'Overview'}
+              {lang === 'hi' ? 'अवलोकन' : 'Overview'}
             </div>
             <button
               onClick={() => {
@@ -275,9 +257,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="flex items-center gap-2.5">
                 <Compass size={17} className={showLanding ? 'text-white' : 'text-[#c084fc]'} />
                 <span>
-                  {lang === 'as'
-                    ? 'SIH 2026 প্ৰজেক্ট ডেমো'
-                    : lang === 'hi'
+                  {lang === 'hi'
                     ? 'SIH 2026 प्रोजेक्ट डेमो'
                     : 'SIH 2026 Project Showcase'}
                 </span>
@@ -290,7 +270,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="space-y-1.5">
             <div className="flex items-center justify-between px-2">
               <span className="text-[11px] font-bold text-sky-200/60 uppercase tracking-wider">
-                {lang === 'as' ? 'ব্যৱহাৰকাৰী ভূমিকা' : lang === 'hi' ? 'भूमिका चुनें' : 'Active Role Mode'}
+                {lang === 'hi' ? 'भूमिका चुनें' : 'Active Role Mode'}
               </span>
               <span className="text-[10px] text-[#c084fc] font-black bg-purple-500/20 px-2 py-0.5 rounded-full border border-purple-400/30">
                 4 Portals
@@ -342,7 +322,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {currentRole === 'patient' && !showLanding && (
             <div className="space-y-1.5 pt-2 border-t border-white/10">
               <div className="text-[11px] font-bold text-sky-200/60 uppercase tracking-wider px-2">
-                {lang === 'as' ? 'ৰোগীৰ সেৱাসমূহ' : lang === 'hi' ? 'रोगी सेवाएँ' : 'Senior Care Modules'}
+                {lang === 'hi' ? 'रोगी सेवाएँ' : 'Senior Care Modules'}
               </div>
 
               <div className="space-y-1">
@@ -388,7 +368,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Quick Utility Actions */}
           <div className="pt-2 border-t border-white/10 space-y-2">
             <div className="text-[11px] font-bold text-sky-200/60 uppercase tracking-wider px-2">
-              {lang === 'as' ? 'সুবিধাসমূহ' : lang === 'hi' ? 'उपकरण' : 'System Quick Toggles'}
+              {lang === 'hi' ? 'उपकरण' : 'System Quick Toggles'}
             </div>
 
             {/* Offline Simulator Switch */}
@@ -404,16 +384,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {settings.isSimulatedOffline ? <WifiOff size={16} /> : <Wifi size={16} />}
                 <span>
                   {settings.isSimulatedOffline
-                    ? lang === 'as'
-                      ? 'অফলাইন মড সক্ৰিয়'
-                      : lang === 'hi'
-                      ? 'ऑफलाइन मोड सक्रिय'
-                      : 'Offline Mode Active'
-                    : lang === 'as'
-                    ? 'অনলাইন নেটৱৰ্ক'
-                    : lang === 'hi'
-                    ? 'ऑनलाइन नेटवर्क'
-                    : 'Network Online'}
+                    ? (lang === 'hi' ? 'ऑफलाइन मोड सक्रिय' : 'Offline Mode Active')
+                    : (lang === 'hi' ? 'ऑनलाइन नेटवर्क' : 'Network Online')}
                 </span>
               </div>
               <span
@@ -436,9 +408,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="flex items-center gap-2">
                 <SlidersHorizontal size={16} className="text-[#c084fc]" />
                 <span>
-                  {lang === 'as'
-                    ? 'ভাষা আৰু প্ৰৱেশাধিকাৰ'
-                    : lang === 'hi'
+                  {lang === 'hi'
                     ? 'भाषा व पहुंच सेटिंग्स'
                     : 'Display & Language'}
                 </span>
@@ -453,87 +423,61 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Bottom User Profile Card with Dynamic Switcher Trigger */}
         <div className="p-4 border-t border-white/10 bg-[#080e1c]/70">
-          <div
-            onClick={() => setProfileModalOpen(true)}
-            className="group bg-white/10 hover:bg-white/15 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl border border-white/15 hover:border-purple-400/50 shadow-sm flex items-center justify-between gap-2.5 cursor-pointer transition-all active:scale-98"
-            title="Click to Switch Profile or Add New Patient"
-          >
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="relative shrink-0">
-                <div
-                  className={`w-10 h-10 rounded-xl bg-gradient-to-tr ${
-                    currentRole === 'patient'
-                      ? activePatient.avatarColor || 'from-purple-600 to-indigo-500'
-                      : currentRole === 'caregiver'
-                      ? 'from-indigo-600 to-blue-500'
-                      : currentRole === 'clinician'
-                      ? 'from-teal-600 to-emerald-500'
-                      : 'from-amber-600 to-orange-500'
-                  } text-white flex items-center justify-center font-black text-xs shadow-xs border border-white/20`}
-                >
-                  {currentRole === 'patient'
-                    ? activePatient.avatarInitials || 'AJ'
-                    : currentRole === 'caregiver'
-                    ? 'PG'
-                    : currentRole === 'clinician'
-                    ? 'DR'
-                    : 'MD'}
+          {currentUser ? (
+            <div
+              onClick={() => setProfileModalOpen(true)}
+              className="group bg-white/10 hover:bg-white/15 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl border border-white/15 hover:border-purple-400/50 shadow-sm flex items-center justify-between gap-2.5 cursor-pointer transition-all active:scale-98"
+              title="Click to Switch Profile"
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="relative shrink-0">
+                  <div
+                    className={`w-10 h-10 rounded-xl bg-gradient-to-tr ${
+                      currentRole === 'patient'
+                        ? 'from-purple-600 to-indigo-500'
+                        : currentRole === 'caregiver'
+                        ? 'from-indigo-600 to-blue-500'
+                        : currentRole === 'clinician'
+                        ? 'from-teal-600 to-emerald-500'
+                        : 'from-amber-600 to-orange-500'
+                    } text-white flex items-center justify-center font-black text-xs shadow-xs border border-white/20`}
+                  >
+                    {currentUser.fullName ? currentUser.fullName.substring(0, 2).toUpperCase() : 'SC'}
+                  </div>
+                  <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#c084fc] border-2 border-[#080e1c]" />
                 </div>
-                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#c084fc] border-2 border-[#080e1c]" />
+
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <h4 className="text-xs font-bold text-white truncate group-hover:text-purple-200 transition-colors">
+                      {currentUser.fullName || currentUser.username}
+                    </h4>
+                  </div>
+                  <p className="text-[10px] text-sky-200/60 truncate capitalize">
+                    {currentUser.role} Account
+                  </p>
+                </div>
               </div>
 
-              <div className="min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <h4 className="text-xs font-bold text-white truncate group-hover:text-purple-200 transition-colors">
-                    {currentRole === 'patient'
-                      ? `${
-                          lang === 'as' && activePatient.nameAs
-                            ? activePatient.nameAs
-                            : lang === 'hi' && activePatient.nameHi
-                            ? activePatient.nameHi
-                            : activePatient.name
-                        } (${activePatient.age}y)`
-                      : currentRole === 'caregiver'
-                      ? 'Priyanka Gogoi'
-                      : currentRole === 'clinician'
-                      ? 'Dr. A. Sarma (MD)'
-                      : 'Minoti Das (ASHA)'}
-                  </h4>
-                </div>
-                <p className="text-[10px] text-sky-200/60 truncate flex items-center gap-1">
-                  <span>
-                    {currentRole === 'patient'
-                      ? lang === 'as' && activePatient.locationAs
-                        ? activePatient.locationAs
-                        : lang === 'hi' && activePatient.locationHi
-                        ? activePatient.locationHi
-                        : activePatient.location
-                      : currentRole === 'caregiver'
-                      ? 'Family Caregiver'
-                      : currentRole === 'clinician'
-                      ? 'Neurology PHC'
-                      : 'Titabor Sub-Centre'}
-                  </span>
-                </p>
+              <div className="flex items-center gap-1 shrink-0">
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-purple-500/20 text-[#c084fc] border border-purple-400/30 group-hover:bg-purple-500/30 transition-all">
+                  Profile
+                </span>
               </div>
             </div>
-
-            <div className="flex items-center gap-1 shrink-0">
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-purple-500/20 text-[#c084fc] border border-purple-400/30 group-hover:bg-purple-500/30 transition-all">
-                Switch
-              </span>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSosOpen(true);
-                }}
-                title="Emergency SOS"
-                className="w-7 h-7 rounded-lg bg-rose-500/20 text-rose-400 hover:bg-rose-600 hover:text-white border border-rose-400/30 flex items-center justify-center transition-colors cursor-pointer"
-              >
-                <AlertOctagon size={14} />
-              </button>
-            </div>
-          </div>
+          ) : (
+            <button
+              onClick={() => {
+                setAuthModalMode('login');
+                setAuthModalOpen(true);
+                onCloseMobile();
+              }}
+              className="w-full bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 text-white font-bold p-3 rounded-2xl flex items-center justify-center gap-2 text-xs shadow-lg transition-all"
+            >
+              <LogIn size={15} />
+              <span>{lang === 'hi' ? 'लॉगिन / रजिस्टर' : 'Sign In / Register'}</span>
+            </button>
+          )}
         </div>
       </aside>
     </>

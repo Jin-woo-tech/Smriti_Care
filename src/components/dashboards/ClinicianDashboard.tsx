@@ -38,9 +38,7 @@ export const ClinicianDashboard: React.FC = () => {
   const { settings, cognitiveTrends, reminders, gameScores, ashaPatients, activePatient } = useApp();
   const lang = settings.language;
   const patientName =
-    lang === 'as' && activePatient.nameAs
-      ? activePatient.nameAs
-      : lang === 'hi' && activePatient.nameHi
+    lang === 'hi' && activePatient.nameHi
       ? activePatient.nameHi
       : activePatient.name;
 
@@ -60,11 +58,11 @@ export const ClinicianDashboard: React.FC = () => {
       const targetPatient = {
         id: activePatient.id,
         name: activePatient.name,
-        nameAs: activePatient.nameAs || activePatient.name,
+        nameHi: activePatient.nameHi || activePatient.name,
         age: activePatient.age,
         gender: activePatient.gender,
         village: activePatient.location,
-        villageAs: activePatient.locationAs || activePatient.location,
+        villageHi: activePatient.locationHi || activePatient.location,
         phone: activePatient.emergencyContactPhone || '+91 94350 12345',
         caregiverName: activePatient.emergencyContactName || 'Family Caregiver',
         caregiverPhone: activePatient.emergencyContactPhone || '+91 98640 67890',
@@ -74,7 +72,7 @@ export const ClinicianDashboard: React.FC = () => {
         medicationStockDays: 18,
         nextScheduledVisit: 'Next Tuesday',
         notes: activePatient.condition || 'Regular clinical neuro-checkup completed.',
-        notesAs: 'নিয়মীয়া স্বাস্থ্য পৰীক্ষা সম্পন্ন হৈছে।',
+        notesHi: 'नियमित स्वास्थ्य जांच व न्यूरो-मूल्यांकन संपन्न।',
       };
 
       generateAndDownloadClinicalReport(targetPatient, cognitiveTrends, activePatient.adherenceRate || 95);
@@ -96,16 +94,12 @@ export const ClinicianDashboard: React.FC = () => {
             <span>Physician & Neurological Health Portal</span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
-            {lang === 'as'
-              ? 'চিকিৎসক পৰ্যবেক্ষণ আৰু ৰিপৰ্ট'
-              : lang === 'hi'
+            {lang === 'hi'
               ? 'चिकित्सकीय संज्ञानात्मक मूल्यांकन पोर्टल'
               : 'Clinical Cognitive Assessment Portal'}
           </h1>
           <p className="text-sm sm:text-base text-sky-200/80 mt-2 leading-relaxed font-medium">
-            {lang === 'as'
-              ? 'ৰোগীৰ মগজুৰ সুস্থতাৰ মূল্যাংকন, দীৰ্ঘম্যাদী পৰীক্ষাৰ ৰেকৰ্ড আৰু চিকিৎসা প্ৰতিবেদন ডাউনল’ড কৰক।'
-              : lang === 'hi'
+            {lang === 'hi'
               ? 'वस्तुनिष्ठ दीर्घकालिक डिजिटल बायोमार्कर, बहु-क्षेत्रीय संज्ञानात्मक मैट्रिक्स और 1-क्लिक क्लिनिकल रिपोर्ट।'
               : 'Objective longitudinal digital biomarkers, multi-domain cognitive metrics, and downloadable clinical reports.'}
           </p>
@@ -114,9 +108,7 @@ export const ClinicianDashboard: React.FC = () => {
         <div className="relative z-10 flex items-center gap-3 shrink-0">
           <VoiceNarratorButton
             textToRead={
-              lang === 'as'
-                ? `চিকিৎসক পৰ্যবেক্ষণ ফলক। ${patientName}ৰ ঔষধ পালনৰ হাৰ ${activePatient.adherenceRate || 95} শতাংশ আৰু স্মৃতি শক্তি সন্তোষজনক।`
-                : lang === 'hi'
+              lang === 'hi'
                 ? `चिकित्सक मूल्यांकन पोर्टल। ${patientName} की दवा अनुपालन दर ${activePatient.adherenceRate || 95}% है और बहु-क्षेत्रीय संज्ञानात्मक रडार स्थिर स्थिति दर्शाता है।`
                 : `Clinician Cognitive Dashboard for ${patientName}. Adherence is ${activePatient.adherenceRate || 95}% and cognitive domain radar shows steady functioning.`
             }
@@ -132,8 +124,8 @@ export const ClinicianDashboard: React.FC = () => {
             <Download size={18} className="stroke-[3]" />
             <span>
               {isGeneratingPdf
-                ? (lang === 'hi' ? 'पीडीएफ तैयार हो रहा है...' : lang === 'as' ? 'PDF প্ৰস্তুত হৈ আছে...' : 'Generating PDF...')
-                : (lang === 'hi' ? 'क्लिनिकल रिपोर्ट PDF डाउनलोड करें' : lang === 'as' ? 'চিকিৎসা PDF ডাউনল’ড' : 'Download Clinical PDF')}
+                ? (lang === 'hi' ? 'पीडीएफ तैयार हो रहा है...' : 'Generating PDF...')
+                : (lang === 'hi' ? 'क्लिनिकल रिपोर्ट PDF डाउनलोड करें' : 'Download Clinical PDF')}
             </span>
           </button>
         </div>

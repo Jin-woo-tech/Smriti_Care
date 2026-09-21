@@ -37,9 +37,7 @@ export const EmergencyModal: React.FC = () => {
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-xl sm:text-2xl font-black text-white">
-                {lang === 'as'
-                  ? 'জৰুৰীকালীন সহায় (SOS)'
-                  : lang === 'hi'
+                {lang === 'hi'
                   ? 'आपातकालीन सहायता (SOS)'
                   : 'Emergency Help & Contacts'}
               </h2>
@@ -48,9 +46,7 @@ export const EmergencyModal: React.FC = () => {
               </span>
             </div>
             <p className="text-xs text-sky-200/70 font-medium mt-0.5">
-              {lang === 'as'
-                ? 'তলৰ যিকোনো এটা নম্বৰত স্পৰ্শ কৰি তৎক্ষণাৎ যোগাযোগ কৰক'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'तुरंत संपर्क करने के लिए नीचे दिए गए किसी भी नंबर पर टैप करें।'
                 : 'Tap any contact below to connect immediately.'}
             </p>
@@ -71,9 +67,7 @@ export const EmergencyModal: React.FC = () => {
               <div>
                 <p className="font-extrabold text-sm sm:text-base text-white group-hover:text-purple-200 transition-colors">
                   {activePatient?.emergencyContactName ||
-                    (lang === 'as'
-                      ? 'জীয়াৰী প্ৰিয়ংকা (প্ৰাথমিক যত্নকৰ্তা)'
-                      : lang === 'hi'
+                    (lang === 'hi'
                       ? 'बेटी प्रियंका (मुख्य देखभालकर्ता)'
                       : 'Primary Caregiver')}
                 </p>
@@ -98,9 +92,7 @@ export const EmergencyModal: React.FC = () => {
               </div>
               <div>
                 <p className="font-extrabold text-sm sm:text-base text-white group-hover:text-cyan-200 transition-colors">
-                  {lang === 'as'
-                    ? 'মিনতি দাস (আশা স্বাস্থ্য কৰ্মী)'
-                    : lang === 'hi'
+                  {lang === 'hi'
                     ? 'मिनती दास (आशा स्वास्थ्य कार्यकर्ता)'
                     : 'Minoti Das (ASHA Worker)'}
                 </p>
@@ -114,7 +106,7 @@ export const EmergencyModal: React.FC = () => {
             </div>
           </a>
 
-          {/* 108 Assam Emergency Ambulance */}
+          {/* 108 Emergency Ambulance */}
           <a
             href="tel:108"
             className="group flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-rose-950/40 to-red-900/30 hover:from-rose-950/60 hover:to-red-900/50 border border-rose-500/40 hover:border-rose-400/70 backdrop-blur-md transition-all shadow-lg hover:shadow-rose-600/30 active:scale-[0.99] cursor-pointer"
@@ -125,9 +117,7 @@ export const EmergencyModal: React.FC = () => {
               </div>
               <div>
                 <p className="font-extrabold text-sm sm:text-base text-white group-hover:text-rose-200 transition-colors">
-                  {lang === 'as'
-                    ? '১০৮ জৰুৰী এম্বুলেন্স সেৱা (অসম)'
-                    : lang === 'hi'
+                  {lang === 'hi'
                     ? '108 आपातकालीन एम्बुलेंस सेवा'
                     : '108 Emergency Medical Ambulance'}
                 </p>
@@ -147,9 +137,7 @@ export const EmergencyModal: React.FC = () => {
           <button
             onClick={() =>
               narrate(
-                lang === 'as'
-                  ? 'জৰুৰীকালীন সহায়: জীয়াৰী বা যত্নকৰ্তা, আশা কৰ্মী মিনতি দাস, বা ১০৮ এম্বুলেন্স সেৱাত ফোন কৰক।'
-                  : lang === 'hi'
+                lang === 'hi'
                   ? 'आपातकालीन सहायता: परिवार के देखभालकर्ता, आशा कार्यकर्ता मिनती दास या 108 एम्बुलेंस सेवा पर कॉल करें।'
                   : 'Emergency Help: You can call your primary caregiver, ASHA worker Minoti Das, or 108 Emergency Ambulance.'
               )
