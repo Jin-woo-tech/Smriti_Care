@@ -41,14 +41,70 @@ function detectProvider(apiKey: string): ProviderConfig {
   return { providerName: 'AI Gateway Proxy', type: 'gateway', model: DEFAULT_MODEL };
 }
 
+interface NormalizedMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
 /**
- * Execute a live request to the specified AI provider
+ * Sanitize and normalize conversation history to satisfy strict multi-turn LLM schemas
+ * (Anthropic Claude, Google Gemini, OpenAI, Groq)
+ */
+function sanitizeConversationMessages(
+  history: any[],
+  currentMessage: string
+): NormalizedMessage[] {
+  const list: NormalizedMessage[] = [];
+
+  if (Array.isArray(history)) {
+    for (const h of history) {
+      const text = (typeof h === 'string' ? h : h.content || h.text || '').trim();
+      if (!text) continue;
+
+      const roleStr = String(h.role || (h.sender === 'user' ? 'user' : h.sender === 'assistant' ? 'assistant' : '')).toLowerCase();
+      const role: 'user' | 'assistant' = roleStr.includes('user') ? 'user' : 'assistant';
+      list.push({ role, content: text });
+    }
+  }
+
+  const cleanCurrent = (currentMessage || '').trim();
+  if (cleanCurrent) {
+    const last = list[list.length - 1];
+    if (!last || last.role !== 'user' || last.content !== cleanCurrent) {
+      list.push({ role: 'user', content: cleanCurrent });
+    }
+  }
+
+  // Merge consecutive same-role turns to strictly enforce role alternation
+  const merged: NormalizedMessage[] = [];
+  for (const msg of list) {
+    if (merged.length > 0 && merged[merged.length - 1].role === msg.role) {
+      merged[merged.length - 1].content += `\n\n${msg.content}`;
+    } else {
+      merged.push({ role: msg.role, content: msg.content });
+    }
+  }
+
+  // Anthropic and Gemini require the first message to have role: 'user'
+  while (merged.length > 0 && merged[0].role === 'assistant') {
+    merged.shift();
+  }
+
+  if (merged.length === 0 && cleanCurrent) {
+    merged.push({ role: 'user', content: cleanCurrent });
+  }
+
+  return merged;
+}
+
+/**
+ * Execute a live request to the specified AI provider with fallback support
  */
 async function callProviderLLM(
-  messages: Array<{ role: string; content: string }>,
+  messages: NormalizedMessage[],
   apiKey: string,
   systemPrompt?: string,
-  temperature = 0.4,
+  temperature = 0.5,
   jsonMode = false,
   timeoutMs = 15000
 ): Promise<{ text: string; error?: string }> {
@@ -57,15 +113,12 @@ async function callProviderLLM(
   const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
+    // 1. Anthropic Claude
     if (provider.type === 'anthropic') {
-      const anthropicMessages = messages
-        .filter(m => m.role !== 'system')
-        .map(m => ({
-          role: m.role === 'assistant' ? 'assistant' : 'user',
-          content: m.content,
-        }));
-
-      const sys = systemPrompt || messages.find(m => m.role === 'system')?.content;
+      const anthropicMessages = messages.map(m => ({
+        role: m.role,
+        content: m.content,
+      }));
 
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -78,7 +131,7 @@ async function callProviderLLM(
           model: provider.model,
           max_tokens: 1024,
           temperature,
-          ...(sys ? { system: sys } : {}),
+          ...(systemPrompt ? { system: systemPrompt } : {}),
           messages: anthropicMessages.length > 0 ? anthropicMessages : [{ role: 'user', content: 'Hello' }],
         }),
         signal: controller.signal,
@@ -100,6 +153,88 @@ async function callProviderLLM(
       return { text: content };
     }
 
+    // 2. Google Gemini (Supports Native Generative API and OpenAI-compatible endpoint)
+    if (provider.type === 'gemini') {
+      // Try Native Gemini REST Endpoint first
+      const geminiContents = messages.map(m => ({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }],
+      }));
+
+      const geminiPayload: any = {
+        contents: geminiContents,
+        generationConfig: {
+          temperature,
+          maxOutputTokens: 1024,
+        },
+      };
+
+      if (systemPrompt) {
+        geminiPayload.systemInstruction = {
+          parts: [{ text: systemPrompt }],
+        };
+      }
+
+      if (jsonMode) {
+        geminiPayload.generationConfig.responseMimeType = 'application/json';
+      }
+
+      try {
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        const res = await fetch(geminiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(geminiPayload),
+          signal: controller.signal,
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+          if (text) {
+            clearTimeout(timer);
+            return { text };
+          }
+        }
+      } catch (geminiErr) {
+        console.warn('Native Gemini call failed, attempting fallback endpoint:', geminiErr);
+      }
+
+      // Fallback: Gemini 2.0 Flash or OpenAI compatibility layer
+      try {
+        const geminiOpenAIUrl = `https://generativelanguage.googleapis.com/v1beta/openai/chat/completions`;
+        const formattedMessages = [
+          ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
+          ...messages,
+        ];
+
+        const res2 = await fetch(geminiOpenAIUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            model: 'gemini-1.5-flash',
+            messages: formattedMessages,
+            temperature,
+          }),
+          signal: controller.signal,
+        });
+
+        clearTimeout(timer);
+        if (res2.ok) {
+          const data2 = await res2.json();
+          const content2 = data2?.choices?.[0]?.message?.content || '';
+          if (content2) return { text: content2 };
+        }
+      } catch (e) {}
+
+      clearTimeout(timer);
+      return { text: '', error: 'Google Gemini request failed across native and compatibility endpoints.' };
+    }
+
+    // 3. Groq, OpenAI, OpenRouter
     if (provider.type === 'groq' || provider.type === 'openai' || provider.type === 'openrouter') {
       const endpoint =
         provider.type === 'groq'
@@ -123,12 +258,19 @@ async function callProviderLLM(
         bodyPayload.response_format = { type: 'json_object' };
       }
 
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      };
+
+      if (provider.type === 'openrouter') {
+        headers['HTTP-Referer'] = 'https://smriticare.org';
+        headers['X-Title'] = 'SmritiCare';
+      }
+
       const res = await fetch(endpoint, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
-        },
+        headers,
         body: JSON.stringify(bodyPayload),
         signal: controller.signal,
       });
@@ -149,44 +291,12 @@ async function callProviderLLM(
       return { text: content };
     }
 
-    if (provider.type === 'gemini') {
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/openai/chat/completions`;
-      const formattedMessages = [
-        ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
-        ...messages,
-      ];
+    // 4. Default Gateway / OmniRoute Proxy
+    const formattedMessages = [
+      ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
+      ...messages,
+    ];
 
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model: provider.model,
-          messages: formattedMessages,
-          temperature,
-        }),
-        signal: controller.signal,
-      });
-
-      clearTimeout(timer);
-
-      if (!res.ok) {
-        let errText = `HTTP ${res.status}`;
-        try {
-          const errJson = await res.json();
-          errText = errJson.error?.message || errText;
-        } catch {}
-        return { text: '', error: errText };
-      }
-
-      const data = await res.json();
-      const content = data?.choices?.[0]?.message?.content || '';
-      return { text: content };
-    }
-
-    // Default Gateway / OmniRoute Proxy
     const res = await fetch(OMNIROUTE_API_URL, {
       method: 'POST',
       headers: {
@@ -195,10 +305,7 @@ async function callProviderLLM(
       },
       body: JSON.stringify({
         model: provider.model,
-        messages: [
-          ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
-          ...messages,
-        ],
+        messages: formattedMessages,
         temperature,
         ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),
       }),
@@ -221,7 +328,7 @@ async function callProviderLLM(
 }
 
 /**
- * Universal Unified AI Generator with Multi-Provider Support & Clinical Fallbacks
+ * Universal Unified AI Generator with Multi-Provider Support
  */
 async function generateAIContent({
   messages,
@@ -230,13 +337,13 @@ async function generateAIContent({
   temperature = 0.5,
   jsonMode = false,
 }: {
-  messages: Array<{ role: string; content: string }>;
+  messages: NormalizedMessage[];
   systemPrompt?: string;
   apiKey?: string;
   temperature?: number;
   jsonMode?: boolean;
 }): Promise<string> {
-  const activeKey = apiKey || OMNIROUTE_API_KEY || process.env.ANTHROPIC_API_KEY || process.env.OPENAI_API_KEY;
+  const activeKey = apiKey || OMNIROUTE_API_KEY || process.env.ANTHROPIC_API_KEY || process.env.OPENAI_API_KEY || process.env.GEMINI_API_KEY;
 
   if (activeKey && activeKey.trim().length > 8) {
     const result = await callProviderLLM(messages, activeKey.trim(), systemPrompt, temperature, jsonMode);
@@ -247,6 +354,343 @@ async function generateAIContent({
   }
 
   return '';
+}
+
+/**
+ * Contextual, Empathetic Rule-Based Offline Conversational Engine
+ * Guarantees dynamic, ChatGPT-like conversational variety in Hindi and English.
+ */
+function generateContextualFallback(
+  message: string,
+  lang: 'Hindi' | 'English',
+  patientName: string,
+  medList: string
+): string {
+  const lower = message.toLowerCase().trim();
+
+  if (lang === 'Hindi') {
+    // 1. Casual Greetings
+    if (
+      lower === 'hi' ||
+      lower === 'hello' ||
+      lower === 'hey' ||
+      lower.startsWith('hlo') ||
+      lower.includes('नमस्ते') ||
+      lower.includes('प्रणाम') ||
+      lower.includes('राम राम')
+    ) {
+      return `नमस्ते ${patientName} जी! आपसे बात करके बहुत प्रसन्नता हुई। आप अभी कैसा महसूस कर रहे हैं? आज का दिन आपका कैसा बीत रहा है?`;
+    }
+
+    // 2. Expressions of Fatigue / Sleepiness
+    if (
+      lower.includes('tired') ||
+      lower.includes('थक') ||
+      lower.includes('थकान') ||
+      lower.includes('neend') ||
+      lower.includes('नींद') ||
+      lower.includes('कमज़ोर') ||
+      lower.includes('exhausted')
+    ) {
+      return `मैं आपकी बात समझ सकता हूँ ${patientName} जी। थकान महसूस होना बिल्कुल स्वाभाविक है। कृपया एक आरामदायक कुर्सी पर बैठें, थोड़ा गुनगुना पानी पिएं और थोड़ी देर आंखें बंद करके विश्राम करें। क्या मैं आपकी कोई और मदद करूँ?`;
+    }
+
+    // 3. User checking presence / "I'm here"
+    if (
+      lower.includes('im here') ||
+      lower.includes('i am here') ||
+      lower.includes('यहाँ हूँ') ||
+      lower.includes('सुन रहे हो') ||
+      lower.includes('कहाँ हो')
+    ) {
+      return `मैं हर समय यहीं आपके साथ हूँ ${patientName} जी! आपका यहाँ होना बहुत अच्छा लगा। बताइए, आज आप मुझसे क्या साझा करना चाहते हैं?`;
+    }
+
+    // 4. Sadness, Loneliness, Low mood
+    if (
+      lower.includes('sad') ||
+      lower.includes('lonely') ||
+      lower.includes('उदासी') ||
+      lower.includes('उदास') ||
+      lower.includes('अकेला') ||
+      lower.includes('रो') ||
+      lower.includes('परेशान')
+    ) {
+      return `मैं हर कदम पर आपके साथ हूँ ${patientName} जी। आप बिल्कुल अकेले नहीं हैं। आपका परिवार और हम सब आपसे बहुत स्नेह करते हैं। एक गहरी शांत सांस लें। क्या आप मुझसे कोई बात करना चाहते हैं या कोई सुखद पारिवारिक याद साझा करें?`;
+    }
+
+    // 5. Memory lapse / Confusion / Forgetfulness
+    if (
+      lower.includes('भूल') ||
+      lower.includes('forget') ||
+      lower.includes('confused') ||
+      lower.includes('भ्रम') ||
+      lower.includes('खो गया') ||
+      lower.includes('याद नहीं')
+    ) {
+      return `बिल्कुल चिंता न करें ${patientName} जी। कभी-कभी थोड़ा भूलना या भ्रमित होना स्वाभाविक है। थोड़ा पानी पिएं और शांत रहें। आपकी हर दिनचर्या और यादें सुरक्षित हैं। आप किस बारे में सोच रहे थे?`;
+    }
+
+    // 6. Anxiety / Fear / Worry
+    if (
+      lower.includes('डर') ||
+      lower.includes('चिंता') ||
+      lower.includes('घबराहट') ||
+      lower.includes('tension') ||
+      lower.includes('scared') ||
+      lower.includes('anxious')
+    ) {
+      return `कृपया एक गहरी और शांत सांस लें ${patientName} जी। आप एक सुरक्षित और शांत जगह पर हैं। सब कुछ ठीक हो जाएगा। मैं आपके साथ हूँ, घबराने की कोई बात नहीं है।`;
+    }
+
+    // 7. Happiness / Good mood
+    if (
+      lower.includes('happy') ||
+      lower.includes('खुश') ||
+      lower.includes('बढ़िया') ||
+      lower.includes('अच्छा') ||
+      lower.includes('मज़ा')
+    ) {
+      return `यह जानकर मेरा दिल खुश हो गया ${patientName} जी! आपका मुस्कुराना और खुश रहना सबसे बड़ी बात है। आज ऐसा क्या हुआ जिसने आपका दिन इतना सुखद बना दिया?`;
+    }
+
+    // 8. Identity & capabilities
+    if (
+      lower.includes('कौन हो') ||
+      lower.includes('who are you') ||
+      lower.includes('क्या कर सकते') ||
+      lower.includes('मदद')
+    ) {
+      return `मैं स्मृति साथी हूँ, आपका अपना संवेदनशील AI साथी। मैं आपकी दैनिक दवाइयों का समय याद दिलाने, आसान दिमागी खेलों, पारिवारिक एल्बम देखने, लैब रिपोर्ट समझने और आपके साथ आत्मीय बातचीत करने के लिए हमेशा तत्पर हूँ।`;
+    }
+
+    // 9. How are you
+    if (
+      lower.includes('how are you') ||
+      lower.includes('कैसे हो') ||
+      lower.includes('कैसी हो') ||
+      lower.includes('क्या हाल')
+    ) {
+      return `मैं बहुत अच्छा हूँ, पूछने के लिए बहुत-बहुत धन्यवाद ${patientName} जी! आपका साथ देना ही मेरी सबसे बड़ी खुशी है। आपकी तबीयत और दिनचर्या कैसी चल रही है?`;
+    }
+
+    // 10. Gratitude / Thanks
+    if (
+      lower.includes('thank') ||
+      lower.includes('धन्यवाद') ||
+      lower.includes('शुक्रिया') ||
+      lower.includes('आभार')
+    ) {
+      return `आपका बहुत-बहुत स्वागत है ${patientName} जी! आपकी सहायता करना मेरे लिए सौभाग्य की बात है। जब भी आपको बात करनी हो, मैं हमेशा यहीं उपस्थित हूँ।`;
+    }
+
+    // 11. Medicines
+    if (
+      lower.includes('dawa') ||
+      lower.includes('medicine') ||
+      lower.includes('दवा') ||
+      lower.includes('गोली') ||
+      lower.includes('रात') ||
+      lower.includes('dinner')
+    ) {
+      return `नमस्ते ${patientName} जी! आपकी नियमित निर्धारित दवाइयां हैं: ${medList}। भोजन के बाद पानी के साथ इसे समय पर अवश्य लें।`;
+    }
+
+    // 12. Brain Games
+    if (
+      lower.includes('game') ||
+      lower.includes('khel') ||
+      lower.includes('दिमाग') ||
+      lower.includes('पहेली') ||
+      lower.includes('खेल')
+    ) {
+      return `आज का दिमागी खेल बहुत ही रोचक है! आप 'Pattern Recall' या 'Word Pairs' खेलकर अपनी एकाग्रता और याददाश्त को मजबूत कर सकते हैं।`;
+    }
+
+    // 13. Doctors
+    if (
+      lower.includes('doctor') ||
+      lower.includes('डॉक्टर') ||
+      lower.includes('consult') ||
+      lower.includes('अस्पताल') ||
+      lower.includes('अपॉइंटमेंट')
+    ) {
+      return `आप 'Doctor Consult' टैब में जाकर हमारे न्यूरोलॉजिस्ट और फिजिशियन से वीडियो या क्लिनिक अपॉइंटमेंट आसानी से बुक कर सकते हैं।`;
+    }
+
+    // 14. Family & Memories
+    if (
+      lower.includes('त्योहार') ||
+      lower.includes('उत्सव') ||
+      lower.includes('परिवार') ||
+      lower.includes('फोटो') ||
+      lower.includes('एल्बम')
+    ) {
+      return `पारिवारिक यादें मन को ताजगी और सुकून देती हैं! आपकी 'स्मृति एल्बम' में परिवार के साथ मनाए गए उत्सवों की सुंदर तस्वीरें मौजूद हैं।`;
+    }
+
+    // 15. Open-ended conversational default
+    return `यह साझा करने के लिए धन्यवाद ${patientName} जी! मैं आपकी बात बहुत ध्यान से सुन रहा हूँ। क्या आप इसके बारे में थोड़ा और बताएंगे या क्या मैं आपकी दिनचर्या में किसी चीज़ में मदद करूँ?`;
+  }
+
+  // English Dialogue Branches
+  // 1. Casual Greetings
+  if (
+    lower === 'hi' ||
+    lower === 'hello' ||
+    lower === 'hey' ||
+    lower.startsWith('hlo') ||
+    lower.includes('good morning') ||
+    lower.includes('good evening') ||
+    lower.includes('good afternoon')
+  ) {
+    return `Hello ${patientName}! It is so wonderful to connect with you. How are you feeling today? Tell me how your day has been going!`;
+  }
+
+  // 2. Fatigue / Sleepiness / Tired
+  if (
+    lower.includes('tired') ||
+    lower.includes('so tired') ||
+    lower.includes('sleepy') ||
+    lower.includes('exhausted') ||
+    lower.includes('weak') ||
+    lower.includes('rest')
+  ) {
+    return `I hear you, ${patientName}. Feeling tired is completely natural. Please sit back in a comfortable chair, take a slow sip of water, and rest your eyes for a bit. Would you like a quiet moment, or is there anything I can help you with before you rest?`;
+  }
+
+  // 3. User checking presence / "I'm here"
+  if (
+    lower.includes('im here') ||
+    lower.includes('i am here') ||
+    lower.includes('here') ||
+    lower.includes('are you there') ||
+    lower.includes('listening')
+  ) {
+    return `I am right here with you, ${patientName}! It brings me so much joy to have you here. I am always listening and ready to chat. What is on your mind today?`;
+  }
+
+  // 4. Sadness / Loneliness / Low Mood
+  if (
+    lower.includes('sad') ||
+    lower.includes('lonely') ||
+    lower.includes('alone') ||
+    lower.includes('crying') ||
+    lower.includes('upset') ||
+    lower.includes('down')
+  ) {
+    return `I am right by your side, ${patientName}. You are never alone. It is completely okay to feel emotional sometimes. Please take a gentle, deep breath. Would you like to talk about what is troubling you, or reminisce about a fond family memory?`;
+  }
+
+  // 5. Memory lapse / Forgetfulness / Confusion
+  if (
+    lower.includes('forget') ||
+    lower.includes('forgot') ||
+    lower.includes('confused') ||
+    lower.includes('lost') ||
+    lower.includes('cant remember')
+  ) {
+    return `Please do not worry at all, ${patientName}. It is completely normal to forget things or feel a little confused occasionally. Take a slow, calm breath and have some water. I am here to help you remember everything. What were you thinking about?`;
+  }
+
+  // 6. Anxiety / Fear / Stress
+  if (
+    lower.includes('worried') ||
+    lower.includes('scared') ||
+    lower.includes('fear') ||
+    lower.includes('anxious') ||
+    lower.includes('stress') ||
+    lower.includes('nervous')
+  ) {
+    return `Take a slow, deep breath in... and gently breathe out, ${patientName}. You are in a safe and peaceful space. Everything is going to be alright. I am right here with you.`;
+  }
+
+  // 7. Happiness / Good Mood
+  if (
+    lower.includes('happy') ||
+    lower.includes('good') ||
+    lower.includes('great') ||
+    lower.includes('fine') ||
+    lower.includes('awesome') ||
+    lower.includes('wonderful')
+  ) {
+    return `That brings such warmth to my heart, ${patientName}! I am thrilled that you are feeling good today. What is something pleasant that happened today?`;
+  }
+
+  // 8. Identity & Capabilities
+  if (
+    lower.includes('who are you') ||
+    lower.includes('what can you do') ||
+    lower.includes('help me') ||
+    lower.includes('your purpose')
+  ) {
+    return `I am Smriti Sathi, your dedicated AI care companion! I can help remind you of your medications, guide you through gentle cognitive games, explain lab reports, explore family photo albums, or simply be here to chat and keep you company.`;
+  }
+
+  // 9. How are you
+  if (
+    lower.includes('how are you') ||
+    lower.includes('how r u') ||
+    lower.includes('how do you do')
+  ) {
+    return `I am doing wonderfully, thank you so much for asking, ${patientName}! Supporting you and keeping you company is my greatest happiness. How are you feeling right now?`;
+  }
+
+  // 10. Gratitude / Thanks
+  if (
+    lower.includes('thank') ||
+    lower.includes('thanks') ||
+    lower.includes('grateful') ||
+    lower.includes('appreciate')
+  ) {
+    return `You are most welcome, ${patientName}! It is always my absolute pleasure to be here for you. Whenever you need anything or just want to chat, I am only a message away.`;
+  }
+
+  // 11. Medicines
+  if (
+    lower.includes('medicine') ||
+    lower.includes('pill') ||
+    lower.includes('dose') ||
+    lower.includes('tonight') ||
+    lower.includes('dinner')
+  ) {
+    return `Hello ${patientName}! Your current prescribed medications are: ${medList}. Please take your scheduled dose with water after dinner.`;
+  }
+
+  // 12. Brain Games
+  if (
+    lower.includes('game') ||
+    lower.includes('brain') ||
+    lower.includes('memory') ||
+    lower.includes('puzzle') ||
+    lower.includes('exercise')
+  ) {
+    return `Playing your daily cognitive games is a wonderful way to keep your memory sharp and active. How about trying the Pattern Recall game today?`;
+  }
+
+  // 13. Doctors
+  if (
+    lower.includes('doctor') ||
+    lower.includes('appointment') ||
+    lower.includes('hospital') ||
+    lower.includes('clinic')
+  ) {
+    return `You can easily schedule a consultation with our verified doctors in the Doctor Consult section for routine checkups or teleconsultations.`;
+  }
+
+  // 14. Family & Memories
+  if (
+    lower.includes('family') ||
+    lower.includes('photo') ||
+    lower.includes('album') ||
+    lower.includes('festival') ||
+    lower.includes('celebration')
+  ) {
+    return `Family memories bring so much joy and warmth! You can explore cherished family moments and festivals anytime in your Family Album.`;
+  }
+
+  // 15. Open-ended conversational continuation
+  return `Thank you for sharing that with me, ${patientName}. I'm listening closely to you. Could you tell me a little more about that, or is there something specific I can help you with today?`;
 }
 
 // 0. Live API Key Verification Endpoint
@@ -268,7 +712,7 @@ router.post('/verify-key', async (req: AuthenticatedRequest, res: Response): Pro
   const provider = detectProvider(cleanKey);
   const startTime = Date.now();
 
-  const testMessages = [{ role: 'user', content: 'Say "READY" in one word.' }];
+  const testMessages: NormalizedMessage[] = [{ role: 'user', content: 'Say "READY" in one word.' }];
   const testCall = await callProviderLLM(testMessages, cleanKey, undefined, 0.1, false, 8000);
   const latencyMs = Date.now() - startTime;
 
@@ -307,8 +751,8 @@ router.post('/chat', optionalAuth, async (req: AuthenticatedRequest, res: Respon
     }
 
     // Retrieve user context for personalized, empathetic memory grounding
-    let patientName = 'Bipin';
-    let userCondition = 'Mild Cognitive Impairment';
+    let patientName = 'Friend';
+    let userCondition = 'Cognitive Wellness & Daily Routine';
     let medList = 'Donepezil 5mg, Telmisartan 40mg';
 
     try {
@@ -327,71 +771,34 @@ router.post('/chat', optionalAuth, async (req: AuthenticatedRequest, res: Respon
 
     const lang = language === 'hi' ? 'Hindi' : 'English';
 
-    const systemPrompt = `You are "Smriti Sathi" (स्मृति साथी), a warm, compassionate, culturally attuned dementia care companion and cognitive wellness assistant for elderly users in India.
-Current Patient: ${patientName}.
+    const systemPrompt = `You are "Smriti Sathi" (स्मृति साथी), an intelligent, warm, empathetic, and culturally attuned conversational companion for seniors and dementia care in India.
+Current User Name: ${patientName}.
 Language of interaction: ${lang}.
-Condition context: ${userCondition}.
+Health & Routine Context: ${userCondition}.
 Active Medications: ${medList}.
 
-Guiding Principles:
-1. Speak in a gentle, respectful, soothing tone (like a caring family member or elder companion).
-2. Keep answers concise, direct, easy to understand, and comforting (2 to 4 sentences).
-3. If speaking in Hindi, use respectful honorifics (e.g., "जी", "आप", "नमस्ते", "शुभकामनाएं").
-4. Never offer formal emergency medical diagnosis.
-5. If the user mentions feeling confused, lost, or having forgotten something, reassure them warmly and gently guide them.
-6. Provide helpful daily routine memory prompts.`;
+Key Personality & Guidelines:
+1. Act like a true conversational AI companion (like ChatGPT / Claude / Gemini) — give thoughtful, natural, helpful, and caring responses tailored directly to what the user says.
+2. When the user greets you (e.g. "hi", "hello", "hloooooo", "नमस्ते"), greet them warmly by name, ask how they are feeling, and invite them to chat.
+3. When the user shares feelings (e.g. "i'm so tired", "feeling lonely", "stressed", "happy"), empathize deeply, validate their emotions with warmth and reassurance, and offer comforting, gentle support.
+4. When the user asks questions about their daily routine, health, medicine, diet, memories, family, or general topics, provide clear, simple, and reassuring guidance.
+5. If responding in Hindi, use warm, respectful language (e.g., "जी", "आप", "नमस्ते").
+6. Keep replies conversational, concise, and comfortable to read (around 2 to 4 sentences).
+7. Do not repeat a fixed greeting if the user is in the middle of a conversation. Respond directly to their latest thought.`;
 
-    const formattedHistory = Array.isArray(conversationHistory)
-      ? conversationHistory.slice(-6).map((h: any) => ({
-          role: h.sender === 'user' ? 'user' : 'assistant',
-          content: h.text || h.content || '',
-        }))
-      : [];
-
-    const messages = [
-      ...formattedHistory,
-      { role: 'user', content: message },
-    ];
+    // Normalize and sanitize message array to strictly enforce role alternation
+    const sanitizedMessages = sanitizeConversationMessages(conversationHistory, message);
 
     let aiReply = await generateAIContent({
-      messages,
+      messages: sanitizedMessages,
       systemPrompt,
       apiKey: reqApiKey,
       temperature: 0.6,
     });
 
-    // Clinical rule-based fallback if live AI is unavailable
+    // Clinical rule-based contextual fallback if live AI is unavailable
     if (!aiReply) {
-      const lower = message.toLowerCase();
-      if (lang === 'Hindi') {
-        if (lower.includes('dawa') || lower.includes('medicine') || lower.includes('दवा') || lower.includes('रात') || lower.includes('dinner')) {
-          aiReply = `नमस्ते ${patientName} जी! आपकी नियमित निर्धारित दवाइयां हैं: ${medList}। रात के भोजन के बाद पानी के साथ इसे समय पर अवश्य लें।`;
-        } else if (lower.includes('game') || lower.includes('khel') || lower.includes('दिमाग') || lower.includes('याद')) {
-          aiReply = `आज का दिमागी खेल बहुत ही रोचक है! आप 'Pattern Recall' या 'Word Pairs' खेलकर अपनी एकाग्रता को मजबूत कर सकते हैं।`;
-        } else if (lower.includes('doctor') || lower.includes('डॉक्टर') || lower.includes('consult') || lower.includes('अपॉइंटमेंट')) {
-          aiReply = `आप 'Doctor Consult' टैब में जाकर डॉ. बरुआ या डॉ. सरमा से वीडियो या क्लिनिक अपॉइंटमेंट आसानी से ले सकते हैं।`;
-        } else if (lower.includes('भूल') || lower.includes('confused') || lower.includes('परेशान') || lower.includes('घबराहट')) {
-          aiReply = `बिल्कुल चिंता न करें ${patientName} जी। कभी-कभी थोड़ा भूलना या थकान महसूस होना स्वाभाविक है। थोड़ा आराम करें और एक घूंट पानी पिएं। मैं हर कदम पर आपके साथ हूँ।`;
-        } else if (lower.includes('त्योहार') || lower.includes('उत्सव') || lower.includes('परिवार') || lower.includes('फोटो')) {
-          aiReply = `पारिवारिक यादें मन को ताजगी देती हैं! आपकी 'स्मृति एल्बम' में परिवार के साथ मनाए गए उत्सवों की सुंदर तस्वीरें मौजूद हैं।`;
-        } else {
-          aiReply = `नमस्ते ${patientName} जी! मैं स्मृति साथी हूँ। मैं आपकी दिनचर्या, दवाइयों की याद और खुशहाल रहने में मदद के लिए यहाँ हूँ। आज आपका दिन कैसा बीत रहा है?`;
-        }
-      } else {
-        if (lower.includes('medicine') || lower.includes('pill') || lower.includes('dose') || lower.includes('tonight') || lower.includes('dinner')) {
-          aiReply = `Hello ${patientName}! Your current prescribed medications are: ${medList}. Please take your scheduled dose with water after dinner.`;
-        } else if (lower.includes('game') || lower.includes('brain') || lower.includes('memory') || lower.includes('exercise')) {
-          aiReply = `Playing your daily cognitive games is a wonderful way to keep your memory sharp. How about trying the Pattern Recall game today?`;
-        } else if (lower.includes('doctor') || lower.includes('appointment') || lower.includes('hospital')) {
-          aiReply = `You can easily schedule a consultation with our verified neurologists in the Doctor Consult section.`;
-        } else if (lower.includes('forget') || lower.includes('confused') || lower.includes('lost') || lower.includes('worried')) {
-          aiReply = `Please do not worry, ${patientName}. It is completely normal to feel a bit tired or forgetful occasionally. Take a deep breath, have some water, and relax. I am right here with you.`;
-        } else if (lower.includes('family') || lower.includes('photo') || lower.includes('album') || lower.includes('festival')) {
-          aiReply = `Family memories bring so much joy! You can explore cherished family moments and festivals anytime in your Family Album.`;
-        } else {
-          aiReply = `Hello ${patientName}! I am Smriti Sathi, your daily companion. How are you feeling today? I am here to help you with your routine, medicines, or simply to share a pleasant conversation.`;
-        }
-      }
+      aiReply = generateContextualFallback(message, lang, patientName, medList);
     }
 
     res.json({
