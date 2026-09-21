@@ -233,12 +233,13 @@ export const App: React.FC = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-bold text-sky-200">
+              <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-bold text-sky-200">
                 <span className="text-[#c084fc] font-extrabold">SmritiCare (स्मृति केयर)</span>
                 <span>•</span>
                 <span>Smart India Hackathon SIH 2026</span>
                 <span>•</span>
-                <span>Vikas, Aditya, Priyanshu</span>
+                <span className="text-purple-300 font-extrabold">Team StarX</span>
+                <span>(Vikas Kumar, Priyanshu Jain, Aditya Raghav, Ananya Jain, Arpit Singh, Prabal Chauhan)</span>
               </div>
 
               <p className="text-[11px] text-sky-200/50 max-w-2xl mx-auto leading-relaxed">

@@ -231,7 +231,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
             <div className="flex items-center gap-2 font-mono text-xs text-sky-200">
               <span>Since</span>
               <span className="text-[#c084fc] font-bold">⚡ 2026</span>
-              <span>• Vikas, Aditya, Priyanshu</span>
+              <span>• Team StarX</span>
             </div>
           </div>
 
@@ -504,8 +504,32 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
           </div>
 
           <p className="text-xs sm:text-sm text-sky-100/80 leading-relaxed">
-            SmritiCare was engineered by <strong className="text-purple-300">Team StarX</strong> to bridge digital geriatric care and community health workers (ASHAs) across Assam with bilingual accessibility, neuro-cognitive exercises, and emergency safety networks.
+            SmritiCare was engineered by <strong className="text-purple-300">Team StarX</strong> to bridge digital geriatric care and community health workers (ASHAs) across Assam with multilingual accessibility, neuro-cognitive exercises, and emergency safety networks.
           </p>
+
+          {/* Team StarX Members Showcase */}
+          <div className="pt-2">
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <span className="px-3 py-1 rounded-xl bg-purple-500/20 text-purple-200 text-xs font-black border border-purple-400/40 shadow-xs">
+                👑 Vikas Kumar (Leader)
+              </span>
+              <span className="px-3 py-1 rounded-xl bg-white/10 text-sky-100 text-xs font-bold border border-white/15">
+                Priyanshu Jain
+              </span>
+              <span className="px-3 py-1 rounded-xl bg-white/10 text-sky-100 text-xs font-bold border border-white/15">
+                Aditya Raghav
+              </span>
+              <span className="px-3 py-1 rounded-xl bg-white/10 text-sky-100 text-xs font-bold border border-white/15">
+                Ananya Jain
+              </span>
+              <span className="px-3 py-1 rounded-xl bg-white/10 text-sky-100 text-xs font-bold border border-white/15">
+                Arpit Singh
+              </span>
+              <span className="px-3 py-1 rounded-xl bg-white/10 text-sky-100 text-xs font-bold border border-white/15">
+                Prabal Chauhan
+              </span>
+            </div>
+          </div>
         </div>
       </section>
 
