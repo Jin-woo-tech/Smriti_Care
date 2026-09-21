@@ -27,7 +27,7 @@ export async function verifyApiKey(apiKey?: string): Promise<ApiKeyVerificationR
   }
 
   // Quick sanity check for standard key token lengths
-  if (cleanKey.length < 10) {
+  if (cleanKey.length < 8) {
     return {
       valid: false,
       message: 'Invalid API Key Length',
@@ -118,7 +118,7 @@ export async function analyzeMedicinePhoto(
   }
 
   // Simulated High-Accuracy Local Fallback
-  await new Promise(resolve => setTimeout(resolve, 800));
+  await new Promise(resolve => setTimeout(resolve, 600));
 
   const bpReminder = scheduledReminders.find(r =>
     r.title.toLowerCase().includes('telmisartan') || r.title.toLowerCase().includes('pressure')
@@ -196,7 +196,7 @@ export async function analyzeLabReport(
   }
 
   // Simulated Local Clinical Diagnostic Summary
-  await new Promise(resolve => setTimeout(resolve, 800));
+  await new Promise(resolve => setTimeout(resolve, 600));
 
   return {
     id: `lab-${Date.now()}`,
@@ -252,7 +252,7 @@ export async function analyzeLabReport(
 
 /**
  * Conversational Sathi Assistant responses in English and Hindi
- * Uses secure backend AI proxy with dynamic history and intelligent offline fallbacks.
+ * Uses secure backend AI proxy with dynamic multi-turn history and intelligent contextual fallbacks.
  */
 export async function getSathiAIResponse(
   userQuery: string,
@@ -270,39 +270,145 @@ export async function getSathiAIResponse(
   }
 
   // Local Intelligent Engine (Instant Offline Bilingual Fallback)
-  await new Promise(resolve => setTimeout(resolve, 400));
+  await new Promise(resolve => setTimeout(resolve, 300));
 
-  const queryLower = userQuery.toLowerCase();
+  const queryLower = userQuery.toLowerCase().trim();
 
   if (language === 'hi') {
-    if (queryLower.includes('दवा') || queryLower.includes('medicine') || queryLower.includes('रात') || queryLower.includes('dinner')) {
+    if (
+      queryLower === 'hi' ||
+      queryLower === 'hello' ||
+      queryLower === 'hey' ||
+      queryLower.startsWith('hlo') ||
+      queryLower.includes('नमस्ते') ||
+      queryLower.includes('प्रणाम')
+    ) {
+      return 'नमस्ते! आपसे बात करके बहुत खुशी हुई। आप अभी कैसा महसूस कर रहे हैं? आज का दिन आपका कैसा बीत रहा है?';
+    }
+    if (
+      queryLower.includes('tired') ||
+      queryLower.includes('थक') ||
+      queryLower.includes('neend') ||
+      queryLower.includes('नींद') ||
+      queryLower.includes('कमज़ोर')
+    ) {
+      return 'मैं आपकी बात समझ सकता हूँ। थकान महसूस होना बिल्कुल स्वाभाविक है। कृपया एक आरामदायक कुर्सी पर बैठें, थोड़ा गुनगुना पानी पिएं और थोड़ी देर विश्राम करें। क्या मैं आपकी कोई और मदद करूँ?';
+    }
+    if (
+      queryLower.includes('im here') ||
+      queryLower.includes('i am here') ||
+      queryLower.includes('यहाँ हूँ') ||
+      queryLower.includes('सुन रहे हो')
+    ) {
+      return 'मैं हर समय यहीं आपके साथ हूँ! बताइए, आज आप मुझसे क्या साझा करना चाहते हैं?';
+    }
+    if (
+      queryLower.includes('sad') ||
+      queryLower.includes('उदास') ||
+      queryLower.includes('अकेला') ||
+      queryLower.includes('परेशान')
+    ) {
+      return 'मैं हर पल आपके साथ हूँ। आप बिल्कुल अकेले नहीं हैं। एक गहरी सांस लें। क्या आप मुझसे अपनी कोई बात साझा करना चाहेंगे?';
+    }
+    if (
+      queryLower.includes('दवा') ||
+      queryLower.includes('medicine') ||
+      queryLower.includes('रात') ||
+      queryLower.includes('dinner')
+    ) {
       return 'नमस्ते! आपकी नियमित निर्धारित दवाइयां समय पर लेना बहुत महत्वपूर्ण है। रात के भोजन के बाद ताजे पानी के साथ अपनी निर्धारित गोली लें।';
     }
-    if (queryLower.includes('त्योहार') || queryLower.includes('उत्सव') || queryLower.includes('खुशी')) {
-      return 'पारिवारिक त्योहार और उत्सव हमारे जीवन में खुशियां भरते हैं। आपकी स्मृति एल्बम में परिवार के साथ मनाए गए उत्सवों की सुंदर तस्वीरें मौजूद हैं!';
+    if (
+      queryLower.includes('त्योहार') ||
+      queryLower.includes('उत्सव') ||
+      queryLower.includes('परिवार') ||
+      queryLower.includes('photo')
+    ) {
+      return 'पारिवारिक यादें और उत्सव मन को बहुत ताजगी देते हैं! आपकी स्मृति एल्बम में परिवार के साथ मनाए गए उत्सवों की सुंदर तस्वीरें मौजूद हैं।';
     }
-    if (queryLower.includes('भूल') || queryLower.includes('confused') || queryLower.includes('परेशान') || queryLower.includes('याद')) {
-      return 'बिल्कुल चिंता न करें। कभी-कभी थोड़ा भूलना या थकान महसूस होना स्वाभाविक है। थोड़ा आराम करें और एक घूंट पानी पिएं। मैं हमेशा आपके साथ हूँ।';
+    if (
+      queryLower.includes('भूल') ||
+      queryLower.includes('confused') ||
+      queryLower.includes('याद')
+    ) {
+      return 'बिल्कुल चिंता न करें। कभी-कभी थोड़ा भूलना या थकान होना स्वाभाविक है। थोड़ा आराम करें और पानी पिएं। मैं हमेशा आपके साथ हूँ।';
     }
-    if (queryLower.includes('शुगर') || queryLower.includes('रिपोर्ट') || queryLower.includes('sugar') || queryLower.includes('blood')) {
-      return 'आपकी नवीनतम लैब रिपोर्ट के अनुसार आपका 3 महीने का HbA1c औसत 6.8% है, जो बहुत अच्छा नियंत्रित है। डॉक्टर ने नियमित टहलने और समय पर दवा लेने की सलाह दी है।';
+    if (
+      queryLower.includes('शुगर') ||
+      queryLower.includes('रिपोर्ट') ||
+      queryLower.includes('sugar') ||
+      queryLower.includes('blood')
+    ) {
+      return 'आपकी नवीनतम लैब रिपोर्ट के अनुसार आपका 3 महीने का HbA1c औसत 6.8% है, जो अच्छा नियंत्रित है। डॉक्टर ने नियमित टहलने और समय पर दवा लेने की सलाह दी है।';
     }
-    return 'नमस्ते! मैं स्मृति साथी हूँ। मैं आपकी दैनिक दवा अनुसूची, पारिवारिक यादों, आसान दिमागी खेलों और स्वास्थ्य संबंधी जानकारियों में मदद के लिए यहाँ हूँ। मैं आपकी क्या सहायता करूँ?';
+    return 'यह साझा करने के लिए धन्यवाद! मैं आपकी बात बहुत ध्यान से सुन रहा हूँ। क्या आप इसके बारे में थोड़ा और बताएंगे?';
   }
 
-  // English responses
-  if (queryLower.includes('medicine') || queryLower.includes('dinner') || queryLower.includes('night') || queryLower.includes('tonight')) {
+  // English fallback responses
+  if (
+    queryLower === 'hi' ||
+    queryLower === 'hello' ||
+    queryLower === 'hey' ||
+    queryLower.startsWith('hlo') ||
+    queryLower.includes('good morning') ||
+    queryLower.includes('good evening')
+  ) {
+    return 'Hello! It is so wonderful to connect with you. How are you feeling today? Tell me how your day has been going!';
+  }
+  if (
+    queryLower.includes('tired') ||
+    queryLower.includes('so tired') ||
+    queryLower.includes('sleepy') ||
+    queryLower.includes('exhausted')
+  ) {
+    return 'I hear you. Feeling tired is completely natural. Please sit back comfortably, take a slow sip of water, and rest your eyes for a bit. Would you like a quiet moment, or can I help you with anything?';
+  }
+  if (
+    queryLower.includes('im here') ||
+    queryLower.includes('i am here') ||
+    queryLower.includes('here') ||
+    queryLower.includes('are you there')
+  ) {
+    return 'I am right here with you! It is a pleasure to have you here. I am always listening and ready to chat. What is on your mind today?';
+  }
+  if (
+    queryLower.includes('sad') ||
+    queryLower.includes('lonely') ||
+    queryLower.includes('alone') ||
+    queryLower.includes('upset')
+  ) {
+    return 'I am right by your side. You are never alone. It is completely okay to feel emotional sometimes. Take a gentle, deep breath. Would you like to talk about what is on your mind?';
+  }
+  if (
+    queryLower.includes('medicine') ||
+    queryLower.includes('dinner') ||
+    queryLower.includes('night') ||
+    queryLower.includes('tonight')
+  ) {
     return 'Good evening! Please remember to take your scheduled evening medication after dinner with a glass of water. Staying consistent with your routine is key to healthy days.';
   }
-  if (queryLower.includes('festival') || queryLower.includes('celebration') || queryLower.includes('family')) {
-    return 'Family celebrations bring such warmth and vitality to life! In your Memory Album, there are beautiful photos of your family gatherings and festive celebrations to revisit anytime.';
+  if (
+    queryLower.includes('festival') ||
+    queryLower.includes('celebration') ||
+    queryLower.includes('family') ||
+    queryLower.includes('photo')
+  ) {
+    return 'Family celebrations bring such warmth to life! In your Memory Album, there are beautiful photos of your family gatherings and festive celebrations to revisit anytime.';
   }
-  if (queryLower.includes('forget') || queryLower.includes('confused') || queryLower.includes('lost')) {
-    return 'Please do not worry. It is completely normal to feel a bit tired or forgetful occasionally. Take a few deep breaths and have a sip of warm water. I am right here with you.';
+  if (
+    queryLower.includes('forget') ||
+    queryLower.includes('confused') ||
+    queryLower.includes('lost')
+  ) {
+    return 'Please do not worry at all. It is completely normal to feel a bit tired or forgetful occasionally. Take a few deep breaths and have a sip of warm water. I am right here with you.';
   }
-  if (queryLower.includes('sugar') || queryLower.includes('report') || queryLower.includes('blood')) {
-    return 'Your latest lab report shows your 3-month HbA1c average is 6.8%, which is well-managed for your age. Fasting blood sugar was 138 mg/dL. Your physician recommends continuing your morning walk and regular meals.';
+  if (
+    queryLower.includes('sugar') ||
+    queryLower.includes('report') ||
+    queryLower.includes('blood')
+  ) {
+    return 'Your latest lab report shows your 3-month HbA1c average is 6.8%, which is well-managed for seniors. Fasting blood sugar was 138 mg/dL. Your physician recommends continuing your morning walk and regular meals.';
   }
 
-  return 'Namaskar! I am Smriti Sathi. I am here to help you with your daily medication schedule, family memory reflections, gentle cognitive games, or health routine explanations. How can I assist you right now?';
+  return 'Thank you for sharing that with me. I am listening closely to your thoughts. Could you tell me a little more about that, or is there a specific way I can help you today?';
 }
