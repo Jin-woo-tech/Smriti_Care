@@ -1,7 +1,7 @@
 # 🧠 SmritiCare (স্মৃতি কেয়াৰ / स्मृति केयर)
 ### *AI-Powered Cognitive Care, Medication Safety & Frontline Geriatric Support Platform*
 > **Smart India Hackathon (SIH 2026)** | Project ID: **SIH-2026-SMRITI**  
-> **Developed by**: **Team StarX** | **Geographic Focus**: Titabor, Jorhat District, Assam, India
+> **Developed by**: **Team StarX** (Leader: **Vikas Kumar** | **Priyanshu Jain**, **Aditya Raghav**, **Ananya Jain**, **Arpit Singh**, **Prabal Chauhan**) | **Geographic Focus**: Titabor, Jorhat District, Assam, India
 
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -218,5 +218,13 @@ npm run preview
 ## 🏆 Project Credits
 
 - **Team**: **Team StarX**
+- **Team Leader**: **Vikas Kumar**
+- **Team Members**:
+  - 👑 **Vikas Kumar** (Team Leader)
+  - 🌟 **Priyanshu Jain**
+  - 🌟 **Aditya Raghav**
+  - 🌟 **Ananya Jain**
+  - 🌟 **Arpit Singh**
+  - 🌟 **Prabal Chauhan**
 - **Initiative**: Smart India Hackathon (SIH 2026)
-- **Community Partner**: Titabor Block Primary Healthcare Network, Jorhat, Assam
+- **Community & Clinical Partner**: Titabor Block Primary Healthcare Network, Jorhat District, Assam, India
