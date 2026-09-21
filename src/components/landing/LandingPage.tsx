@@ -231,7 +231,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
             <div className="flex items-center gap-2 font-mono text-xs text-sky-200">
               <span>Since</span>
               <span className="text-[#c084fc] font-bold">⚡ 2026</span>
-              <span>• Titabor, Assam</span>
+              <span>• Vikas, Aditya, Priyanshu</span>
             </div>
           </div>
 
