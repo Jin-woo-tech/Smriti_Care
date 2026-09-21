@@ -340,13 +340,30 @@ class ApiClient {
 
   // OmniRoute AI Gateway APIs
   public ai = {
-    chat: (message: string, language: Language = 'en', conversationHistory: any[] = []) =>
-      this.request<{ reply: string; language: string; disclaimer: string }>('/ai/chat', {
+    verifyKey: (apiKey?: string) =>
+      this.request<{
+        valid: boolean;
+        provider?: string;
+        model?: string;
+        latencyMs?: number;
+        message: string;
+        messageHi?: string;
+        errorDetail?: string;
+        isOfflineSafe?: boolean;
+      }>('/ai/verify-key', {
         method: 'POST',
-        body: JSON.stringify({ message, language, conversationHistory }),
+        body: JSON.stringify({ apiKey }),
+        headers: apiKey ? { 'x-api-key': apiKey } : {},
       }),
 
-    medicineOcr: (payload: { imageBase64?: string; ocrText?: string }) =>
+    chat: (message: string, language: Language = 'en', conversationHistory: any[] = [], apiKey?: string) =>
+      this.request<{ reply: string; language: string; disclaimer: string }>('/ai/chat', {
+        method: 'POST',
+        body: JSON.stringify({ message, language, conversationHistory, apiKey }),
+        headers: apiKey ? { 'x-api-key': apiKey } : {},
+      }),
+
+    medicineOcr: (payload: { imageBase64?: string; ocrText?: string }, apiKey?: string) =>
       this.request<{
         medication: {
           name: string;
@@ -363,10 +380,11 @@ class ApiClient {
         disclaimer: string;
       }>('/ai/medicine-ocr', {
         method: 'POST',
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, apiKey }),
+        headers: apiKey ? { 'x-api-key': apiKey } : {},
       }),
 
-    analyzeLab: (payload: { reportText: string; testName?: string }) =>
+    analyzeLab: (payload: { reportText: string; testName?: string }, apiKey?: string) =>
       this.request<{
         testName: string;
         summaryEn: string;
@@ -382,7 +400,8 @@ class ApiClient {
         disclaimer: string;
       }>('/ai/lab-analyzer', {
         method: 'POST',
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, apiKey }),
+        headers: apiKey ? { 'x-api-key': apiKey } : {},
       }),
 
     getCognitiveInsights: (patientId?: string) =>

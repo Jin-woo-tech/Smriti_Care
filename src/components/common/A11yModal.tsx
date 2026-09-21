@@ -39,28 +39,30 @@ export const A11yModal: React.FC = () => {
   const [showKey, setShowKey] = useState<boolean>(false);
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
   const [verificationError, setVerificationError] = useState<string | null>(null);
+  const [verifiedModel, setVerifiedModel] = useState<string | null>(null);
 
   if (!isA11yOpen) return null;
 
   const handleVerify = async () => {
     setIsVerifying(true);
     setVerificationError(null);
+    setVerifiedModel(null);
 
     const cleanKey = inputKey.trim();
-    updateSettings({ apiKey: cleanKey });
 
     try {
       const result = await verifyApiKey(cleanKey);
       if (result.valid) {
         updateSettings({ apiKey: cleanKey, apiKeyStatus: 'valid' });
         setVerificationError(null);
+        setVerifiedModel(result.model || 'Verified AI Gateway');
       } else {
         updateSettings({ apiKey: cleanKey, apiKeyStatus: 'invalid' });
-        setVerificationError(result.errorDetail || 'Invalid Anthropic API Key.');
+        setVerificationError(result.errorDetail || result.message || 'Verification rejected by upstream AI provider.');
       }
     } catch (err: any) {
       updateSettings({ apiKey: cleanKey, apiKeyStatus: 'invalid' });
-      setVerificationError(err?.message || 'Verification failed.');
+      setVerificationError(err?.message || 'Verification connection failed.');
     } finally {
       setIsVerifying(false);
     }
@@ -286,7 +288,7 @@ export const A11yModal: React.FC = () => {
             </div>
           </div>
 
-          {/* Anthropic Claude API Key Section with Live Verification */}
+          {/* AI Gateway API Key Section with Live Verification */}
           <div className="p-5 rounded-3xl border border-purple-400/30 bg-purple-950/30 space-y-4 backdrop-blur-md shadow-xl">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2.5">
@@ -309,7 +311,7 @@ export const A11yModal: React.FC = () => {
               <div className="relative flex-1">
                 <input
                   type={showKey ? 'text' : 'password'}
-                  placeholder="sk-ant-api03-..."
+                  placeholder="sk-ant-... or sk-... or AIzaSy..."
                   value={inputKey}
                   onChange={e => {
                     setInputKey(e.target.value);
@@ -358,7 +360,7 @@ export const A11yModal: React.FC = () => {
                       {getTranslation('apiKeyStatusValid', lang)}
                     </span>
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/40 font-mono">
-                      Claude 3.5 Sonnet / Haiku
+                      {verifiedModel || 'AI Gateway Active'}
                     </span>
                   </div>
                   <p className="text-emerald-100/90 leading-relaxed font-medium">
