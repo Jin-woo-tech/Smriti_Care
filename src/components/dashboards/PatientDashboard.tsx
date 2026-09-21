@@ -23,6 +23,7 @@ import { BrainCrystalVisual } from '../visuals/BrainCrystalVisual';
 import { LungsCrystalVisual } from '../visuals/LungsCrystalVisual';
 import { LiverCrystalVisual } from '../visuals/LiverCrystalVisual';
 import { KidneyCrystalVisual } from '../visuals/KidneyCrystalVisual';
+import { ThreeDParticleBackground } from '../common/ThreeDParticleBackground';
 
 interface PatientDashboardProps {
   onNavigateTab: (tab: 'routine' | 'games' | 'journal' | 'chat' | 'safety') => void;
@@ -33,7 +34,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
   onNavigateTab,
   onOpenEmergency,
 }) => {
-  const { settings, reminders, photos, waterGlasses, activePatient } = useApp();
+  const { settings, reminders, photos, waterGlasses, activePatient, cognitiveTrends } = useApp();
   const lang = settings.language;
   const patientName =
     lang === 'hi' && activePatient.nameHi
@@ -43,7 +44,20 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
   const pendingReminders = reminders.filter(r => !r.taken);
   const nextReminder = pendingReminders[0] || reminders[0];
   const completedTodayCount = reminders.filter(r => r.taken).length;
-  const pillPercent = Math.round((completedTodayCount / (reminders.length || 1)) * 100);
+  const pillPercent = reminders.length > 0
+    ? Math.round((completedTodayCount / reminders.length) * 100)
+    : 0;
+
+  const avgBrainScore = cognitiveTrends && cognitiveTrends.length > 0
+    ? Math.round(cognitiveTrends.reduce((acc, curr) => acc + curr.score, 0) / cognitiveTrends.length)
+    : (activePatient.adherenceRate || 85);
+
+  const brainStatusText =
+    avgBrainScore >= 80
+      ? (lang === 'hi' ? 'स्थिर व सकारात्मक' : 'Stable vs Baseline')
+      : avgBrainScore >= 70
+      ? (lang === 'hi' ? 'निगरानी स्थिति' : 'Watch Status')
+      : (lang === 'hi' ? 'समीक्षा आवश्यक' : 'Review Needed');
 
   const getReminderTitle = (rem: typeof nextReminder) => {
     if (!rem) return '';
@@ -55,6 +69,9 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
     <div className="space-y-6 sm:space-y-8 text-white animate-in fade-in duration-300">
       {/* Hero Banner with Frosted Glass Panels & Purple Ambient Glow */}
       <div className="relative overflow-hidden bg-gradient-to-r from-[#161233]/95 via-[#1a1c48]/90 to-[#0e172e]/95 p-6 sm:p-9 rounded-[2.5rem] border border-white/20 shadow-2xl backdrop-blur-2xl space-y-6">
+        {/* Dynamic Section 3D Particle Animation */}
+        <ThreeDParticleBackground variant="section" particleCount={25} colorTheme="purple-indigo" />
+
         {/* Background glow accents */}
         <div className="absolute top-0 right-0 -mr-16 -mt-16 w-72 h-72 rounded-full bg-purple-500/25 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-1/3 -mb-16 w-64 h-64 rounded-full bg-indigo-500/20 blur-3xl pointer-events-none" />
@@ -167,10 +184,10 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
               <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </div>
             <div className="text-xl sm:text-2xl font-black text-indigo-200">
-              84%
+              {avgBrainScore}%
             </div>
             <p className="text-[11px] text-indigo-300 font-semibold mt-0.5">
-              {lang === 'hi' ? 'स्थिर व सकारात्मक' : 'Stable vs Baseline'}
+              {brainStatusText}
             </p>
           </div>
         </div>

@@ -15,10 +15,12 @@ import {
   RefreshCw,
   ShieldCheck,
   SlidersHorizontal,
+  ExternalLink,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { getTranslation } from '../../lib/i18n';
 import { verifyApiKey } from '../../lib/aiClient';
+import { ThreeDParticleBackground } from './ThreeDParticleBackground';
 
 export const A11yModal: React.FC = () => {
   const {
@@ -71,8 +73,11 @@ export const A11yModal: React.FC = () => {
   const status = settings.apiKeyStatus || 'untested';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-xl animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-[32px] bg-gradient-to-b from-[#181635] via-[#0e1628] to-[#0a101f] p-6 sm:p-8 shadow-2xl shadow-purple-950/60 border border-purple-500/30 text-white animate-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0f1d]/70 p-4 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-[32px] bg-gradient-to-b from-[#181635]/95 via-[#0e1628]/95 to-[#0a101f]/95 p-6 sm:p-8 shadow-2xl shadow-purple-950/60 border border-purple-500/40 text-white animate-in zoom-in-95 duration-200 backdrop-blur-2xl">
+        {/* Dynamic Modal 3D Particle Animation */}
+        <ThreeDParticleBackground variant="modal" particleCount={45} colorTheme="purple-indigo" />
+
         {/* Glow ambient spots */}
         <div className="absolute -top-24 -left-24 w-60 h-60 bg-purple-600/25 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -right-24 w-60 h-60 bg-cyan-600/20 rounded-full blur-3xl pointer-events-none" />
@@ -311,7 +316,7 @@ export const A11yModal: React.FC = () => {
               <div className="relative flex-1">
                 <input
                   type={showKey ? 'text' : 'password'}
-                  placeholder="sk-ant-... or sk-... or AIzaSy..."
+                  placeholder="AIzaSy... / AQ... / gsk_... / sk-..."
                   value={inputKey}
                   onChange={e => {
                     setInputKey(e.target.value);
@@ -395,6 +400,54 @@ export const A11yModal: React.FC = () => {
                 </div>
               </div>
             )}
+
+            {/* Free AI Provider Quick Guides */}
+            <div className="pt-2 border-t border-purple-400/20">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-black uppercase tracking-wider text-purple-300">
+                  {lang === 'hi' ? '100% मुफ़्त AI की (Free AI Keys)' : 'Get 100% Free AI Keys (No Card Required)'}
+                </span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-bold">
+                  Free Tier
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <a
+                  href="https://aistudio.google.com/app/apikey"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-2.5 rounded-xl bg-purple-900/30 hover:bg-purple-900/50 border border-purple-400/30 hover:border-purple-300 text-left transition-all group"
+                >
+                  <div>
+                    <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                      <span>Google Gemini 2.0</span>
+                    </div>
+                    <p className="text-[10px] text-purple-200/70">
+                      {lang === 'hi' ? 'Google AI Studio से फ्री की लें (Starts with AIzaSy)' : 'Free from Google AI Studio (AIzaSy...)'}
+                    </p>
+                  </div>
+                  <ExternalLink size={13} className="text-purple-300 group-hover:translate-x-0.5 transition-transform" />
+                </a>
+
+                <a
+                  href="https://console.groq.com/keys"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-2.5 rounded-xl bg-indigo-900/30 hover:bg-indigo-900/50 border border-indigo-400/30 hover:border-indigo-300 text-left transition-all group"
+                >
+                  <div>
+                    <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                      <span>Groq Cloud (Llama 3.3)</span>
+                    </div>
+                    <p className="text-[10px] text-indigo-200/70">
+                      {lang === 'hi' ? 'Groq Console से फ्री की लें (Starts with gsk_)' : 'Ultra-fast free inference (gsk_...)'}
+                    </p>
+                  </div>
+                  <ExternalLink size={13} className="text-indigo-300 group-hover:translate-x-0.5 transition-transform" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
