@@ -18,6 +18,7 @@ import {
 import { useApp } from '../../context/AppContext';
 import { PatientProfile } from '../../types';
 import { maskPhoneNumber } from '../../lib/utils';
+import { ThreeDParticleBackground } from './ThreeDParticleBackground';
 
 export const ProfileManagerModal: React.FC = () => {
   const {
@@ -129,11 +130,14 @@ export const ProfileManagerModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xl animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl bg-gradient-to-b from-[#181635] via-[#0e1628] to-[#0a101f] border border-purple-500/30 rounded-[32px] p-6 sm:p-8 shadow-2xl shadow-purple-950/50 text-white overflow-hidden max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0a0f1d]/70 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-xl bg-gradient-to-b from-[#181635]/90 via-[#0e1628]/95 to-[#0a101f]/95 border border-purple-500/40 rounded-[32px] p-6 sm:p-8 shadow-2xl shadow-purple-950/70 text-white overflow-hidden max-h-[90vh] flex flex-col backdrop-blur-2xl">
+        {/* Dynamic Modal 3D Particle Animation */}
+        <ThreeDParticleBackground variant="modal" particleCount={50} colorTheme="purple-indigo" />
+
         {/* Glow ambient spots */}
-        <div className="absolute -top-24 -left-24 w-60 h-60 bg-purple-600/30 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -right-24 w-60 h-60 bg-indigo-600/25 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -left-24 w-60 h-60 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-60 h-60 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none" />
 
         {/* Modal Header */}
         <div className="relative z-10 flex items-center justify-between pb-5 border-b border-white/10 shrink-0">

@@ -36,16 +36,29 @@ function detectProvider(apiKey: string): ProviderConfig {
     return {
       providerName: 'Groq Cloud',
       type: 'groq',
-      model: 'llama-3.3-70b-versatile',
-      fallbackModels: ['llama-3.1-8b-instant', 'mixtral-8x7b-32768'],
+      model: 'llama-3.1-8b-instant',
+      fallbackModels: [
+        'llama3-8b-8192',
+        'llama-3.3-70b-versatile',
+        'llama-3.1-70b-versatile',
+        'gemma2-9b-it',
+        'mixtral-8x7b-32768',
+      ],
     };
   }
-  if (key.startsWith('AIzaSy')) {
+  if (key.startsWith('AIzaSy') || key.startsWith('AQ.') || key.startsWith('AIza')) {
     return {
       providerName: 'Google Gemini',
       type: 'gemini',
-      model: 'gemini-2.0-flash',
-      fallbackModels: ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-1.0-pro'],
+      model: 'gemini-3.5-flash',
+      fallbackModels: [
+        'gemini-flash-lite-latest',
+        'gemini-3.6-flash',
+        'gemini-3.7-flash',
+        'gemini-flash-latest',
+        'gemini-3.8-flash',
+        'gemini-2.5-flash',
+      ],
     };
   }
   if (key.startsWith('sk-or-')) {
@@ -53,7 +66,7 @@ function detectProvider(apiKey: string): ProviderConfig {
       providerName: 'OpenRouter AI',
       type: 'openrouter',
       model: 'google/gemini-2.0-flash-001',
-      fallbackModels: ['anthropic/claude-3.5-sonnet', 'openai/gpt-4o-mini'],
+      fallbackModels: ['meta-llama/llama-3.1-8b-instruct', 'openai/gpt-4o-mini', 'anthropic/claude-3.5-sonnet'],
     };
   }
   if (key.startsWith('sk-proj-') || key.startsWith('sk-')) {
@@ -139,10 +152,8 @@ async function callProviderLLM(
   temperature = 0.6,
   jsonMode = false,
   timeoutMs = 15000
-): Promise<{ text: string; error?: string }> {
+): Promise<{ text: string; modelUsed?: string; error?: string }> {
   const provider = detectProvider(apiKey);
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     // 1. Anthropic Claude
@@ -151,6 +162,8 @@ async function callProviderLLM(
       let lastErr = '';
 
       for (const m of modelsToTry) {
+        const attemptController = new AbortController();
+        const attemptTimer = setTimeout(() => attemptController.abort(), Math.min(timeoutMs, 7000));
         try {
           const anthropicMessages = messages.map(msg => ({
             role: msg.role,
@@ -171,24 +184,25 @@ async function callProviderLLM(
               ...(systemPrompt ? { system: systemPrompt } : {}),
               messages: anthropicMessages.length > 0 ? anthropicMessages : [{ role: 'user', content: 'Hello' }],
             }),
-            signal: controller.signal,
+            signal: attemptController.signal,
           });
 
+          clearTimeout(attemptTimer);
+
           if (res.ok) {
-            clearTimeout(timer);
             const data = await res.json();
             const content = data?.content?.[0]?.text || '';
-            if (content) return { text: content };
+            if (content) return { text: content, modelUsed: m };
           } else {
             const errJson = await res.json().catch(() => ({}));
             lastErr = errJson.error?.message || `HTTP ${res.status}`;
           }
         } catch (e: any) {
+          clearTimeout(attemptTimer);
           lastErr = e.message || 'Claude connection error';
         }
       }
 
-      clearTimeout(timer);
       return { text: '', error: lastErr || 'Anthropic Claude request failed' };
     }
 
@@ -217,37 +231,43 @@ async function callProviderLLM(
         geminiPayload.generationConfig.responseMimeType = 'application/json';
       }
 
-      const modelsToTry = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-1.0-pro'];
+      const modelsToTry = [provider.model, ...(provider.fallbackModels || ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-1.0-pro'])];
       let lastErr = '';
 
       // Try Native Gemini REST Endpoints
       for (const m of modelsToTry) {
+        const attemptController = new AbortController();
+        const attemptTimer = setTimeout(() => attemptController.abort(), Math.min(timeoutMs, 7000));
         try {
           const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`;
           const res = await fetch(geminiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(geminiPayload),
-            signal: controller.signal,
+            signal: attemptController.signal,
           });
+
+          clearTimeout(attemptTimer);
 
           if (res.ok) {
             const data = await res.json();
             const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
             if (text) {
-              clearTimeout(timer);
-              return { text };
+              return { text, modelUsed: m };
             }
           } else {
             const errData = await res.json().catch(() => ({}));
             lastErr = errData.error?.message || `HTTP ${res.status}`;
           }
         } catch (e: any) {
+          clearTimeout(attemptTimer);
           lastErr = e.message || 'Gemini native error';
         }
       }
 
       // Fallback: Gemini OpenAI Compatibility Layer
+      const openAiFallbackController = new AbortController();
+      const openAiFallbackTimer = setTimeout(() => openAiFallbackController.abort(), Math.min(timeoutMs, 7000));
       try {
         const geminiOpenAIUrl = `https://generativelanguage.googleapis.com/v1beta/openai/chat/completions`;
         const formattedMessages = [
@@ -266,23 +286,23 @@ async function callProviderLLM(
             messages: formattedMessages,
             temperature,
           }),
-          signal: controller.signal,
+          signal: openAiFallbackController.signal,
         });
 
-        clearTimeout(timer);
+        clearTimeout(openAiFallbackTimer);
         if (res2.ok) {
           const data2 = await res2.json();
           const content2 = data2?.choices?.[0]?.message?.content || '';
-          if (content2) return { text: content2 };
+          if (content2) return { text: content2, modelUsed: 'gemini-1.5-flash' };
         } else {
           const errData2 = await res2.json().catch(() => ({}));
           lastErr = errData2.error?.message || lastErr;
         }
       } catch (e: any) {
+        clearTimeout(openAiFallbackTimer);
         lastErr = e.message || lastErr;
       }
 
-      clearTimeout(timer);
       return { text: '', error: lastErr || 'Google Gemini request failed across endpoints' };
     }
 
@@ -304,6 +324,8 @@ async function callProviderLLM(
       let lastErr = '';
 
       for (const m of modelsToTry) {
+        const attemptController = new AbortController();
+        const attemptTimer = setTimeout(() => attemptController.abort(), Math.min(timeoutMs, 7000));
         try {
           const bodyPayload: any = {
             model: m,
@@ -329,24 +351,25 @@ async function callProviderLLM(
             method: 'POST',
             headers,
             body: JSON.stringify(bodyPayload),
-            signal: controller.signal,
+            signal: attemptController.signal,
           });
 
+          clearTimeout(attemptTimer);
+
           if (res.ok) {
-            clearTimeout(timer);
             const data = await res.json();
             const content = data?.choices?.[0]?.message?.content || '';
-            if (content) return { text: content };
+            if (content) return { text: content, modelUsed: m };
           } else {
             const errJson = await res.json().catch(() => ({}));
             lastErr = errJson.error?.message || `HTTP ${res.status}`;
           }
         } catch (e: any) {
+          clearTimeout(attemptTimer);
           lastErr = e.message || `${provider.providerName} connection error`;
         }
       }
 
-      clearTimeout(timer);
       return { text: '', error: lastErr || `${provider.providerName} request failed` };
     }
 
@@ -356,32 +379,39 @@ async function callProviderLLM(
       ...messages,
     ];
 
-    const res = await fetch(OMNIROUTE_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey || OMNIROUTE_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: provider.model,
-        messages: formattedMessages,
-        temperature,
-        ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),
-      }),
-      signal: controller.signal,
-    });
+    const defaultController = new AbortController();
+    const defaultTimer = setTimeout(() => defaultController.abort(), timeoutMs);
 
-    clearTimeout(timer);
+    try {
+      const res = await fetch(OMNIROUTE_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey || OMNIROUTE_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: provider.model,
+          messages: formattedMessages,
+          temperature,
+          ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),
+        }),
+        signal: defaultController.signal,
+      });
 
-    if (res.ok) {
-      const data = await res.json();
-      const content = data?.choices?.[0]?.message?.content || '';
-      return { text: content };
+      clearTimeout(defaultTimer);
+
+      if (res.ok) {
+        const data = await res.json();
+        const content = data?.choices?.[0]?.message?.content || '';
+        return { text: content, modelUsed: provider.model };
+      }
+
+      return { text: '', error: `Gateway returned HTTP ${res.status}` };
+    } catch (e: any) {
+      clearTimeout(defaultTimer);
+      return { text: '', error: e.message || 'Gateway request failed' };
     }
-
-    return { text: '', error: `Gateway returned HTTP ${res.status}` };
   } catch (err: any) {
-    clearTimeout(timer);
     return { text: '', error: err.message || 'Request timed out or failed' };
   }
 }
@@ -970,7 +1000,7 @@ router.post('/verify-key', async (req: AuthenticatedRequest, res: Response): Pro
     res.json({
       valid: true,
       provider: provider.providerName,
-      model: provider.model,
+      model: testCall.modelUsed || provider.model,
       latencyMs,
       message: 'AI Gateway Verified & Active',
       messageHi: 'सुरक्षित AI गेटवे सत्यापित और सक्रिय',
@@ -993,12 +1023,16 @@ router.post('/chat', optionalAuth, async (req: AuthenticatedRequest, res: Respon
   try {
     const userId = req.user?.id || 'user_patient_demo';
     const { message, language = 'en', conversationHistory = [] } = req.body;
+    const authHeader = req.headers['authorization'] || '';
+    const isBearerAiKey =
+      authHeader.startsWith('Bearer sk-') ||
+      authHeader.startsWith('Bearer AIza') ||
+      authHeader.startsWith('Bearer AQ.') ||
+      authHeader.startsWith('Bearer gsk_');
     const reqApiKey =
       (req.headers['x-api-key'] as string) ||
       req.body?.apiKey ||
-      (req.headers['authorization']?.startsWith('Bearer sk-') || req.headers['authorization']?.startsWith('Bearer AIzaSy') || req.headers['authorization']?.startsWith('Bearer gsk_')
-        ? req.headers['authorization'].replace(/^Bearer\s+/i, '')
-        : undefined);
+      (isBearerAiKey ? authHeader.replace(/^Bearer\s+/i, '') : undefined);
 
     if (!message) {
       res.status(400).json({ error: 'Message text is required' });
