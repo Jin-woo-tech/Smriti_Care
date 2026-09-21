@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GameShell } from './GameShell';
 import { AdaptiveTierConfig } from '../../lib/adaptiveDifficulty';
+import { useApp } from '../../context/AppContext';
 
 interface PathNode {
   id: number;
@@ -15,9 +16,9 @@ export const FollowPathGame: React.FC<{ onBack: () => void }> = ({ onBack }) => 
     <GameShell
       gameId="follow-path"
       title="Follow the Path"
-      titleAs="ক্ৰম অনুসৰি পথ বাছক"
+      titleHi="क्रमबद्ध पथ अनुसरण"
       instructions="Tap each circle in ascending numerical/alphabetical sequence (1 → 2 → 3 or 1 → A → 2 → B)."
-      instructionsAs="ক্ৰম অনুসৰি বৃত্তসমূহত স্পৰ্শ কৰক (১ → ২ → ৩ বা ১ → A → ২ → B)।"
+      instructionsHi="क्रम के अनुसार वृत्तों पर टैप करें (1 → 2 → 3 या 1 → A → 2 → B)।"
       onBack={onBack}
     >
       {({ tierConfig, onGameOver, isGameActive }) => (
@@ -32,6 +33,8 @@ const PathBoard: React.FC<{
   onGameOver: (score: number, maxScore: number, accuracy: number, reactionTimeMs: number) => void;
   isGameActive: boolean;
 }> = ({ tierConfig, onGameOver }) => {
+  const { settings } = useApp();
+  const lang = settings.language;
   const nodeCount = tierConfig.pathNodesCount || (tierConfig.tier === 1 ? 5 : tierConfig.tier === 2 ? 8 : 10);
 
   const [nodes, setNodes] = useState<PathNode[]>([]);
@@ -91,17 +94,19 @@ const PathBoard: React.FC<{
     }
   };
 
-  const nextExpectedLabel = nodes[currentOrderIndex]?.label || 'Done';
+  const nextExpectedLabel = nodes[currentOrderIndex]?.label || (lang === 'hi' ? 'पूर्ण' : 'Done');
 
   return (
     <div className="w-full max-w-2xl space-y-4 text-white">
       {/* Target prompt */}
       <div className="flex justify-between items-center glass-card-dark p-3.5 rounded-2xl border border-white/12">
         <span className="text-sm font-semibold text-sky-200/90">
-          Next target to tap: <strong className="text-[#c084fc] text-lg ml-1 font-mono">[{nextExpectedLabel}]</strong>
+          {lang === 'hi' ? 'अगला लक्ष्य:' : 'Next target to tap:'}{' '}
+          <strong className="text-[#c084fc] text-lg ml-1 font-mono">[{nextExpectedLabel}]</strong>
         </span>
         <span className="text-sm text-sky-200/70 font-semibold">
-          Progress: <strong className="text-white">{currentOrderIndex} / {nodeCount}</strong>
+          {lang === 'hi' ? 'प्रगति:' : 'Progress:'}{' '}
+          <strong className="text-white">{currentOrderIndex} / {nodeCount}</strong>
         </span>
       </div>
 

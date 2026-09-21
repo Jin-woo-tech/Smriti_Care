@@ -36,9 +36,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
   const { settings, reminders, photos, waterGlasses, activePatient } = useApp();
   const lang = settings.language;
   const patientName =
-    lang === 'as' && activePatient.nameAs
-      ? activePatient.nameAs
-      : lang === 'hi' && activePatient.nameHi
+    lang === 'hi' && activePatient.nameHi
       ? activePatient.nameHi
       : activePatient.name;
 
@@ -49,7 +47,6 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
 
   const getReminderTitle = (rem: typeof nextReminder) => {
     if (!rem) return '';
-    if (lang === 'as') return rem.titleAs;
     if (lang === 'hi') return rem.titleHi || rem.title;
     return rem.title;
   };
@@ -67,24 +64,18 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/20 text-purple-200 border border-purple-400/30 text-xs font-bold backdrop-blur-md shadow-xs">
               <Sun size={14} className="text-[#c084fc]" />
               <span>
-                {lang === 'as'
-                  ? 'তিতাবৰ, যোৰহাট • ২৬°C ফৰকাল'
-                  : lang === 'hi'
+                {lang === 'hi'
                   ? 'तीताबर, जोरहाट • 26°C सुखद मौसम'
                   : 'Titabor, Jorhat • 26°C Pleasant'}
               </span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
-              {lang === 'as'
-                ? `নমস্কাৰ, ${patientName}!`
-                : lang === 'hi'
+              {lang === 'hi'
                 ? `नमस्ते, ${patientName} जी!`
                 : `Namaskar, ${patientName}!`}
             </h1>
             <p className="text-xs sm:text-sm text-sky-100/80 font-medium max-w-xl">
-              {lang === 'as'
-                ? 'আজিৰ দিনটো আপোনাৰ বাবে শুভ হওক। আপোনাৰ দৈনিক ঔষধ আৰু স্মৃতি খেল সাজু আছে।'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'आपका दिन मंगलमय हो। आपकी दैनिक दवाइयां, जल सेवन व स्मृति खेल तैयार हैं।'
                 : 'Welcome to your SmritiCare home. Track your daily routine, play memory exercises, or speak with Sathi.'}
             </p>
@@ -92,9 +83,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
 
           <VoiceNarratorButton
             textToRead={
-              lang === 'as'
-                ? `নমস্কাৰ ${patientName}! আজি আপোনাৰ ৪ টা ঔষধৰ ভিতৰত ২ টা খোৱা হ’ল। মন সতেজ ৰাখিবলৈ মগজুৰ খেল খেলক।`
-                : lang === 'hi'
+              lang === 'hi'
                 ? `नमस्ते ${patientName} जी! आज आपकी 4 में से 2 दवाइयाँ ली जा चुकी हैं। मन को तरोताजा रखने के लिए दिमागी खेल खेलें।`
                 : `Namaskar ${patientName}. Welcome to your SmritiCare daily board. Tap any tile below to check medicines, play memory games, or talk with Sathi.`
             }
@@ -113,7 +102,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
             <div className="flex items-center justify-between text-purple-200 text-xs font-bold mb-1">
               <span className="flex items-center gap-1.5">
                 <Pill size={15} className="text-[#c084fc]" />
-                <span>{lang === 'as' ? 'ঔষধ' : lang === 'hi' ? 'दवाइयां' : 'Medicines'}</span>
+                <span>{lang === 'hi' ? 'दवाइयां' : 'Medicines'}</span>
               </span>
               <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </div>
@@ -121,7 +110,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
               {completedTodayCount}/{reminders.length}
             </div>
             <p className="text-[11px] text-purple-300 font-semibold mt-0.5">
-              {pillPercent}% {lang === 'as' ? 'সম্পূৰ্ণ' : lang === 'hi' ? 'पूर्ण' : 'Completed'}
+              {pillPercent}% {lang === 'hi' ? 'पूर्ण' : 'Completed'}
             </p>
           </div>
 
@@ -133,7 +122,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
             <div className="flex items-center justify-between text-sky-200 text-xs font-bold mb-1">
               <span className="flex items-center gap-1.5">
                 <Droplets size={15} className="text-cyan-300" />
-                <span>{lang === 'as' ? 'পানী' : lang === 'hi' ? 'जल सेवन' : 'Hydration'}</span>
+                <span>{lang === 'hi' ? 'जल सेवन' : 'Hydration'}</span>
               </span>
               <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </div>
@@ -141,7 +130,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
               {waterGlasses}/8
             </div>
             <p className="text-[11px] text-cyan-300 font-semibold mt-0.5">
-              {lang === 'as' ? 'গিলাচ পানী' : lang === 'hi' ? 'गिलास पानी' : 'Glasses recorded'}
+              {lang === 'hi' ? 'गिलास पानी' : 'Glasses recorded'}
             </p>
           </div>
 
@@ -153,7 +142,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
             <div className="flex items-center justify-between text-purple-200 text-xs font-bold mb-1">
               <span className="flex items-center gap-1.5">
                 <Footprints size={15} className="text-purple-300" />
-                <span>{lang === 'as' ? 'খোজ কঢ়া' : lang === 'hi' ? 'सैर' : 'Daily Walk'}</span>
+                <span>{lang === 'hi' ? 'सैर' : 'Daily Walk'}</span>
               </span>
               <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </div>
@@ -161,7 +150,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
               20 Mins
             </div>
             <p className="text-[11px] text-purple-200 font-semibold mt-0.5">
-              {lang === 'as' ? 'সম্পূৰ্ণ হ’ল' : lang === 'hi' ? 'सफलतापूर्वक पूर्ण' : 'Done today'}
+              {lang === 'hi' ? 'सफलतापूर्वक पूर्ण' : 'Done today'}
             </p>
           </div>
 
@@ -173,7 +162,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
             <div className="flex items-center justify-between text-indigo-200 text-xs font-bold mb-1">
               <span className="flex items-center gap-1.5">
                 <Brain size={15} className="text-indigo-300" />
-                <span>{lang === 'as' ? 'মগজুৰ সূচক' : lang === 'hi' ? 'स्मृति सूचकांक' : 'Brain Index'}</span>
+                <span>{lang === 'hi' ? 'स्मृति सूचकांक' : 'Brain Index'}</span>
               </span>
               <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </div>
@@ -181,7 +170,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
               84%
             </div>
             <p className="text-[11px] text-indigo-300 font-semibold mt-0.5">
-              {lang === 'as' ? 'স্থিৰ ও সুস্থ' : lang === 'hi' ? 'स्थिर व सकारात्मक' : 'Stable vs Baseline'}
+              {lang === 'hi' ? 'स्थिर व सकारात्मक' : 'Stable vs Baseline'}
             </p>
           </div>
         </div>
@@ -200,9 +189,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-black uppercase tracking-wider bg-[#a855f7] text-white px-2.5 py-0.5 rounded-full shadow-xs">
-                  {lang === 'as'
-                    ? 'পৰৱৰ্তী নিৰ্ধাৰিত ঔষধ'
-                    : lang === 'hi'
+                  {lang === 'hi'
                     ? 'अगली निर्धारित दवा'
                     : 'Next Scheduled Pill'}
                 </span>
@@ -221,7 +208,7 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
 
           <div className="flex items-center gap-2 text-white font-black text-xs sm:text-sm bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] px-5 py-2.5 rounded-2xl group-hover:from-[#9333ea] group-hover:to-[#7c3aed] transition-all shadow-lg shadow-purple-600/30 border border-purple-400/30">
             <span>
-              {lang === 'as' ? 'ঔষধ তালিকা চাওক' : lang === 'hi' ? 'दवा सूची देखें' : 'View Schedule'}
+              {lang === 'hi' ? 'दवा सूची देखें' : 'View Schedule'}
             </span>
             <ChevronRight size={16} />
           </div>

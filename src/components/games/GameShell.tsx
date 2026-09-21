@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Timer, Award, RotateCcw, Volume2, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Timer, Award, RotateCcw, Sparkles } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useApp } from '../../context/AppContext';
 import { GameId, GameScoreRecord } from '../../types';
@@ -10,9 +10,9 @@ import { VoiceNarratorButton } from '../common/VoiceNarratorButton';
 interface GameShellProps {
   gameId: GameId;
   title: string;
-  titleAs: string;
+  titleHi?: string;
   instructions: string;
-  instructionsAs: string;
+  instructionsHi?: string;
   onBack: () => void;
   children: (props: {
     tierConfig: AdaptiveTierConfig;
@@ -25,13 +25,13 @@ interface GameShellProps {
 export const GameShell: React.FC<GameShellProps> = ({
   gameId,
   title,
-  titleAs,
+  titleHi,
   instructions,
-  instructionsAs,
+  instructionsHi,
   onBack,
   children,
 }) => {
-  const { settings, gameScores, saveGameScore, narrate } = useApp();
+  const { settings, gameScores, saveGameScore } = useApp();
   const lang = settings.language;
 
   const [tierConfig, setTierConfig] = useState<AdaptiveTierConfig>(() =>
@@ -101,6 +101,11 @@ export const GameShell: React.FC<GameShellProps> = ({
     }
   };
 
+  const displayTitle = lang === 'hi' && titleHi ? titleHi : title;
+  const displayInstructions = lang === 'hi' && instructionsHi ? instructionsHi : instructions;
+  const displayTierLabel = lang === 'hi' && tierConfig.tierLabelHi ? tierConfig.tierLabelHi : tierConfig.tierLabel;
+  const displayFeedback = lang === 'hi' && tierConfig.feedbackMessageHi ? tierConfig.feedbackMessageHi : tierConfig.feedbackMessage;
+
   return (
     <div className="max-w-4xl mx-auto space-y-6 text-white animate-in fade-in">
       {/* Top Navigation & Status Bar */}
@@ -116,7 +121,7 @@ export const GameShell: React.FC<GameShellProps> = ({
         <div className="flex items-center gap-3">
           {/* Adaptive Tier Badge */}
           <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-purple-500/20 text-purple-200 border border-purple-400/40 shadow-xs">
-            {lang === 'as' ? tierConfig.tierLabelAs : tierConfig.tierLabel}
+            {displayTierLabel}
           </span>
 
           {/* Active Timer */}
@@ -131,19 +136,15 @@ export const GameShell: React.FC<GameShellProps> = ({
       <div className="glass-card-dark p-6 sm:p-8 rounded-[2rem] border border-white/12 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-black text-white">
-            {lang === 'as' ? titleAs : title}
+            {displayTitle}
           </h1>
           <p className="text-sm text-sky-200/80 mt-1 max-w-2xl font-medium leading-relaxed">
-            {lang === 'as' ? instructionsAs : instructions}
+            {displayInstructions}
           </p>
         </div>
 
         <VoiceNarratorButton
-          textToRead={
-            lang === 'as'
-              ? `${titleAs}. ${instructionsAs}`
-              : `${title}. ${instructions}`
-          }
+          textToRead={`${displayTitle}. ${displayInstructions}`}
           size="md"
           label={getTranslation('actionListen', lang)}
           className="bg-purple-500/20 hover:bg-purple-500/30 text-white border border-purple-400/30"
@@ -163,10 +164,10 @@ export const GameShell: React.FC<GameShellProps> = ({
 
             <div>
               <h3 className="text-2xl font-black text-white mb-2">
-                {lang === 'as' ? 'খেলিবলৈ প্ৰস্তুত নে?' : 'Ready to begin?'}
+                {lang === 'hi' ? 'क्या आप तैयार हैं?' : 'Ready to begin?'}
               </h3>
               <p className="text-sm text-sky-200/80 font-medium leading-relaxed">
-                {lang === 'as' ? tierConfig.feedbackMessageAs : tierConfig.feedbackMessage}
+                {displayFeedback}
               </p>
             </div>
 
@@ -188,11 +189,11 @@ export const GameShell: React.FC<GameShellProps> = ({
 
             <div>
               <h3 className="text-2xl font-black text-white">
-                {lang === 'as' ? 'বঢ়িয়া প্ৰদৰ্শন!' : 'Wonderful Exercise!'}
+                {lang === 'hi' ? 'शानदार प्रदर्शन!' : 'Wonderful Exercise!'}
               </h3>
               <p className="text-sm text-sky-200/80 mt-1 font-medium">
-                {lang === 'as'
-                  ? 'আপোনাৰ মগজুৰ সক্ৰিয়তা আৰু মনোযোগ অতি প্ৰশংসনীয়।'
+                {lang === 'hi'
+                  ? 'आपकी संज्ञानात्मक गतिविधि और प्रदर्शन सफलतापूर्वक रिकॉर्ड कर लिया गया है।'
                   : 'Your cognitive engagement has been recorded to your daily baseline.'}
               </p>
             </div>
@@ -225,7 +226,7 @@ export const GameShell: React.FC<GameShellProps> = ({
                 className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] hover:from-[#9333ea] hover:to-[#7c3aed] text-white font-bold cursor-pointer transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 border border-purple-400/30"
               >
                 <RotateCcw size={18} />
-                <span>{lang === 'as' ? 'পুনৰ খেলক' : 'Play Again'}</span>
+                <span>{lang === 'hi' ? 'पुनः खेलें' : 'Play Again'}</span>
               </button>
               <button
                 onClick={onBack}

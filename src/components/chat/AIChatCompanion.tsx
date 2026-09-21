@@ -35,10 +35,10 @@ export const AIChatCompanion: React.FC = () => {
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
   const quickPrompts = [
-    { en: getTranslation('chatPrompt1', 'en'), hi: getTranslation('chatPrompt1', 'hi'), as: getTranslation('chatPrompt1', 'as') },
-    { en: getTranslation('chatPrompt2', 'en'), hi: getTranslation('chatPrompt2', 'hi'), as: getTranslation('chatPrompt2', 'as') },
-    { en: getTranslation('chatPrompt3', 'en'), hi: getTranslation('chatPrompt3', 'hi'), as: getTranslation('chatPrompt3', 'as') },
-    { en: getTranslation('chatPrompt4', 'en'), hi: getTranslation('chatPrompt4', 'hi'), as: getTranslation('chatPrompt4', 'as') },
+    { en: getTranslation('chatPrompt1', 'en'), hi: getTranslation('chatPrompt1', 'hi') },
+    { en: getTranslation('chatPrompt2', 'en'), hi: getTranslation('chatPrompt2', 'hi') },
+    { en: getTranslation('chatPrompt3', 'en'), hi: getTranslation('chatPrompt3', 'hi') },
+    { en: getTranslation('chatPrompt4', 'en'), hi: getTranslation('chatPrompt4', 'hi') },
   ];
 
   const handleSend = async (textToSend: string) => {
@@ -89,26 +89,18 @@ export const AIChatCompanion: React.FC = () => {
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <h2 className="text-2xl sm:text-3xl font-black text-white">
-                {lang === 'as' ? 'স্মৃতি সাথী (AI Companion)' : lang === 'hi' ? 'स्मृति साथी (AI Companion)' : 'Smriti Sathi (AI Care Companion)'}
+                {lang === 'hi' ? 'स्मृति साथी (AI Companion)' : 'Smriti Sathi (AI Care Companion)'}
               </h2>
               <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-200 border border-purple-400/30">
-                Trilingual
+                Bilingual (EN / HI)
               </span>
-              {settings.apiKeyStatus === 'valid' ? (
-                <span className="text-[10px] uppercase font-extrabold tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-500/25 text-emerald-200 border border-emerald-400/50 shadow-[0_0_12px_rgba(52,211,153,0.35)] flex items-center gap-1">
-                  <Sparkles size={11} className="text-emerald-300" />
-                  Live Claude 3.5
-                </span>
-              ) : (
-                <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-white/10 text-sky-200/80 border border-white/15">
-                  Offline Engine
-                </span>
-              )}
+              <span className="text-[10px] uppercase font-extrabold tracking-wider px-2.5 py-0.5 rounded-full bg-purple-500/25 text-purple-200 border border-purple-400/50 shadow-[0_0_12px_rgba(168,85,247,0.35)] flex items-center gap-1">
+                <Sparkles size={11} className="text-[#c084fc]" />
+                AI Proxy Powered
+              </span>
             </div>
             <p className="text-xs sm:text-sm text-sky-200/80 font-medium mt-1">
-              {lang === 'as'
-                ? 'ঔষধ, স্মৃতি আৰু দৈনন্দিন কথা-বতৰাৰ বাবে আপোনাৰ সদা সজাগ সংগী।'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'दवा, दिनचर्या और यादों के लिए आपका संवेदनशील AI संवादी साथी।'
                 : 'Empathetic voice-enabled conversational support for daily guidance.'}
             </p>
@@ -118,11 +110,9 @@ export const AIChatCompanion: React.FC = () => {
         <div className="relative z-10">
           <VoiceNarratorButton
             textToRead={
-              lang === 'as'
-                ? 'নমস্কাৰ! মই আপোনাৰ স্মৃতি সাথী। আপোনাৰ কিবা সুধিবলগীয়া থাকিলে তলৰ বুটামত টিপক।'
-                : lang === 'hi'
-                ? 'नमस्ते! मैं स्मृति साथी हूँ। किसी भी सुझाव प्रश्न पर टैप करें या सीधे बोलें।'
-                : 'Namaskar! I am Smriti Sathi. Tap any suggested question or speak to me directly.'
+              lang === 'hi'
+                ? 'नमस्ते! मैं स्मृति साथी हूँ। किसी भी सुझाव प्रश्न पर टैप करें या सीधे लिखें।'
+                : 'Namaskar! I am Smriti Sathi. Tap any suggested question or write to me directly.'
             }
             size="md"
             label={getTranslation('actionListen', lang)}
@@ -136,10 +126,10 @@ export const AIChatCompanion: React.FC = () => {
         {quickPrompts.map((p, i) => (
           <button
             key={i}
-            onClick={() => handleSend(lang === 'as' ? p.as : lang === 'hi' ? (p.hi || p.en) : p.en)}
+            onClick={() => handleSend(lang === 'hi' ? (p.hi || p.en) : p.en)}
             className="text-xs font-semibold px-4 py-2.5 rounded-2xl glass-card-dark border border-white/12 hover:border-purple-400 hover:bg-white/15 text-sky-100 whitespace-nowrap cursor-pointer transition-all shadow-md backdrop-blur-md"
           >
-            💬 {lang === 'as' ? p.as : lang === 'hi' ? (p.hi || p.en) : p.en}
+            💬 {lang === 'hi' ? (p.hi || p.en) : p.en}
           </button>
         ))}
       </div>
@@ -208,9 +198,7 @@ export const AIChatCompanion: React.FC = () => {
           onChange={e => setInputValue(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleSend(inputValue)}
           placeholder={
-            lang === 'as'
-              ? 'ইয়াত লিখক বা সুধক...'
-              : lang === 'hi'
+            lang === 'hi'
               ? 'यहाँ लिखें या पूछें...'
               : 'Ask Smriti Sathi about your routine, medicines, or memories...'
           }

@@ -4,24 +4,51 @@ export const translations = {
   en: {
     // App header & brand
     appName: 'SmritiCare',
-    appTagline: 'Cognitive Wellness & Medicine Safety for North East India',
-    appSubtext: 'Supportive, offline-first care tailored for elders, families, and community health workers.',
+    appTagline: 'Cognitive Wellness & Medicine Safety',
+    appSubtext: 'Supportive, offline-first care tailored for elders, families, clinicians, and community health workers.',
 
     // Roles
     rolePatient: 'Elder / Patient',
     roleCaregiver: 'Family Caregiver',
     roleClinician: 'Doctor / Clinician',
-    roleAsha: 'ASHA / Anganwadi Worker',
+    roleAsha: 'ASHA / Health Worker',
     roleSwitch: 'Switch Role',
+
+    // Auth & Account
+    authTitle: 'Welcome to SmritiCare',
+    authSubtitle: 'Sign in to access your personalized health & cognitive companion',
+    loginTab: 'Sign In',
+    registerTab: 'Create Account',
+    fullName: 'Full Name',
+    emailOrPhone: 'Email or Phone Number',
+    password: 'Password',
+    selectRole: 'Select Your Primary Role',
+    dateOfBirth: 'Date of Birth',
+    address: 'City / Village / Address',
+    emergencyContactName: 'Emergency Contact Name',
+    emergencyContactPhone: 'Emergency Contact Phone',
+    preferredLanguage: 'Preferred Language',
+    healthConditions: 'Known Health Conditions (e.g. Hypertension, Diabetes)',
+    btnSignIn: 'Sign In',
+    btnRegister: 'Complete Registration',
+    btnSignOut: 'Sign Out',
+    alreadyHaveAccount: 'Already have an account? Sign In',
+    needAccount: "Don't have an account? Create one now",
+    accountSetupStep1: 'Step 1: Account Info',
+    accountSetupStep2: 'Step 2: Personal Profile',
+    accountSetupStep3: 'Step 3: Health & Routine Setup',
+    btnNext: 'Next Step',
+    btnBack: 'Previous Step',
 
     // Navigation
     navHome: 'Home',
     navRoutine: 'Daily Routine',
     navGames: 'Brain Games',
-    navSafety: 'Medicine Safety',
+    navSafety: 'Medicine & Lab AI',
     navJournal: 'Memory Album',
     navChat: 'Smriti Sathi (AI)',
     navDashboard: 'Dashboard',
+    navAppointments: 'Doctor Consultations',
     navVillage: 'Village Health',
     navSettings: 'Settings',
 
@@ -33,6 +60,7 @@ export const translations = {
     actionListen: 'Listen',
     actionStopVoice: 'Stop Voice',
     actionTakeDose: 'Mark Taken',
+    actionSkipDose: 'Skip Dose',
     actionSnooze: 'Remind Later',
     actionAdd: 'Add New',
     actionUpload: 'Upload Photo / File',
@@ -41,13 +69,21 @@ export const translations = {
     actionDownloadPdf: 'Download Clinical Report (PDF)',
     actionSyncNow: 'Sync Pending Changes',
     actionEmergency: 'Emergency SOS',
+    actionBookAppointment: 'Book Appointment',
+    actionConfirm: 'Confirm & Save',
 
     // Status badges
     statusStable: 'Performance Trend: Stable',
-    statusWatch: 'Performance Trend: Slight Deviation (Watch)',
-    statusReview: 'Performance Trend: Early Review Signal',
+    statusWatch: 'Performance Trend: Watch',
+    statusReview: 'Performance Trend: Review Signal',
     statusTaken: 'Taken',
+    statusScheduled: 'Scheduled',
+    statusSkipped: 'Skipped',
+    statusMissed: 'Missed',
     statusPending: 'Pending',
+    statusConfirmed: 'Confirmed',
+    statusCompleted: 'Completed',
+    statusCancelled: 'Cancelled',
     statusNormal: 'Normal Range',
     statusElevated: 'Slightly Elevated',
     statusLow: 'Below Range',
@@ -62,53 +98,47 @@ export const translations = {
     a11yReducedMotion: 'Reduce Animations',
     a11yVoice: 'Voice Assistance & Read Aloud',
 
-    // API Key & Live AI
-    apiKeySectionTitle: 'Anthropic Claude API Key (Optional Live Vision & AI)',
-    apiKeySectionDesc: 'By default, SmritiCare runs on an instant offline-capable intelligent engine. Enter and verify your Claude API key to activate live Claude 3.5 Sonnet / Haiku Vision and real-time empathetic AI conversation.',
-    apiKeyVerifyBtn: 'Verify API Key',
-    apiKeyVerifying: 'Verifying with Anthropic...',
-    apiKeyStatusValid: 'Valid & Active',
-    apiKeyStatusInvalid: 'Invalid API Key',
-    apiKeyStatusUntested: 'Unverified / Demo Mode',
-    apiKeyValidDetails: 'Claude 3.5 Sonnet / Haiku connected. Live AI assistance is active.',
-    apiKeyInvalidDetails: 'Authentication failed. Please verify your sk-ant-... key or check Anthropic credits.',
-    apiKeyClearBtn: 'Clear Key',
-    apiKeyPlaceholder: 'sk-ant-api03-...',
+    // API Key & Live Verification
+    apiKeySectionTitle: 'AI Gateway & Live Verification',
+    apiKeySectionDesc: 'Configure and test the AI engine for real-time natural language reasoning, clinical summaries, and OCR validation.',
+    apiKeyVerifying: 'Verifying...',
+    apiKeyVerifyBtn: 'Verify Connection',
+    apiKeyStatusValid: 'AI Gateway Verified & Active',
+    apiKeyValidDetails: 'Secure connection established. All neural features are functioning with full capabilities.',
+    apiKeyStatusInvalid: 'Verification Unsuccessful',
+    apiKeyInvalidDetails: 'Could not connect to AI services. Please check credentials or network connectivity.',
+    apiKeyStatusUntested: 'Standard Intelligent Engine Active',
 
     // Offline status
     onlineStatus: 'Online (Connected)',
     offlineStatus: 'Offline Mode Active',
-    offlineSyncText: 'Changes will sync automatically when internet restores.',
+    offlineSyncText: 'Changes are safely queued and will sync automatically when connectivity returns.',
     syncPendingCount: 'items queued for sync',
 
     // Disclaimer
     clinicalDisclaimerTitle: 'Important Health Notice',
     clinicalDisclaimer: 'SmritiCare tracks performance trends and assists with daily medication adherence. It is NOT a diagnostic tool and does NOT diagnose dementia, Alzheimer\'s, or medical conditions. Consult registered medical practitioners for clinical diagnosis.',
 
-    // Safety & AI Stub badge
-    aiStubBadgeTitle: 'AI Vision & Assistant Engine (DEMO / STUB MODE)',
-    aiStubBadgeDesc: 'Showing simulated local intelligence for hackathon preview. Live Anthropic Claude Vision API can be enabled with an API key in Settings.',
-
     // Games
     gameRememberMatch: 'Remember & Match',
-    gameRememberMatchDesc: 'Find pairs of traditional Assamese cultural items to train visual memory.',
+    gameRememberMatchDesc: 'Find matching pairs of cultural items to train visual memory.',
     gameFindSymbol: 'Find the Symbol',
-    gameFindSymbolDesc: 'Spot the target cultural emblem among distractors to sharpen visual attention.',
+    gameFindSymbolDesc: 'Spot the target emblem among distractors to sharpen visual attention.',
     gameFollowPath: 'Follow the Path',
     gameFollowPathDesc: 'Connect numbers and letters in sequence to practice visual-spatial planning.',
     gameRememberRoutine: 'Remember the Routine',
-    gameRememberRoutineDesc: 'Arrange daily healthy living steps in their correct morning-to-night sequence.',
+    gameRememberRoutineDesc: 'Arrange daily healthy living steps in their correct sequence.',
     gameSequenceRecall: 'Sequence Recall',
-    gameSequenceRecallDesc: 'Remember and repeat the light and sound pattern to boost working memory.',
-    gameLocalMemory: 'Local Heritage Memory',
-    gameLocalMemoryDesc: 'Answer friendly questions celebrating Assam\'s heritage, festivals, and landmarks.',
+    gameSequenceRecallDesc: 'Observe the flashing color patterns and repeat them accurately.',
+    gameLocalMemory: 'Heritage Recall',
+    gameLocalMemoryDesc: 'Recall famous cultural landmarks, festivals, and traditions.',
 
     // Adaptive difficulty
-    difficultyTier1: 'Gentle (Level 1)',
-    difficultyTier2: 'Standard (Level 2)',
-    difficultyTier3: 'Challenging (Level 3)',
-    difficultyAdjustUp: 'Great focus! Difficulty adjusted upward.',
-    difficultyAdjustGentle: 'Adjusted to a gentle pace for maximum comfort.',
+    difficultyTier1: 'Gentle Tier (Level 1)',
+    difficultyTier2: 'Standard Tier (Level 2)',
+    difficultyTier3: 'Challenge Tier (Level 3)',
+    difficultyAdjustUp: 'Great focus! Difficulty tier adjusted up.',
+    difficultyAdjustGentle: 'Adjusted to gentle tier for comfort.',
 
     // Routine & Reminders
     routineMorning: 'Morning Schedule',
@@ -116,65 +146,115 @@ export const translations = {
     routineEvening: 'Evening Schedule',
     routineNight: 'Night Schedule',
     waterTracker: 'Daily Hydration Tracker',
-    waterGoal: 'Goal: 8 glasses daily (Tea, water, fresh lemon water)',
-    walkTracker: 'Daily Gentle Movement',
-    walkGoal: 'Goal: 20-30 min walk (Garden / courtyard)',
+    waterGoal: 'Goal: 8 glasses daily (water, warm herbal tea)',
+    walkTracker: 'Daily Gentle Walking',
+    walkGoal: 'Goal: 20-30 mins gentle stroll in courtyard or garden',
+    addMedicineTitle: 'Add New Medication',
+    medName: 'Medicine Name',
+    medDose: 'Dosage / Strength',
+    medTime: 'Time of Dose',
+    medFreq: 'Frequency',
+    medNotes: 'Special Instructions',
 
     // AI Chat
-    chatGreeting: 'Namaskar! I am Smriti Sathi, your caring assistant. How can I help you today?',
-    chatPrompt1: 'What medicine do I take with dinner tonight?',
-    chatPrompt2: 'Remind me about the Rongali Bihu celebration.',
-    chatPrompt3: 'I feel a bit forgetful today, what should I do?',
-    chatPrompt4: 'Explain my fasting blood sugar report.',
+    chatGreeting: 'Namaste! I am Smriti Sathi, your caring wellness assistant. How may I assist you today?',
+    chatPrompt1: 'What medicines do I have scheduled for today?',
+    chatPrompt2: 'How was my cognitive game performance this week?',
+    chatPrompt3: 'Explain my latest lab test report in simple words.',
+    chatPrompt4: 'Give me gentle tips for sleeping peacefully tonight.',
 
     // Memory Journal
-    journalTitle: 'Family & Heritage Memory Album',
-    journalSubtitle: 'Familiar faces, ancestral memories, and joyful everyday reflections.',
-    whoIsThis: 'Who is in this photo?',
-    revealStory: 'Listen to the Family Memory Story',
+    journalTitle: 'Family Album & Memory Journal',
+    journalSubtitle: 'Familiar faces, nostalgic memories, and joyful family moments.',
+    whoIsThis: 'Who is this in the photo?',
+    revealStory: 'Listen to Story & Voice Note',
+    addMemoryTitle: 'Add New Family Memory',
 
     // Caregiver
-    caregiverOverview: 'Patient Care & Adherence Overview',
-    adherenceRateMed: 'Medicine Adherence',
-    adherenceRateHydration: 'Hydration Goal',
-    adherenceRateActivity: 'Daily Activity',
-    cognitiveBaseline: 'Personal Cognitive Baseline',
-    caregiverNotesTitle: 'Caregiver Observation Log',
+    caregiverOverview: 'Caregiver Patient Overview',
+    adherenceRateMed: 'Medication Adherence Rate',
+    adherenceRateHydration: 'Hydration Target',
+    adherenceRateActivity: 'Daily Physical Routine',
+    cognitiveBaseline: 'Cognitive Domain Radar',
+    caregiverNotesTitle: 'Caregiver Log & Observations',
+    linkPatientTitle: 'Link Patient Account',
+    linkPatientDesc: 'Enter the Patient ID or registered phone number to establish authorized caregiver monitoring.',
 
     // Clinician
-    clinicianOverview: 'Clinical Longitudinal Monitoring Portal',
-    domainRadarTitle: 'Cognitive Domain Breakdown',
-    adherenceHistory: '30-Day Medication & Activity Adherence',
-    clinicalRecommendation: 'Clinical Observation & Recommendation',
+    clinicianOverview: 'Clinician Cognitive Radar & Longitudinal Records',
+    domainRadarTitle: 'Cognitive Domain Performance History',
+    adherenceHistory: '30-Day Medication Log & Compliance',
+    clinicalRecommendation: 'Doctor Observations & Clinical Notes',
+    patientList: 'Patient Roster',
+
+    // Doctor Appointments
+    appointmentsTitle: 'Doctor Appointments & Consultations',
+    findDoctor: 'Find Doctor / Specialist',
+    selectSpecialty: 'Filter by Specialty',
+    availableSlots: 'Available Time Slots',
+    bookConsultation: 'Confirm Booking',
+    myUpcomingAppointments: 'Upcoming Consultations',
+    appointmentStatus: 'Status',
 
     // ASHA
-    ashaTitle: 'ASHA & Anganwadi Village Care Portal',
-    ashaSubtitle: 'Community Outreach • Titabor Block, Jorhat District',
-    rosterTitle: 'Assigned Elderly Patients',
+    ashaTitle: 'ASHA & Community Health Portal',
+    ashaSubtitle: 'Doorstep Screening & Elderly Wellness Records',
+    rosterTitle: 'Assigned Village Patients',
     lastVisited: 'Last Visited',
-    medicineStock: 'Medicine Stock Left',
+    medicineStock: 'Medicine Stock Remaining',
+    recordVisitTitle: 'Record Home Visit & Screening',
+    vitalSigns: 'Blood Pressure & Vitals',
+    screeningNotes: 'Screening Notes & Observations',
+    addVillagePatient: 'Register Village Elder',
   },
   hi: {
     // App header & brand
     appName: 'स्मृति केयर (SmritiCare)',
-    appTagline: 'पूर्वोत्तर भारत के वरिष्ठ नागरिकों के लिए संज्ञानात्मक देखभाल और दवा सुरक्षा',
-    appSubtext: 'बुजुर्गों, परिवारों और आशा स्वास्थ्य कार्यकर्ताओं के लिए सरल और ऑफलाइन-सक्षम सेवा।',
+    appTagline: 'संज्ञानात्मक स्वास्थ्य और सुरक्षित दवा प्रबंधन',
+    appSubtext: 'बुजुर्गों, परिवारों, डॉक्टरों और आशा स्वास्थ्य कार्यकर्ताओं के लिए सरल और ऑफलाइन-सक्षम सेवा।',
 
     // Roles
     rolePatient: 'वरिष्ठ नागरिक / मरीज',
     roleCaregiver: 'पारिवारिक देखभालकर्ता',
     roleClinician: 'चिकित्सक / डॉक्टर',
-    roleAsha: 'आशा / आंगनवाड़ी कार्यकर्ता',
+    roleAsha: 'आशा / स्वास्थ्य कार्यकर्ता',
     roleSwitch: 'भूमिका बदलें',
+
+    // Auth & Account
+    authTitle: 'स्मृति केयर में आपका स्वागत है',
+    authSubtitle: 'अपनी व्यक्तिगत स्वास्थ्य और संज्ञानात्मक सहायता के लिए साइन इन करें',
+    loginTab: 'साइन इन',
+    registerTab: 'नया खाता बनाएं',
+    fullName: 'पूरा नाम',
+    emailOrPhone: 'ईमेल या मोबाइल नंबर',
+    password: 'पासवर्ड',
+    selectRole: 'अपनी प्राथमिक भूमिका चुनें',
+    dateOfBirth: 'जन्म तिथि',
+    address: 'शहर / गाँव / पता',
+    emergencyContactName: 'आपातकालीन संपर्क का नाम',
+    emergencyContactPhone: 'आपातकालीन संपर्क नंबर',
+    preferredLanguage: 'पसंदीदा भाषा',
+    healthConditions: 'स्वास्थ्य स्थिति (जैसे उच्च रक्तचाप, मधुमेह)',
+    btnSignIn: 'साइन इन करें',
+    btnRegister: 'पंजीकरण पूर्ण करें',
+    btnSignOut: 'लॉग आउट करें',
+    alreadyHaveAccount: 'क्या आपके पास पहले से खाता है? साइन इन करें',
+    needAccount: 'खाता नहीं है? नया बनाएं',
+    accountSetupStep1: 'चरण 1: खाता जानकारी',
+    accountSetupStep2: 'चरण 2: व्यक्तिगत प्रोफ़ाइल',
+    accountSetupStep3: 'चरण 3: स्वास्थ्य व दवा सेटअप',
+    btnNext: 'अगला कदम',
+    btnBack: 'पिछला कदम',
 
     // Navigation
     navHome: 'मुख्य पृष्ठ',
     navRoutine: 'दैनिक दिनचर्या',
     navGames: 'दिमागी खेल',
-    navSafety: 'दवा सुरक्षा',
+    navSafety: 'दवा व लैब AI',
     navJournal: 'स्मृति एल्बम',
     navChat: 'स्मृति साथी (AI)',
     navDashboard: 'डैशबोर्ड',
+    navAppointments: 'डॉक्टर परामर्श',
     navVillage: 'ग्रामीण स्वास्थ्य',
     navSettings: 'सेटिंग्स',
 
@@ -186,6 +266,7 @@ export const translations = {
     actionListen: 'सुनें',
     actionStopVoice: 'आवाज बंद करें',
     actionTakeDose: 'दवा ले ली',
+    actionSkipDose: 'छोड़ दी',
     actionSnooze: 'बाद में याद दिलाएं',
     actionAdd: 'नया जोड़ें',
     actionUpload: 'फोटो या फाइल अपलोड करें',
@@ -194,13 +275,21 @@ export const translations = {
     actionDownloadPdf: 'चिकित्सा रिपोर्ट डाउनलोड करें (PDF)',
     actionSyncNow: 'अभी सिंक करें',
     actionEmergency: 'आपातकालीन सहायता (SOS)',
+    actionBookAppointment: 'अपॉइंटमेंट बुक करें',
+    actionConfirm: 'पुष्टि करें और सहेजें',
 
     // Status badges
     statusStable: 'प्रदर्शन रुझान: स्थिर (Stable)',
-    statusWatch: 'प्रदर्शन रुझान: हल्का बदलाव (Watch)',
+    statusWatch: 'प्रदर्शन रुझान: निगरानी (Watch)',
     statusReview: 'प्रदर्शन रुझान: समीक्षा संकेत (Review)',
     statusTaken: 'ली गई',
+    statusScheduled: 'निर्धारित',
+    statusSkipped: 'छोड़ी गई',
+    statusMissed: 'छूट गई',
     statusPending: 'बाकी',
+    statusConfirmed: 'पुष्टि हो चुकी',
+    statusCompleted: 'पूर्ण',
+    statusCancelled: 'रद्द',
     statusNormal: 'सामान्य सीमा',
     statusElevated: 'हल्का बढ़ा हुआ',
     statusLow: 'सामान्य से कम',
@@ -211,40 +300,34 @@ export const translations = {
     a11yNormal: 'सामान्य (16px)',
     a11yLarge: 'बड़ा (19px)',
     a11yXLarge: 'बहुत बड़ा (22px)',
-    a11yContrast: 'उच्च कंट्रास्ट मोड (High Contrast)',
+    a11yContrast: 'उच्च कंट्रास्ट मोड',
     a11yReducedMotion: 'एनीमेशन कम करें',
     a11yVoice: 'ध्वनि सहायता और बोलकर सुनाएं',
 
-    // API Key & Live AI
-    apiKeySectionTitle: 'एंथ्रोपिक क्लॉड API कुंजी (लाइव AI एवं विजन)',
-    apiKeySectionDesc: 'स्मृति केयर डिफ़ॉल्ट रूप से ऑफलाइन इंटेलिजेंट इंजन पर काम करता है। वास्तविक क्लॉड 3.5 सॉनेट / हाइकू विजन और लाइव संवादी AI सक्रिय करने के लिए अपनी API Key दर्ज और सत्यापित करें।',
-    apiKeyVerifyBtn: 'कुंजी सत्यापित करें (Verify)',
-    apiKeyVerifying: 'सत्यापन जारी है...',
-    apiKeyStatusValid: 'सत्यापित एवं सक्रिय (Valid)',
-    apiKeyStatusInvalid: 'अमान्य कुंजी (Invalid)',
-    apiKeyStatusUntested: 'अ-सत्यापित / डेमो मोड',
-    apiKeyValidDetails: 'क्लॉड 3.5 सफलतापूर्वक कनेक्ट हुआ। लाइव AI साथी सक्रिय है।',
-    apiKeyInvalidDetails: 'सत्यापन विफल। कृपया sk-ant-... कुंजी या इंटरनेट कनेक्शन की जांच करें।',
-    apiKeyClearBtn: 'कुंजी हटाएं',
-    apiKeyPlaceholder: 'sk-ant-api03-...',
+    // API Key & Live Verification
+    apiKeySectionTitle: 'AI गेटवे एवं लाइव सत्यापन',
+    apiKeySectionDesc: 'वास्तविक समय में प्राकृतिक भाषा समझ, नैदानिक सारांश और OCR सत्यापन के लिए AI इंजन को कॉन्फ़िगर और परीक्षण करें।',
+    apiKeyVerifying: 'सत्यापन हो रहा है...',
+    apiKeyVerifyBtn: 'कनेक्शन सत्यापित करें',
+    apiKeyStatusValid: 'AI गेटवे सत्यापित और सक्रिय है',
+    apiKeyValidDetails: 'सुरक्षित कनेक्शन स्थापित हो चुका है। सभी उन्नत AI सुविधाएं पूर्ण रूप से सक्रिय हैं।',
+    apiKeyStatusInvalid: 'सत्यापन असफल रहा',
+    apiKeyInvalidDetails: 'AI सेवाओं से कनेक्ट नहीं हो सका। कृपया अपनी क्रेडेंशियल्स या इंटरनेट जांचें।',
+    apiKeyStatusUntested: 'मानक इंटेलिजेंट इंजन सक्रिय है',
 
     // Offline status
     onlineStatus: 'ऑनलाइन (इंटरनेट सक्रिय)',
     offlineStatus: 'ऑफलाइन मोड सक्रिय',
-    offlineSyncText: 'इंटरनेट आते ही सभी डेटा अपने आप सुरक्षित हो जाएगा।',
+    offlineSyncText: 'बदलाव सुरक्षित हैं और इंटरनेट आते ही अपने आप सिंक हो जाएंगे।',
     syncPendingCount: 'आइटम सिंक के लिए कतार में हैं',
 
     // Disclaimer
     clinicalDisclaimerTitle: 'महत्वपूर्ण स्वास्थ्य सूचना',
     clinicalDisclaimer: 'स्मृति केयर मानसिक स्वास्थ्य रुझानों पर नज़र रखता है और दैनिक दवा लेने में मदद करता है। यह कोई नैदानिक उपकरण नहीं है और डिमेंशिया या अल्जाइमर का निदान नहीं करता है। किसी भी चिकित्सीय सलाह के लिए पंजीकृत चिकित्सक से परामर्श लें।',
 
-    // Safety & AI Stub badge
-    aiStubBadgeTitle: 'AI विजन और सहायक इंजन (डेमो मोड)',
-    aiStubBadgeDesc: 'हैकथॉन पूर्वावलोकन के लिए स्थानीय डेमो प्रदर्शित है। वास्तविक क्लाउड विजन का उपयोग करने के लिए सेटिंग्स में API Key जोड़ें।',
-
     // Games
     gameRememberMatch: 'याद रखें और मिलाएं',
-    gameRememberMatchDesc: 'पारंपरिक सांस्कृतिक प्रतीकों के जोड़े मिलाकर स्मृति क्षमता का अभ्यास करें।',
+    gameRememberMatchDesc: 'सांस्कृतिक प्रतीकों के जोड़े मिलाकर स्मृति क्षमता का अभ्यास करें।',
     gameFindSymbol: 'प्रतीक खोजें',
     gameFindSymbolDesc: 'अन्य चित्रों के बीच से सही प्रतीक ढूंढकर दृश्य एकाग्रता बढ़ाएं।',
     gameFollowPath: 'क्रम अनुसार पथ चुनें',
@@ -253,8 +336,8 @@ export const translations = {
     gameRememberRoutineDesc: 'सुबह से रात तक की दैनिक स्वस्थ गतिविधियों को सही क्रम में व्यवस्थित करें।',
     gameSequenceRecall: 'रंग और संकेत का क्रम',
     gameSequenceRecallDesc: 'रोशनी और ध्वनि के पैटर्न को याद रखकर उसी क्रम में दोहराएं।',
-    gameLocalMemory: 'स्थानीय धरोहर स्मृति',
-    gameLocalMemoryDesc: 'असम की संस्कृति, त्योहारों और ऐतिहासिक स्थलों से जुड़े सरल प्रश्नों के उत्तर दें।',
+    gameLocalMemory: 'धरोहर स्मृति',
+    gameLocalMemoryDesc: 'संस्कृति, त्योहारों और ऐतिहासिक स्थलों से जुड़े सरल प्रश्नों के उत्तर दें।',
 
     // Adaptive difficulty
     difficultyTier1: 'सरल स्तर (Level 1)',
@@ -272,197 +355,84 @@ export const translations = {
     waterGoal: 'लक्ष्य: प्रतिदिन 8 गिलास पानी (चाय, पानी, नींबू पानी)',
     walkTracker: 'दैनिक हल्का चलना',
     walkGoal: 'लक्ष्य: 20-30 मिनट बगीचे या आंगन में टहलना',
+    addMedicineTitle: 'नई दवा जोड़ें',
+    medName: 'दवा का नाम',
+    medDose: 'खुराक / शक्ति',
+    medTime: 'लेने का समय',
+    medFreq: 'आवृत्ति (Frequency)',
+    medNotes: 'विशेष निर्देश',
 
     // AI Chat
     chatGreeting: 'नमस्ते! मैं स्मृति साथी हूँ, आपकी देखभाल सहायक। आज मैं आपकी क्या मदद कर सकती हूँ?',
-    chatPrompt1: 'आज रात के खाने के साथ मुझे कौन सी दवा लेनी है?',
-    chatPrompt2: 'रोंगाली बिहू उत्सव के बारे में कुछ बताइए।',
-    chatPrompt3: 'आज मुझे थोड़ा भूलने जैसा लग रहा है, मैं क्या करूँ?',
-    chatPrompt4: 'मेरी ब्लड टेस्ट रिपोर्ट समझाइए।',
+    chatPrompt1: 'आज मुझे कौन सी दवाएं लेनी हैं?',
+    chatPrompt2: 'इस सप्ताह मेरे दिमागी खेल का प्रदर्शन कैसा रहा?',
+    chatPrompt3: 'मेरी नवीनतम लैब रिपोर्ट को सरल शब्दों में समझाइए।',
+    chatPrompt4: 'आज रात अच्छी नींद के लिए मुझे कुछ सुझाव दीजिए।',
 
     // Memory Journal
     journalTitle: 'परिवार और स्मृति एल्बम',
     journalSubtitle: 'पहचाने चेहरे, पुरानी यादें और सुखद पारिवारिक क्षण।',
     whoIsThis: 'इस फोटो में कौन है?',
     revealStory: 'इस स्मृति की कहानी सुनें',
+    addMemoryTitle: 'नई पारिवारिक स्मृति जोड़ें',
 
     // Caregiver
-    caregiverOverview: 'रोगी देखभाल अवलोकन (बिपिन गोगोई, उम्र 72)',
+    caregiverOverview: 'रोगी देखभाल अवलोकन',
     adherenceRateMed: 'नियमित दवा लेने की दर',
     adherenceRateHydration: 'पानी पीने का लक्ष्य',
-    adherenceRateActivity: 'दैनिक चलने का लक्ष्य',
-    cognitiveBaseline: 'व्यक्तिगत संज्ञानात्मक आधार',
+    adherenceRateActivity: 'दैनिक शारीरिक गतिविधि',
+    cognitiveBaseline: 'संज्ञानात्मक रुझान चार्ट',
     caregiverNotesTitle: 'देखभालकर्ता की टिप्पणियां',
+    linkPatientTitle: 'मरीज का खाता लिंक करें',
+    linkPatientDesc: 'मरीज का आईडी या पंजीकृत फोन नंबर दर्ज करें।',
 
     // Clinician
-    clinicianOverview: 'चिकित्सक निगरानी पोर्टल',
+    clinicianOverview: 'चिकित्सक निगरानी पोर्टल और संज्ञानात्मक रडार',
     domainRadarTitle: 'मस्तिष्क के विभिन्न क्षेत्रों का प्रदर्शन',
-    adherenceHistory: '30 दिनों की दवा और गतिविधि इतिहास',
+    adherenceHistory: '30 दिनों का दवा इतिहास और अनुपालन',
     clinicalRecommendation: 'चिकित्सकीय अवलोकन और सलाह',
+    patientList: 'मरीजों की सूची',
+
+    // Doctor Appointments
+    appointmentsTitle: 'डॉक्टर अपॉइंटमेंट और परामर्श',
+    findDoctor: 'डॉक्टर / विशेषज्ञ खोजें',
+    selectSpecialty: 'विशेषज्ञता अनुसार चुनें',
+    availableSlots: 'उपलब्ध समय',
+    bookConsultation: 'बुकिंग की पुष्टि करें',
+    myUpcomingAppointments: 'आगामी परामर्श',
+    appointmentStatus: 'स्थिति',
 
     // ASHA
-    ashaTitle: 'आशा और आंगनवाड़ी कार्यकर्ता पोर्टल',
-    ashaSubtitle: 'सामुदायिक स्वास्थ्य सेवा • तीताबर ब्लॉक, जोरहाट जिला',
+    ashaTitle: 'आशा और स्वास्थ्य कार्यकर्ता पोर्टल',
+    ashaSubtitle: 'सामुदायिक स्वास्थ्य सेवा और बुजुर्ग देखभाल',
     rosterTitle: 'सौंपे गए वरिष्ठ नागरिक',
-    lastVisited: 'पिछली मुलाकात की तारीख',
+    lastVisited: 'पिछली मुलाकात',
     medicineStock: 'दवा का शेष स्टॉक',
+    recordVisitTitle: 'घर का दौरा और स्वास्थ्य जांच दर्ज करें',
+    vitalSigns: 'रक्तचाप और वाइटल्स',
+    screeningNotes: 'जांच नोट्स और टिप्पणियां',
+    addVillagePatient: 'गाँव के बुजुर्ग को पंजीकृत करें',
   },
-  as: {
-    // App header & brand
-    appName: 'স্মৃতি কেয়াৰ (SmritiCare)',
-    appTagline: 'উত্তৰ-পূব ভাৰতৰ জ্যেষ্ঠ নাগৰিকসকলৰ বাবে স্মৃতি যত্ন আৰু ঔষধ সুৰক্ষা',
-    appSubtext: 'জ্যেষ্ঠজন, পৰিয়াল আৰু স্বাস্থ্যকৰ্মীসকলৰ বাবে সহজ আৰু ইন্টাৰনেট নথকাকৈও চলিব পৰা সেৱা।',
-
-    // Roles
-    rolePatient: 'জ্যেষ্ঠ নাগৰিক / ৰোগী',
-    roleCaregiver: 'পৰিয়ালৰ তত্ত্বাৱধায়ক',
-    roleClinician: 'চিকিৎসক / ডাক্তৰ',
-    roleAsha: 'আশা / অংগনৱাড়ী কৰ্মী',
-    roleSwitch: 'ভূমিকা সলনি কৰক',
-
-    // Navigation
-    navHome: 'মূল পৃষ্ঠা',
-    navRoutine: 'দৈনন্দিন ৰুটিন',
-    navGames: 'মগজুৰ খেল',
-    navSafety: 'ঔষধ সুৰক্ষা',
-    navJournal: 'স্মৃতি এলবাম',
-    navChat: 'স্মৃতি সাথী (AI)',
-    navDashboard: 'ডেশ্ববৰ্ড',
-    navVillage: 'গাঁৱৰ স্বাস্থ্য',
-    navSettings: 'ছেটিংছ',
-
-    // Common actions
-    actionBack: 'উভতি যাওক',
-    actionSave: 'সংৰক্ষণ কৰক',
-    actionCancel: 'বাতিল কৰক',
-    actionPlay: 'খেলক',
-    actionListen: 'শুনক',
-    actionStopVoice: 'কণ্ঠ বন্ধ কৰক',
-    actionTakeDose: 'ঔষধ খালোঁ',
-    actionSnooze: 'পাছত মনত পেলাব',
-    actionAdd: 'নতুন যোগ কৰক',
-    actionUpload: 'ফটো বা ফাইল আপলোড কৰক',
-    actionScan: 'ঔষধৰ পেকেট স্কেন কৰক',
-    actionExplain: 'সহজ ভাষাত বুজাই দিয়ক',
-    actionDownloadPdf: 'চিকিৎসা প্ৰতিবেদন ডাউনল’ড কৰক (PDF)',
-    actionSyncNow: 'এতিয়াই সংমিশ্ৰণ (Sync) কৰক',
-    actionEmergency: 'জৰুৰীকালীন সহায় (SOS)',
-
-    // Status badges
-    statusStable: 'দক্ষতা ধাৰা: স্থিৰ (Stable)',
-    statusWatch: 'দক্ষতা ধাৰা: সামান্য তাৰতম্য (Watch)',
-    statusReview: 'দক্ষতা ধাৰা: পুনৰীক্ষণৰ সংকেত (Review)',
-    statusTaken: 'খোৱা হ’ল',
-    statusPending: 'বাকী আছে',
-    statusNormal: 'স্বাভাৱিক সীমা',
-    statusElevated: 'সামান্য বেছি',
-    statusLow: 'স্বাভাৱিকতকৈ কম',
-
-    // Accessibility
-    a11yTitle: 'সহজ প্ৰৱেশাধিকাৰ আৰু দৃশ্যমানতা',
-    a11yTextSize: 'আখৰৰ আকাৰ',
-    a11yNormal: 'স্বাভাৱিক (16px)',
-    a11yLarge: 'ডাঙৰ (19px)',
-    a11yXLarge: 'অতি ডাঙৰ (22px)',
-    a11yContrast: 'উচ্চ বৈসাদৃশ্য মোড (High Contrast)',
-    a11yReducedMotion: 'এনিমেশ্যন কম কৰক',
-    a11yVoice: 'কণ্ঠ সহায়ক আৰু পঢ়ি শুনোৱা সেৱা',
-
-    // API Key & Live AI
-    apiKeySectionTitle: 'Anthropic Claude API Key (প্ৰকৃত লাইভ AI আৰু ভিজন)',
-    apiKeySectionDesc: 'স্মৃতি কেয়াৰ সাধাৰণতে অফলাইন ব্যৱস্থাতো চলিব পৰাকৈ নিৰ্মাণ কৰা হৈছে। প্ৰকৃত Claude 3.5 Sonnet / Haiku ব্যৱহাৰ কৰিবলৈ আপোনাৰ API Key সংযোগ কৰি পৰীক্ষা কৰক।',
-    apiKeyVerifyBtn: 'কী পৰীক্ষা কৰক (Verify)',
-    apiKeyVerifying: 'পৰীক্ষা কৰি থকা হৈছে...',
-    apiKeyStatusValid: 'প্ৰমাণিত আৰু সক্ৰিয় (Valid)',
-    apiKeyStatusInvalid: 'অবৈধ API Key (Invalid)',
-    apiKeyStatusUntested: 'অপৰীক্ষিত / নমুনা মোড',
-    apiKeyValidDetails: 'Claude 3.5 সফলভাৱে সংযোগ হ’ল। লাইভ AI সাথী সক্ৰিয় হৈছে।',
-    apiKeyInvalidDetails: 'পৰীক্ষা বিফল। অনুগ্ৰহ কৰি আপোনাৰ sk-ant-... কী বা ইন্টাৰনেট পৰীক্ষা কৰক।',
-    apiKeyClearBtn: 'কী আঁতৰাওক',
-    apiKeyPlaceholder: 'sk-ant-api03-...',
-
-    // Offline status
-    onlineStatus: 'অনলাইন (ইন্টাৰনেট সক্ৰিয়)',
-    offlineStatus: 'অফলাইন মোড চলি আছে',
-    offlineSyncText: 'ইন্টাৰনেট আহিলে সকলো তথ্য স্বয়ংক্ৰিয়ভাৱে সংৰক্ষিত হ’ব।',
-    syncPendingCount: 'টা তথ্য সংমিশ্ৰণৰ বাবে বাকী আছে',
-
-    // Disclaimer
-    clinicalDisclaimerTitle: 'প্ৰয়োজনীয় স্বাস্থ্য সতৰ্কবাৰ্তা',
-    clinicalDisclaimer: 'স্মৃতি কেয়াৰে স্মৃতিশক্তিৰ ধাৰা লক্ষ্য ৰাখে আৰু ঔষধ খোৱাৰ সময় মনত পেলায়। ই কোনো ৰোগ নিৰ্ণয়কাৰী সঁজুলি নহয়। কোনো চিকিৎসা সম্বন্ধীয় পৰামৰ্শৰ বাবে অনুগ্ৰহ কৰি পঞ্জীয়নভুক্ত চিকিৎসকৰ সৈতে যোগাযোগ কৰক।',
-
-    // Safety & AI Stub badge
-    aiStubBadgeTitle: 'AI দৃষ্টি আৰু সহায়ক ব্যৱস্থা (ডেমো / নমুনা অৱস্থা)',
-    aiStubBadgeDesc: 'হেকাথন প্ৰদৰ্শনৰ বাবে স্থানীয় নমুনা প্ৰদৰ্শিত হৈছে। প্ৰকৃত Claude Vision ব্যৱহাৰ কৰিবলৈ ছেটিংছত API Key সংযোগ কৰিব পাৰিব।',
-
-    // Games
-    gameRememberMatch: 'মনত ৰাখক আৰু মিলাওক',
-    gameRememberMatchDesc: 'অসমৰ পৰম্পৰাগত সামগ্ৰী যেনে জাপি, গামোচা, শৰাই আদিৰ যোৰ মিলাই স্মৃতিশক্তি পৰীক্ষা কৰক।',
-    gameFindSymbol: 'চিহ্ন বিচাৰি উলিয়াওক',
-    gameFindSymbolDesc: 'অন্যান্য ছবিৰ মাজৰ পৰা সঠিক অসমীয়া চিহ্ন বিচাৰি দৃষ্টিশক্তি আৰু মনোযোগ জোখক।',
-    gameFollowPath: 'ক্ৰম অনুসৰি পথ বাছক',
-    gameFollowPathDesc: 'ক্ৰম অনুসাৰে সংখ্যা আৰু আখৰ সংযোগ কৰি মগজুৰ পৰিকল্পনা ক্ষমতা বৃদ্ধি কৰক।',
-    gameRememberRoutine: 'দৈনন্দিন ৰুটিন মনত পেলাওক',
-    gameRememberRoutineDesc: 'পুৱাৰ পৰা ৰাতিলৈকে কৰিবলগীয়া দৈনন্দিন কামসমূহ শুদ্ধ ক্ৰমত সজাওক।',
-    gameSequenceRecall: 'ৰং আৰু শব্দৰ ক্ৰম',
-    gameSequenceRecallDesc: 'প্ৰদৰ্শিত ৰং আৰু সংকেতৰ ক্ৰম মনত ৰাখি পুনৰাবৃত্তি কৰক।',
-    gameLocalMemory: 'থলুৱা ঐতিহ্য স্মৃতি',
-    gameLocalMemoryDesc: 'অসমৰ উৎসৱ, ইতিহাস আৰু ঐতিহ্য সম্পৰ্কীয় প্ৰশ্নৰ উত্তৰ দি মন সতেজ ৰাখক।',
-
-    // Adaptive difficulty
-    difficultyTier1: 'সহজ স্তৰ (Level 1)',
-    difficultyTier2: 'মধ্যম স্তৰ (Level 2)',
-    difficultyTier3: 'উন্নত স্তৰ (Level 3)',
-    difficultyAdjustUp: 'বঢ়িয়া! আপোনাৰ দক্ষতা অনুসৰি স্তৰ উন্নত কৰা হৈছে।',
-    difficultyAdjustGentle: 'আপোনাৰ সুবিধাৰ্থে খেলৰ স্তৰ সহজ কৰা হৈছে।',
-
-    // Routine & Reminders
-    routineMorning: 'ৰাতিপুৱাৰ সময়সূচী',
-    routineAfternoon: 'দুপৰীয়াৰ সময়সূচী',
-    routineEvening: 'গধূলিৰ সময়সূচী',
-    routineNight: 'ৰাতিৰ সময়সূচী',
-    waterTracker: 'দৈনিক পানী খোৱাৰ হিচাপ',
-    waterGoal: 'লক্ষ্য: দৈনিক ৮ গিলাচ পানী/চাহ/নেমুপানী',
-    walkTracker: 'দৈনিক খোজ কঢ়া',
-    walkGoal: 'লক্ষ্য: ২০-৩০ মিনিট চোতাল বা ফুলনিত খোজ কঢ়া',
-
-    // AI Chat
-    chatGreeting: 'নমস্কাৰ! মই আপোনাৰ সহায়ক স্মৃতি সাথী। আজি মই আপোনাক কেনেদৰে সহায় কৰিব পাৰোঁ?',
-    chatPrompt1: 'আজি ৰাতি ভাত খাই কি ঔষধ খাব লাগিব?',
-    chatPrompt2: 'ৰঙালী বিহুৰ বিষয়ে কিছু কথা কওকচোন।',
-    chatPrompt3: 'আজি মোৰ অলপ পাহৰা যেন লাগিছে, মই কি কৰিম?',
-    chatPrompt4: 'মোৰ তেজ পৰীক্ষাৰ ৰিপৰ্টখন বুজাই দিয়ক।',
-
-    // Memory Journal
-    journalTitle: 'পৰিয়াল আৰু স্মৃতি এলবাম',
-    journalSubtitle: 'চিনাকি মুখ, পুৰণি স্মৃতি আৰু আনন্দদায়ক মুহূৰ্তসমূহ।',
-    whoIsThis: 'এইখন কাৰ ফটো বাৰু?',
-    revealStory: 'পৰিয়ালৰ এই স্মৃতিৰ কাহিনী শুনক',
-
-    // Caregiver
-    caregiverOverview: 'ৰোগীৰ যত্নৰ বুজ-বাজ (বিপিন গগৈ, বয়স ৭২)',
-    adherenceRateMed: 'নিয়মীয়াকৈ ঔষধ খোৱাৰ হাৰ',
-    adherenceRateHydration: 'পানী খোৱাৰ লক্ষ্য',
-    adherenceRateActivity: 'দৈনিক খোজ কঢ়াৰ লক্ষ্য',
-    cognitiveBaseline: 'ব্যক্তিগত স্মৃতি আৰু দক্ষতাৰ ভিত্তি',
-    caregiverNotesTitle: 'তত্ত্বাৱধায়কৰ টোকা',
-
-    // Clinician
-    clinicianOverview: 'চিকিৎসকৰ নিৰীক্ষণ পোৰ্টেল',
-    domainRadarTitle: 'মগজুৰ বিভিন্ন ক্ষেত্ৰৰ দক্ষতা',
-    adherenceHistory: '৩০ দিনৰ ঔষধ আৰু কাৰ্যকলাপৰ ইতিহাস',
-    clinicalRecommendation: 'চিকিৎসা সম্বন্ধীয় পৰ্যবেক্ষণ আৰু পৰামৰ্শ',
-
-    // ASHA
-    ashaTitle: 'আশা আৰু অংগনৱাড়ী কৰ্মী পোৰ্টেল',
-    ashaSubtitle: 'সামূহিক স্বাস্থ্য সেৱা • তিতাবৰ ব্লক, যোৰহাট জিলা',
-    rosterTitle: 'দায়িত্বত থকা জ্যেষ্ঠ নাগৰিকসকল',
-    lastVisited: 'শেষবাৰৰ বাবে চোৱাৰ তাৰিখ',
-    medicineStock: 'ঔষধ বাকী থকা দিন',
-  }
 };
 
-export function getTranslation(key: keyof typeof translations['en'], lang: Language): string {
-  const langDict = translations[lang] || translations.en;
-  return langDict[key] || translations.en[key] || key;
+export type TranslationKey = keyof typeof translations['en'];
+
+export function getTranslation(key: TranslationKey, lang?: Language): string;
+export function getTranslation(lang: Language, key: TranslationKey): string;
+export function getTranslation(arg1: TranslationKey | Language, arg2?: TranslationKey | Language): string {
+  let lang: Language = 'en';
+  let key: TranslationKey;
+
+  if (arg1 === 'en' || arg1 === 'hi') {
+    lang = arg1;
+    key = arg2 as TranslationKey;
+  } else {
+    key = arg1 as TranslationKey;
+    lang = (arg2 === 'hi' || arg2 === 'en') ? arg2 : 'en';
+  }
+
+  const selectedLang = lang === 'hi' ? 'hi' : 'en';
+  return (translations[selectedLang] as any)?.[key] || (translations['en'] as any)?.[key] || (key as string) || '';
 }
+
+export const t = getTranslation;

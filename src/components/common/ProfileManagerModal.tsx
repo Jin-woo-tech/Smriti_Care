@@ -107,9 +107,7 @@ export const ProfileManagerModal: React.FC = () => {
             <div>
               <h3 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
                 <span>
-                  {lang === 'as'
-                    ? 'ৰোগী প্ৰফাইল ব্যৱস্থাপনা'
-                    : lang === 'hi'
+                  {lang === 'hi'
                     ? 'मरीज़ प्रोफ़ाइल प्रबंधन'
                     : 'Patient Profile Manager'}
                 </span>
@@ -118,9 +116,7 @@ export const ProfileManagerModal: React.FC = () => {
                 </span>
               </h3>
               <p className="text-xs text-sky-200/70 font-medium">
-                {lang === 'as'
-                  ? 'সক্ৰিয় প্ৰফাইল সলনি কৰক বা নতুন পৰিয়ালৰ সদস্য যোগ কৰক'
-                  : lang === 'hi'
+                {lang === 'hi'
                   ? 'सक्रिय प्रोफ़ाइल बदलें या नए रोगी/परिवार सदस्य को जोड़ें'
                   : 'Switch active profile or register a new patient profile'}
               </p>
@@ -147,7 +143,7 @@ export const ProfileManagerModal: React.FC = () => {
           >
             <User size={16} />
             <span>
-              {lang === 'as' ? 'প্ৰফাইল সলনি কৰক' : lang === 'hi' ? 'प्रोफ़ाइल बदलें' : 'Switch Profile'}
+              {lang === 'hi' ? 'प्रोफ़ाइल बदलें' : 'Switch Profile'}
             </span>
           </button>
 
@@ -161,7 +157,7 @@ export const ProfileManagerModal: React.FC = () => {
           >
             <UserPlus size={16} />
             <span>
-              {lang === 'as' ? 'নতুন প্ৰফাইল যোগ কৰক' : lang === 'hi' ? 'नया प्रोफ़ाइल जोड़ें' : 'Add New Profile'}
+              {lang === 'hi' ? 'नया प्रोफ़ाइल जोड़ें' : 'Add New Profile'}
             </span>
           </button>
         </div>
@@ -199,7 +195,7 @@ export const ProfileManagerModal: React.FC = () => {
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           <h4 className="font-black text-sm sm:text-base text-white truncate">
-                            {lang === 'as' && profile.nameAs ? profile.nameAs : lang === 'hi' && profile.nameHi ? profile.nameHi : profile.name}
+                            {lang === 'hi' && profile.nameHi ? profile.nameHi : profile.name}
                           </h4>
                           <span className="text-xs px-2 py-0.5 rounded-full bg-white/10 text-sky-200 font-bold border border-white/15">
                             {profile.age}y • {profile.gender === 'F' ? 'Female' : profile.gender === 'M' ? 'Male' : 'Other'}
@@ -209,7 +205,7 @@ export const ProfileManagerModal: React.FC = () => {
                         <div className="flex items-center gap-3 mt-1 text-xs text-sky-200/70 font-medium truncate">
                           <span className="flex items-center gap-1 shrink-0">
                             <MapPin size={12} className="text-[#c084fc]" />
-                            {lang === 'as' && profile.locationAs ? profile.locationAs : lang === 'hi' && profile.locationHi ? profile.locationHi : profile.location}
+                            {lang === 'hi' && profile.locationHi ? profile.locationHi : profile.location}
                           </span>
                           {profile.emergencyContactPhone && (
                             <span className="text-[11px] font-mono text-purple-300 hidden sm:inline-block">
@@ -218,7 +214,7 @@ export const ProfileManagerModal: React.FC = () => {
                           )}
                           {profile.condition && (
                             <span className="truncate hidden md:inline-block">
-                              • {lang === 'as' && profile.conditionAs ? profile.conditionAs : lang === 'hi' && profile.conditionHi ? profile.conditionHi : profile.condition}
+                              • {lang === 'hi' && profile.conditionHi ? profile.conditionHi : profile.condition}
                             </span>
                           )}
                         </div>
@@ -247,7 +243,7 @@ export const ProfileManagerModal: React.FC = () => {
                 {/* Full Name */}
                 <div>
                   <label className="block text-xs font-bold text-sky-200 mb-1">
-                    {lang === 'as' ? 'সম্পূৰ্ণ নাম (Full Name)*' : lang === 'hi' ? 'पूरा नाम (Full Name)*' : 'Full Name*'}
+                    {lang === 'hi' ? 'पूरा नाम (Full Name)*' : 'Full Name*'}
                   </label>
                   <input
                     type="text"
@@ -262,7 +258,7 @@ export const ProfileManagerModal: React.FC = () => {
                 {/* Age */}
                 <div>
                   <label className="block text-xs font-bold text-sky-200 mb-1">
-                    {lang === 'as' ? 'বয়স (Age)*' : lang === 'hi' ? 'आयु (Age)*' : 'Age*'}
+                    {lang === 'hi' ? 'आयु (Age)*' : 'Age*'}
                   </label>
                   <input
                     type="number"
@@ -281,23 +277,23 @@ export const ProfileManagerModal: React.FC = () => {
                 {/* Gender */}
                 <div>
                   <label className="block text-xs font-bold text-sky-200 mb-1">
-                    {lang === 'as' ? 'লিংগ (Gender)' : lang === 'hi' ? 'लिंग (Gender)' : 'Gender'}
+                    {lang === 'hi' ? 'लिंग (Gender)' : 'Gender'}
                   </label>
                   <select
                     value={gender}
                     onChange={e => setGender(e.target.value as any)}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-[#131e34] border border-white/20 text-white text-xs focus:outline-none focus:border-purple-400"
                   >
-                    <option value="F">Female / মহিলা</option>
-                    <option value="M">Male / পুৰুষ</option>
-                    <option value="Other">Other / অন্যান্য</option>
+                    <option value="F">Female / महिला</option>
+                    <option value="M">Male / पुरुष</option>
+                    <option value="Other">Other / अन्य</option>
                   </select>
                 </div>
 
                 {/* Location / Village */}
                 <div>
                   <label className="block text-xs font-bold text-sky-200 mb-1">
-                    {lang === 'as' ? 'গাঁও / স্থান (Location)' : lang === 'hi' ? 'स्थान / गांव (Location)' : 'Location / Village'}
+                    {lang === 'hi' ? 'स्थान / गांव (Location)' : 'Location / Village'}
                   </label>
                   <input
                     type="text"
@@ -312,7 +308,7 @@ export const ProfileManagerModal: React.FC = () => {
               {/* Health Focus / Primary Condition */}
               <div>
                 <label className="block text-xs font-bold text-sky-200 mb-1">
-                  {lang === 'as' ? 'স্বাস্থ্য লক্ষ্য / স্থিতি (Care Goal / Condition)' : lang === 'hi' ? 'स्वास्थ्य लक्ष्य / स्थिति (Care Goal / Condition)' : 'Care Goal / Primary Condition'}
+                  {lang === 'hi' ? 'स्वास्थ्य लक्ष्य / स्थिति (Care Goal / Condition)' : 'Care Goal / Primary Condition'}
                 </label>
                 <input
                   type="text"
@@ -327,7 +323,7 @@ export const ProfileManagerModal: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold text-sky-200 mb-1">
-                    {lang === 'as' ? 'অভিভাৱক / জৰুৰীকালীন নাম' : lang === 'hi' ? 'अभिभावक / आपातकालीन नाम' : 'Guardian / Emergency Contact Name'}
+                    {lang === 'hi' ? 'अभिभावक / आपातकालीन नाम' : 'Guardian / Emergency Contact Name'}
                   </label>
                   <input
                     type="text"
@@ -339,7 +335,7 @@ export const ProfileManagerModal: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-sky-200 mb-1">
-                    {lang === 'as' ? 'জৰুৰীকালীন ফোন' : lang === 'hi' ? 'आपातकालीन फोन' : 'Emergency Phone Number'}
+                    {lang === 'hi' ? 'आपातकालीन फोन' : 'Emergency Phone Number'}
                   </label>
                   <input
                     type="tel"
@@ -358,7 +354,7 @@ export const ProfileManagerModal: React.FC = () => {
                 >
                   <Sparkles size={16} />
                   <span>
-                    {lang === 'as' ? 'প্ৰফাইল সংৰক্ষণ আৰু সক্ৰিয় কৰক' : lang === 'hi' ? 'प्रोफ़ाइल सहेजें एवं सक्रिय करें' : 'Save & Activate Profile'}
+                    {lang === 'hi' ? 'प्रोफ़ाइल सहेजें एवं सक्रिय करें' : 'Save & Activate Profile'}
                   </span>
                 </button>
               </div>
