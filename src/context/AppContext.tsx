@@ -23,6 +23,7 @@ import {
   initialPhotoMemories,
   initialJournal,
   initialCognitiveTrends,
+  freshCognitiveTrends,
   initialGameScores,
   initialAshaPatients,
   initialPatientProfiles,
@@ -149,13 +150,59 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [isAuthModalOpen, setAuthModalOpen] = useState<boolean>(false);
   const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login');
 
-  const [patientProfiles, setPatientProfiles] = useState<PatientProfile[]>(() =>
-    getStoredData<PatientProfile[]>(STORAGE_KEYS.PATIENT_PROFILES, initialPatientProfiles)
-  );
+  const [patientProfiles, setPatientProfiles] = useState<PatientProfile[]>(() => {
+    const saved = getStoredData<PatientProfile[]>(STORAGE_KEYS.PATIENT_PROFILES, initialPatientProfiles);
+    const savedUser = localStorage.getItem('smriticare_user_session');
+    if (savedUser) {
+      try {
+        const u = JSON.parse(savedUser);
+        if (u && (u.id || u.username)) {
+          const profileId = `pat-user-${u.id || u.username}`;
+          const existing = saved.find(p => p.id === profileId);
+          if (!existing) {
+            const initials = (u.fullName || u.username || 'PT')
+              .split(' ')
+              .map((p: string) => p[0])
+              .filter(Boolean)
+              .join('')
+              .toUpperCase()
+              .slice(0, 2) || 'PT';
+            const userProfile: PatientProfile = {
+              id: profileId,
+              name: u.fullName || u.username,
+              nameHi: u.fullName || u.username,
+              age: u.profile?.age || 65,
+              gender: (u.profile?.gender as 'M' | 'F' | 'Other') || 'M',
+              location: u.profile?.location || 'Jorhat, Assam',
+              locationHi: u.profile?.location || 'जोरहाट, असम',
+              avatarInitials: u.profile?.avatarInitials || initials,
+              avatarColor: u.profile?.avatarColor || 'from-purple-600 to-indigo-500',
+              condition: u.profile?.condition || 'Cognitive Wellness & Daily Routine',
+              conditionHi: 'संज्ञानात्मक स्वास्थ्य एवं दैनिक दिनचर्या',
+              adherenceRate: 100,
+              emergencyContactName: 'Primary Caregiver',
+              emergencyContactPhone: '+91 94350 00000',
+            };
+            return [userProfile, ...saved];
+          }
+        }
+      } catch {}
+    }
+    return saved;
+  });
 
-  const [activePatientId, setActivePatientIdState] = useState<string>(() =>
-    getStoredData<string>(STORAGE_KEYS.ACTIVE_PATIENT_ID, 'pat-ananya-20')
-  );
+  const [activePatientId, setActivePatientIdState] = useState<string>(() => {
+    const savedUser = localStorage.getItem('smriticare_user_session');
+    if (savedUser) {
+      try {
+        const u = JSON.parse(savedUser);
+        if (u && (u.id || u.username)) {
+          return `pat-user-${u.id || u.username}`;
+        }
+      } catch {}
+    }
+    return getStoredData<string>(STORAGE_KEYS.ACTIVE_PATIENT_ID, 'pat-ananya-20');
+  });
 
   const [reminders, setReminders] = useState<Reminder[]>(() =>
     getStoredData<Reminder[]>(STORAGE_KEYS.REMINDERS, initialReminders)
@@ -199,6 +246,50 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const activePatient =
     patientProfiles.find(p => p.id === activePatientId) || patientProfiles[0] || initialPatientProfiles[0];
 
+  // Dynamic synchronization of authenticated user to patient profile
+  const syncUserToPatientProfile = (user: User, isNewRegistration: boolean = false) => {
+    if (!user) return;
+    const profileId = `pat-user-${user.id || user.username}`;
+    const initials = (user.fullName || user.username || 'PT')
+      .split(' ')
+      .map(p => p[0])
+      .filter(Boolean)
+      .join('')
+      .toUpperCase()
+      .slice(0, 2) || 'PT';
+
+    const userProfile: PatientProfile = {
+      id: profileId,
+      name: user.fullName || user.username,
+      nameHi: user.fullName || user.username,
+      age: user.profile?.age || 65,
+      gender: (user.profile?.gender as 'M' | 'F' | 'Other') || 'M',
+      location: user.profile?.location || 'Jorhat, Assam',
+      locationHi: user.profile?.location || 'जोरहाट, असम',
+      avatarInitials: user.profile?.avatarInitials || initials,
+      avatarColor: user.profile?.avatarColor || 'from-purple-600 to-indigo-500',
+      condition: user.profile?.condition || 'Cognitive Wellness & Daily Routine',
+      conditionHi: 'संज्ञानात्मक स्वास्थ्य एवं दैनिक दिनचर्या',
+      adherenceRate: 100,
+      emergencyContactName: 'Primary Caregiver',
+      emergencyContactPhone: '+91 94350 00000',
+    };
+
+    setPatientProfiles(prev => {
+      const filtered = prev.filter(p => p.id !== profileId);
+      return [userProfile, ...filtered];
+    });
+    setActivePatientIdState(profileId);
+    setStoredData(STORAGE_KEYS.ACTIVE_PATIENT_ID, profileId);
+
+    if (isNewRegistration) {
+      setWaterGlasses(0);
+      setGameScores([]);
+      setCognitiveTrends(freshCognitiveTrends);
+      setReminders([]);
+    }
+  };
+
   // Try to load initial profile / session from server on startup
   useEffect(() => {
     async function loadServerUser() {
@@ -212,6 +303,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
             if (res.user.role) {
               setSettings(s => ({ ...s, role: res.user.role }));
             }
+            syncUserToPatientProfile(res.user, false);
           }
         }
       } catch (e) {
@@ -328,6 +420,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           role: res.user.role,
           language: res.user.preferredLanguage || s.language,
         }));
+        syncUserToPatientProfile(res.user, false);
         await refreshMedications();
         return true;
       }
@@ -350,6 +443,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           role: res.user.role,
           language: res.user.preferredLanguage || s.language,
         }));
+        syncUserToPatientProfile(res.user, true);
         await refreshMedications();
         return true;
       }
@@ -366,6 +460,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     // Set fallback demo user
     setCurrentUser(null);
     setSettings(s => ({ ...s, role: 'patient' }));
+    if (patientProfiles.length > 0) {
+      setActivePatientIdState(patientProfiles[0].id);
+    }
   };
 
   const switchRole = async (role: Role) => {
@@ -376,6 +473,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setCurrentUser(res.user);
         localStorage.setItem('smriticare_user_session', JSON.stringify(res.user));
         setSettings(s => ({ ...s, role }));
+        syncUserToPatientProfile(res.user, false);
         await refreshMedications();
       } else {
         setSettings(s => ({ ...s, role }));

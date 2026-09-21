@@ -65,8 +65,8 @@ export const PatientDashboard: React.FC<PatientDashboardProps> = ({
               <Sun size={14} className="text-[#c084fc]" />
               <span>
                 {lang === 'hi'
-                  ? 'तीताबर, जोरहाट • 26°C सुखद मौसम'
-                  : 'Titabor, Jorhat • 26°C Pleasant'}
+                  ? `${activePatient.locationHi || activePatient.location || 'जोरहाट, असम'} • 26°C सुखद मौसम`
+                  : `${activePatient.location || 'Jorhat, Assam'} • 26°C Pleasant`}
               </span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
