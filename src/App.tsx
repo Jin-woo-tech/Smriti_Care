@@ -229,7 +229,7 @@ export const App: React.FC = () => {
               <span>•</span>
               <span>Smart India Hackathon SIH 2026</span>
               <span>•</span>
-              <span>Titabor, Jorhat, Assam</span>
+              <span>Vikas, Aditya, Priyanshu</span>
             </div>
 
             <p className="text-[11px] text-sky-200/50 max-w-2xl mx-auto leading-relaxed">

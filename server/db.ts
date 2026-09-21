@@ -580,33 +580,33 @@ function seedInitialData() {
   insertMemory.run(
     uuidv4(),
     patientId,
-    'Daughter Priyanka & Grandson Aarav',
-    'बेटी प्रियंका और पोता आरव',
-    'Daughter & Grandson',
-    'बेटी और पोता',
-    'Celebration of Aarav\'s 5th birthday at our ancestral home in Titabor.',
-    'तीताबर के पैतृक घर में आरव के 5वें जन्मदिन का आनंदमय उत्सव।',
-    '2024',
-    'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=800&auto=format&fit=crop&q=80',
-    'Aarav was so happy cutting his birthday cake with everyone gathered around.',
-    'आरव अपने जन्मदिन का केक काटते समय बेहद खुश था और सब साथ में थे।',
-    'family,celebration,birthday'
+    'Family Pet Dog Bruno',
+    'पारिवारिक पालतू कुत्ता ब्रूनो',
+    'Beloved Pet Dog',
+    'प्रिय पालतू कुत्ता',
+    'Our playful Golden Retriever Bruno who loves morning garden walks and playing fetch.',
+    'हमारा प्यारा गोल्डन रिट्रीवर कुत्ता ब्रूनो, जिसे सुबह बगीचे में टहलना और गेंद खेलना पसंद है।',
+    '2025',
+    'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80',
+    'This is Bruno, your loyal Golden Retriever pet dog who greets you happily every morning.',
+    'यह ब्रूनो है, आपका वफादार पालतू कुत्ता जो हर सुबह खुशी से आपका स्वागत करता है।',
+    'pet,dog,bruno,family'
   );
 
   insertMemory.run(
     uuidv4(),
     patientId,
-    'Ancestral Tea Garden in Titabor',
-    'तीताबर का पैतृक चाय बागान',
-    'Heritage & Home',
-    'पैतृक धरोहर एवं घर',
-    'Morning stroll amidst the lush green tea leaves and morning mist.',
-    'सुबह की ताज़ा हवा में हरी चाय की पत्तियों के बीच शांत चहलकदमी।',
-    '2021',
-    'https://images.unsplash.com/photo-1576085898323-218337e3e43c?w=800&auto=format&fit=crop&q=80',
-    'The soothing aroma of fresh morning tea leaves has brought peace for decades.',
-    'सुबह की ताज़ा चाय पत्तियों की खुशबू दशकों से मन को शांति देती रही है।',
-    'nature,tea-garden,walk'
+    'Majestic Royal Bengal Tiger',
+    'रॉयल बंगाल टाइगर (सफारी)',
+    'Wildlife Safari Encounter',
+    'वन्यजीव सफारी अनुभव',
+    'Memorable family safari sighting in Kaziranga National Park during a scenic morning jeep ride.',
+    'काजीरंगा नेशनल पार्क में सुबह की जीप सफारी के दौरान यादगार वन्यजीव दर्शन।',
+    '2024',
+    'https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=600&q=80',
+    'Remember the thrilling Kaziranga safari tour where you spotted this beautiful tiger near the lake.',
+    'याद है वह रोमांचक काजीरंगा सफारी, जहां आपने झील के किनारे इस सुंदर बाघ को देखा था।',
+    'nature,wildlife,tiger,safari'
   );
 
   // 11. Seed Lab Report

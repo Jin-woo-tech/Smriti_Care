@@ -250,7 +250,7 @@ export const ProfileManagerModal: React.FC = () => {
                     required
                     value={name}
                     onChange={e => setName(e.target.value)}
-                    placeholder="e.g. Ananya Jain"
+                    placeholder="e.g. Rahul Sharma"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-sky-200/40 text-xs focus:outline-none focus:border-purple-400 backdrop-blur-md"
                   />
                 </div>
@@ -267,7 +267,7 @@ export const ProfileManagerModal: React.FC = () => {
                     max="120"
                     value={age}
                     onChange={e => setAge(e.target.value)}
-                    placeholder="e.g. 20 or 72"
+                    placeholder="e.g. 68"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-sky-200/40 text-xs focus:outline-none focus:border-purple-400 backdrop-blur-md"
                   />
                 </div>
@@ -284,8 +284,8 @@ export const ProfileManagerModal: React.FC = () => {
                     onChange={e => setGender(e.target.value as any)}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-[#131e34] border border-white/20 text-white text-xs focus:outline-none focus:border-purple-400"
                   >
-                    <option value="F">Female / महिला</option>
                     <option value="M">Male / पुरुष</option>
+                    <option value="F">Female / महिला</option>
                     <option value="Other">Other / अन्य</option>
                   </select>
                 </div>
@@ -299,7 +299,7 @@ export const ProfileManagerModal: React.FC = () => {
                     type="text"
                     value={location}
                     onChange={e => setLocation(e.target.value)}
-                    placeholder="e.g. Titabor, Jorhat"
+                    placeholder="e.g. Jorhat, Assam"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-sky-200/40 text-xs focus:outline-none focus:border-purple-400 backdrop-blur-md"
                   />
                 </div>
