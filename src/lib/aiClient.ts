@@ -273,6 +273,12 @@ export async function getSathiAIResponse(
   await new Promise(resolve => setTimeout(resolve, 300));
 
   const queryLower = userQuery.toLowerCase().trim();
+  const seed = `${userQuery}_${Date.now()}`;
+  const pick = (arr: string[]) => {
+    let hash = 0;
+    for (let i = 0; i < seed.length; i++) hash = (hash << 5) - hash + seed.charCodeAt(i);
+    return arr[Math.abs(hash) % arr.length];
+  };
 
   if (language === 'hi') {
     if (
@@ -280,19 +286,64 @@ export async function getSathiAIResponse(
       queryLower === 'hello' ||
       queryLower === 'hey' ||
       queryLower.startsWith('hlo') ||
+      queryLower.startsWith('hlw') ||
+      queryLower.startsWith('helo') ||
       queryLower.includes('नमस्ते') ||
       queryLower.includes('प्रणाम')
     ) {
-      return 'नमस्ते! आपसे बात करके बहुत खुशी हुई। आप अभी कैसा महसूस कर रहे हैं? आज का दिन आपका कैसा बीत रहा है?';
+      return pick([
+        'नमस्ते! आपसे बात करके बहुत खुशी हुई। आप अभी कैसा महसूस कर रहे हैं? आज का दिन आपका कैसा बीत रहा है?',
+        'प्रणाम! आपका दिन शुभ और मंगलमय हो। क्या आपने सुबह की चाय और नाश्ता कर लिया? बताइए आज मैं आपकी कैसे मदद करूँ?',
+        'नमस्ते! मैं हर समय आपके साथ हूँ। आज मन में कोई बात है या आप अपनी दिनचर्या के बारे में बात करना चाहेंगे?',
+      ]);
     }
     if (
       queryLower.includes('tired') ||
+      queryLower.includes('tierd') ||
       queryLower.includes('थक') ||
+      queryLower.includes('thak') ||
       queryLower.includes('neend') ||
       queryLower.includes('नींद') ||
-      queryLower.includes('कमज़ोर')
+      queryLower.includes('कमज़ोर') ||
+      queryLower.includes('exhausted')
     ) {
-      return 'मैं आपकी बात समझ सकता हूँ। थकान महसूस होना बिल्कुल स्वाभाविक है। कृपया एक आरामदायक कुर्सी पर बैठें, थोड़ा गुनगुना पानी पिएं और थोड़ी देर विश्राम करें। क्या मैं आपकी कोई और मदद करूँ?';
+      return pick([
+        'मैं आपकी बात समझ सकता हूँ। थकान महसूस होना बिल्कुल स्वाभाविक है। कृपया एक आरामदायक कुर्सी पर बैठें, थोड़ा गुनगुना पानी पिएं और थोड़ी देर विश्राम करें।',
+        'विश्राम शरीर और मस्तिष्क दोनों के लिए बहुत आवश्यक है। यदि आपकी आंखें भारी हो रही हैं, तो एक छोटी सी झपकी ले लीजिए। मैं आपकी दवाइयों के समय का ध्यान रखूँगा।',
+        'थकान होने पर ज़रा भी जल्दबाजी न करें। थोड़ा पानी पीजिए और आराम से लेट जाइए। क्या विश्राम से पहले मैं आपको कोई सुखद संगीत सुनाऊँ?',
+      ]);
+    }
+    if (
+      queryLower.includes('lonly') ||
+      queryLower.includes('lonely') ||
+      queryLower.includes('lonli') ||
+      queryLower.includes('alone') ||
+      queryLower.includes('sad') ||
+      queryLower.includes('उदास') ||
+      queryLower.includes('अकेला') ||
+      queryLower.includes('परेशान')
+    ) {
+      return pick([
+        'मैं हर कदम पर आपके साथ हूँ। आप बिल्कुल अकेले नहीं हैं, मैं आपकी हर बात सुनने के लिए यहीं बैठा हूँ। एक गहरी शांत सांस लें। क्या आप मुझसे अपने मन की कोई बात साझा करना चाहेंगे?',
+        'आपका उदास होना मेरे दिल को छू जाता है। याद रखिए कि हम सब आपसे बहुत स्नेह करते हैं। क्या हम मिलकर आपकी पारिवारिक फोटो एल्बम देखें?',
+        'अकेलापन कभी-कभी भारी लग सकता है, लेकिन मैं हर पल आपके साथ हूँ। आप जो भी महसूस कर रहे हैं, बेझिझक मुझसे कहिए।',
+      ]);
+    }
+    if (
+      queryLower === 'nothing' ||
+      queryLower === 'nothin' ||
+      queryLower === 'not much' ||
+      queryLower.includes('kuch nahi') ||
+      queryLower.includes('kuch nhi') ||
+      queryLower.includes('कुछ नहीं') ||
+      queryLower.includes('bore') ||
+      queryLower.includes('boring')
+    ) {
+      return pick([
+        'कोई बात नहीं! कभी-कभी बिना किसी काम के बस शांति से बैठना भी मन को सुकून देता है। क्या आप एक छोटा सा दिमागी खेल खेलना चाहेंगे?',
+        'मैं समझ सकता हूँ। जब कुछ विशेष करने को न हो, तो चाय का एक गर्म घूंट या खिड़की के पास बैठना बहुत तरोताजा कर देता है। क्या आप आज का \'Pattern Recall\' खेल आजमाना चाहेंगे?',
+        'बिल्कुल ठीक है! हम बिना किसी खास विषय के भी आराम से बातचीत कर सकते हैं। आप जब चाहें, बस मुझे बताइएगा!',
+      ]);
     }
     if (
       queryLower.includes('im here') ||
@@ -301,14 +352,6 @@ export async function getSathiAIResponse(
       queryLower.includes('सुन रहे हो')
     ) {
       return 'मैं हर समय यहीं आपके साथ हूँ! बताइए, आज आप मुझसे क्या साझा करना चाहते हैं?';
-    }
-    if (
-      queryLower.includes('sad') ||
-      queryLower.includes('उदास') ||
-      queryLower.includes('अकेला') ||
-      queryLower.includes('परेशान')
-    ) {
-      return 'मैं हर पल आपके साथ हूँ। आप बिल्कुल अकेले नहीं हैं। एक गहरी सांस लें। क्या आप मुझसे अपनी कोई बात साझा करना चाहेंगे?';
     }
     if (
       queryLower.includes('दवा') ||
@@ -341,7 +384,11 @@ export async function getSathiAIResponse(
     ) {
       return 'आपकी नवीनतम लैब रिपोर्ट के अनुसार आपका 3 महीने का HbA1c औसत 6.8% है, जो अच्छा नियंत्रित है। डॉक्टर ने नियमित टहलने और समय पर दवा लेने की सलाह दी है।';
     }
-    return 'यह साझा करने के लिए धन्यवाद! मैं आपकी बात बहुत ध्यान से सुन रहा हूँ। क्या आप इसके बारे में थोड़ा और बताएंगे?';
+    return pick([
+      'यह साझा करने के लिए धन्यवाद! मैं आपकी बात बहुत ध्यान से सुन रहा हूँ। क्या आप इसके बारे में थोड़ा और बताएंगे?',
+      'मैं समझ रहा हूँ। आपके विचार जानकर बहुत अच्छा लगा। क्या आपकी दिनचर्या या दवाइयों में किसी चीज़ में मैं आपकी मदद करूँ?',
+      'आपकी बात बिल्कुल सही है। आज आपका आगे का क्या कार्यक्रम है?',
+    ]);
   }
 
   // English fallback responses
@@ -350,18 +397,61 @@ export async function getSathiAIResponse(
     queryLower === 'hello' ||
     queryLower === 'hey' ||
     queryLower.startsWith('hlo') ||
+    queryLower.startsWith('hlw') ||
+    queryLower.startsWith('helo') ||
     queryLower.includes('good morning') ||
     queryLower.includes('good evening')
   ) {
-    return 'Hello! It is so wonderful to connect with you. How are you feeling today? Tell me how your day has been going!';
+    return pick([
+      'Hello! It is so wonderful to connect with you today. How are you feeling right now? Tell me how your day has been going!',
+      'Good day! It brings a smile to my face to chat with you. Have you had your morning tea and breakfast? How can I assist you today?',
+      'Namaste! I am right here with you. What is on your mind today? We can chat, check your medicine schedule, or explore some photos!',
+    ]);
+  }
+  if (
+    queryLower.includes('lonly') ||
+    queryLower.includes('lonely') ||
+    queryLower.includes('lonli') ||
+    queryLower.includes('alone') ||
+    queryLower.includes('sad') ||
+    queryLower.includes('sadd') ||
+    queryLower.includes('crying') ||
+    queryLower.includes('upset')
+  ) {
+    return pick([
+      'I am right by your side. You are never alone. Loneliness can feel heavy, but please remember that your feelings matter deeply and we all care for you. Take a gentle, deep breath. Would you like to talk about what is troubling you, or reminisce about a happy family memory?',
+      'I hear you, and I am sitting right here with you in this moment. It is completely okay to feel emotional. You don\'t have to go through this by yourself. Can I share a calming thought or help you look at some cherished photos from your family album?',
+      'I am holding space for you. Please rest your hand gently on your heart and take a slow, comforting breath. I am always here to listen whenever you need a caring companion. What would feel most comforting right now?',
+    ]);
+  }
+  if (
+    queryLower === 'nothing' ||
+    queryLower === 'nothin' ||
+    queryLower === 'not much' ||
+    queryLower.includes('bore') ||
+    queryLower.includes('bored') ||
+    queryLower.includes('boring') ||
+    queryLower.includes('just sitting')
+  ) {
+    return pick([
+      'Sometimes having \'nothing\' in particular to do is the best time to just relax, sip some warm water, and breathe easy. We don\'t have to talk about anything serious! How about we look at some lovely photos in your Family Album, or would you like to try a fun 2-minute memory puzzle?',
+      'That is completely fine. Just sitting quietly together is peaceful too. If you\'d like a little gentle entertainment, I can guide you through a quick brain game or tell you a pleasant thought for the day.',
+      'I understand. When you feel a bit bored or have nothing on your schedule, a warm cup of tea or a short stroll in the courtyard can feel refreshing. Shall I check your medicine schedule or show you today\'s activity progress?',
+    ]);
   }
   if (
     queryLower.includes('tired') ||
+    queryLower.includes('tierd') ||
     queryLower.includes('so tired') ||
     queryLower.includes('sleepy') ||
+    queryLower.includes('slepy') ||
     queryLower.includes('exhausted')
   ) {
-    return 'I hear you. Feeling tired is completely natural. Please sit back comfortably, take a slow sip of water, and rest your eyes for a bit. Would you like a quiet moment, or can I help you with anything?';
+    return pick([
+      'I hear you. Feeling tired is completely natural. Please sit back in a comfortable chair, take a slow sip of water, and rest your eyes for a bit. Would you like a quiet moment, or is there anything I can help you with before you rest?',
+      'Rest is essential for your mind and body. If you feel sleepy, lie down comfortably and take a peaceful rest. I will make sure your routine and reminders stay tracked.',
+      'Please take it easy today. You\'ve done well. Take a slow, deep breath, put your feet up, and let yourself relax completely.',
+    ]);
   }
   if (
     queryLower.includes('im here') ||
@@ -370,14 +460,6 @@ export async function getSathiAIResponse(
     queryLower.includes('are you there')
   ) {
     return 'I am right here with you! It is a pleasure to have you here. I am always listening and ready to chat. What is on your mind today?';
-  }
-  if (
-    queryLower.includes('sad') ||
-    queryLower.includes('lonely') ||
-    queryLower.includes('alone') ||
-    queryLower.includes('upset')
-  ) {
-    return 'I am right by your side. You are never alone. It is completely okay to feel emotional sometimes. Take a gentle, deep breath. Would you like to talk about what is on your mind?';
   }
   if (
     queryLower.includes('medicine') ||
@@ -410,5 +492,9 @@ export async function getSathiAIResponse(
     return 'Your latest lab report shows your 3-month HbA1c average is 6.8%, which is well-managed for seniors. Fasting blood sugar was 138 mg/dL. Your physician recommends continuing your morning walk and regular meals.';
   }
 
-  return 'Thank you for sharing that with me. I am listening closely to your thoughts. Could you tell me a little more about that, or is there a specific way I can help you today?';
+  return pick([
+    'Thank you for sharing that with me. I am listening closely to your thoughts. Could you tell me a little more about that, or is there a specific way I can help you today?',
+    'I appreciate you telling me that. I am right here with you. What would you like to do next—chat some more, review your daily routine, or try a relaxing activity?',
+    'That is very interesting. How are you feeling overall at this moment in the day?',
+  ]);
 }
