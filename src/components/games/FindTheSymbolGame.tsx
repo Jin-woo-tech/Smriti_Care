@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { GameShell } from './GameShell';
 import { AdaptiveTierConfig } from '../../lib/adaptiveDifficulty';
+import { useApp } from '../../context/AppContext';
 
 interface SymbolItem {
   id: number;
   symbol: string;
   name: string;
-  nameAs: string;
+  nameHi: string;
   icon: string;
   isTarget: boolean;
 }
 
 const ALL_SYMBOLS = [
-  { symbol: 'rhino', name: 'One-Horned Rhino', nameAs: 'এশিঙীয়া গঁড়', icon: '🦏' },
-  { symbol: 'japi', name: 'Japi Hat', nameAs: 'জাপি', icon: '👒' },
-  { symbol: 'tea', name: 'Tea Leaf', nameAs: 'চাহ পাত', icon: '🍃' },
-  { symbol: 'xorai', name: 'Xorai Stand', nameAs: 'শৰাই', icon: '🏆' },
-  { symbol: 'fish', name: 'Ilish / Chitol Fish', nameAs: 'চিতল মাছ', icon: '🐟' },
-  { symbol: 'bird', name: 'Hornbill', nameAs: 'ধনেশ পক্ষী', icon: '🦜' },
-  { symbol: 'lotus', name: 'Padma Lotus', nameAs: 'পদ্ম ফুল', icon: '🪷' },
-  { symbol: 'sun', name: 'Surya Sun', nameAs: 'সূৰ্য্য', icon: '☀️' },
+  { symbol: 'rhino', name: 'One-Horned Rhino', nameHi: 'एक सींग वाला गैंडा', icon: '🦏' },
+  { symbol: 'japi', name: 'Japi Hat', nameHi: 'पारंपरिक जापी टोपी', icon: '👒' },
+  { symbol: 'tea', name: 'Tea Leaf', nameHi: 'चाय की पत्तियां', icon: '🍃' },
+  { symbol: 'xorai', name: 'Xorai Stand', nameHi: 'शराई पीतल पात्र', icon: '🏆' },
+  { symbol: 'fish', name: 'Chitol Fish', nameHi: 'चितल मछली', icon: '🐟' },
+  { symbol: 'bird', name: 'Hornbill Bird', nameHi: 'धनेश पक्षी', icon: '🦜' },
+  { symbol: 'lotus', name: 'Padma Lotus', nameHi: 'कमल का फूल', icon: '🪷' },
+  { symbol: 'sun', name: 'Surya Sun', nameHi: 'सूर्य देव', icon: '☀️' },
 ];
 
 export const FindTheSymbolGame: React.FC<{ onBack: () => void }> = ({ onBack }) => {
@@ -27,9 +28,9 @@ export const FindTheSymbolGame: React.FC<{ onBack: () => void }> = ({ onBack }) 
     <GameShell
       gameId="find-symbol"
       title="Find the Symbol"
-      titleAs="চিহ্ন বিচাৰি উলিয়াওক"
+      titleHi="चिह्न ढूंढें"
       instructions="Spot and tap all instances of the requested target symbol among the items on screen."
-      instructionsAs="তলত দিয়া নিৰ্দিষ্ট চিহ্নটো বাকীবোৰ ছবিৰ মাজৰ পৰা বিচাৰি স্পৰ্শ কৰক।"
+      instructionsHi="स्क्रीन पर दिखाई दे रहे प्रतीकों में से लक्षित प्रतीक को खोजें और उस पर टैप करें।"
       onBack={onBack}
     >
       {({ tierConfig, onGameOver, isGameActive }) => (
@@ -44,6 +45,9 @@ const SymbolBoard: React.FC<{
   onGameOver: (score: number, maxScore: number, accuracy: number, reactionTimeMs: number) => void;
   isGameActive: boolean;
 }> = ({ tierConfig, onGameOver }) => {
+  const { settings } = useApp();
+  const lang = settings.language;
+
   const totalCount = tierConfig.symbolCount || (tierConfig.tier === 1 ? 8 : tierConfig.tier === 2 ? 15 : 24);
   const targetCount = tierConfig.tier === 1 ? 3 : tierConfig.tier === 2 ? 4 : 5;
 
@@ -107,6 +111,8 @@ const SymbolBoard: React.FC<{
     }
   };
 
+  const targetName = lang === 'hi' ? targetSymbol.nameHi : targetSymbol.name;
+
   return (
     <div className="w-full max-w-2xl space-y-6 text-white">
       {/* Target Banner */}
@@ -117,18 +123,20 @@ const SymbolBoard: React.FC<{
           </span>
           <div>
             <p className="text-xs font-bold text-[#c084fc] uppercase tracking-wide">
-              Find This Symbol
+              {lang === 'hi' ? 'यह चिह्न ढूंढें' : 'Find This Symbol'}
             </p>
             <h3 className="text-xl font-black text-white">
-              {targetSymbol.name} ({targetSymbol.nameAs})
+              {targetName}
             </h3>
           </div>
         </div>
 
         <div className="text-right">
-          <span className="text-xs text-sky-200/70 block font-bold">Remaining</span>
+          <span className="text-xs text-sky-200/70 block font-bold">
+            {lang === 'hi' ? 'शेष' : 'Remaining'}
+          </span>
           <span className="text-2xl font-black text-purple-300">
-            {targetCount - foundIds.length} left
+            {targetCount - foundIds.length} {lang === 'hi' ? 'बाकी' : 'left'}
           </span>
         </div>
       </div>

@@ -17,6 +17,7 @@ import { OfflineBanner } from './components/common/OfflineBanner';
 import { EmergencyModal } from './components/common/EmergencyModal';
 import { A11yModal } from './components/common/A11yModal';
 import { ProfileManagerModal } from './components/common/ProfileManagerModal';
+import { AuthModal } from './components/modals/AuthModal';
 import { LandingPage } from './components/landing/LandingPage';
 import { PatientDashboard } from './components/dashboards/PatientDashboard';
 import { CaregiverDashboard } from './components/dashboards/CaregiverDashboard';
@@ -36,54 +37,47 @@ export const App: React.FC = () => {
   const [showLanding, setShowLanding] = useState<boolean>(true); // Default to Landing Showcase
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState<boolean>(false);
 
-  // Tab definitions for Patient Mode
-  const patientTabs: { id: PatientTab; labelEn: string; labelHi: string; labelAs: string; icon: React.ReactNode }[] = [
+  // Tab definitions for Patient Mode (Strictly Bilingual: English & Hindi)
+  const patientTabs: { id: PatientTab; labelEn: string; labelHi: string; icon: React.ReactNode }[] = [
     {
       id: 'dashboard',
       labelEn: 'Dashboard',
       labelHi: 'डैशबोर्ड',
-      labelAs: 'ডেচবৰ্ড',
       icon: <LayoutDashboard size={17} />,
     },
     {
       id: 'routine',
       labelEn: 'Medicines & Routine',
       labelHi: 'दैनिक दिनचर्या',
-      labelAs: 'দৈনিক ঔষধ',
       icon: <Pill size={17} />,
     },
     {
       id: 'games',
       labelEn: 'Memory Games',
       labelHi: 'दिमागी खेल',
-      labelAs: 'মগজুৰ খেল',
       icon: <Brain size={17} />,
     },
     {
       id: 'journal',
       labelEn: 'Family Album',
       labelHi: 'स्मृति एल्बम',
-      labelAs: 'পৰিয়াল এলবাম',
       icon: <Heart size={17} />,
     },
     {
       id: 'safety',
       labelEn: 'Medicine & Lab',
       labelHi: 'दवा व लैब सुरक्षा',
-      labelAs: 'ঔষধ সুৰক্ষা',
       icon: <ShieldCheck size={17} />,
     },
     {
       id: 'chat',
       labelEn: 'Smriti Sathi (AI)',
       labelHi: 'स्मृति साथी (AI)',
-      labelAs: 'স্মৃতি সাথী',
       icon: <MessageSquare size={17} />,
     },
   ];
 
   const getTabLabel = (tab: typeof patientTabs[0]) => {
-    if (lang === 'as') return tab.labelAs;
     if (lang === 'hi') return tab.labelHi;
     return tab.labelEn;
   };
@@ -128,9 +122,7 @@ export const App: React.FC = () => {
             >
               <Compass size={14} className="text-[#c084fc]" />
               <span>
-                {lang === 'as'
-                  ? 'প্ৰত্যক্ষ প’ৰ্টেললৈ উভতি যাওক (Return to Active Role Portal)'
-                  : lang === 'hi'
+                {lang === 'hi'
                   ? 'सक्रिय पोर्टल पर वापस जाएं (Return to Active Role Portal)'
                   : 'Return to Active Role Portal'}
               </span>
@@ -233,7 +225,7 @@ export const App: React.FC = () => {
               </div>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-bold text-sky-200">
-              <span className="text-[#c084fc] font-extrabold">SmritiCare (স্মৃতি কেয়াৰ / स्मृति केयर)</span>
+              <span className="text-[#c084fc] font-extrabold">SmritiCare (स्मृति केयर)</span>
               <span>•</span>
               <span>Smart India Hackathon SIH 2026</span>
               <span>•</span>
@@ -241,7 +233,7 @@ export const App: React.FC = () => {
             </div>
 
             <p className="text-[11px] text-sky-200/50 max-w-2xl mx-auto leading-relaxed">
-              Clinical Safety Notice: SmritiCare is a supportive cognitive stimulation and medication adherence companion. It does not provide medical diagnoses of Alzheimer's Disease or related cognitive conditions. In case of acute medical emergencies, contact Assam Emergency Services (108) or your primary healthcare centre immediately.
+              Clinical Safety Notice: SmritiCare is a supportive cognitive stimulation and medication adherence companion. It does not provide medical diagnoses of Alzheimer's Disease or related cognitive conditions. In case of acute medical emergencies, contact Emergency Services (108) or your primary healthcare centre immediately.
             </p>
           </div>
         </footer>
@@ -267,6 +259,7 @@ export const App: React.FC = () => {
       </div>
 
       {/* Modals */}
+      <AuthModal />
       <EmergencyModal />
       <A11yModal />
       <ProfileManagerModal />

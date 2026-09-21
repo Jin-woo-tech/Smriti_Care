@@ -44,70 +44,55 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
       role: 'patient' as Role,
       title: 'Elder / Senior Patient',
       titleHi: 'वरिष्ठ नागरिक / मरीज',
-      titleAs: 'জ্যেষ্ঠ নাগৰিক / ৰোগী',
       desc: 'Simple large buttons, daily routine audio alerts, 6 cultural brain games, nostalgic photo album, and Smriti Sathi AI.',
       descHi: 'सरल और बड़े बटन वाला दैनिक दिनचर्या शेड्यूल, वॉयस अलर्ट, 6 दिमागी खेल, स्मृति एल्बम और स्नेही AI साथी।',
-      descAs: 'সহজ আৰু ডাঙৰ বুটামৰ সৈতে দৈনিক ঔষধ খোৱাৰ সময়সূচী, ৬ টা মগজুৰ খেল, পুৰণি স্মৃতি আৰু AI সহায়িকা।',
       icon: <User size={26} className="text-[#c084fc]" />,
       badge: 'Senior Mode',
       badgeHi: 'वरिष्ठ मोड',
-      badgeAs: 'সহজ জ্যেষ্ঠ মোড',
     },
     {
       role: 'caregiver' as Role,
       title: 'Family Caregiver',
       titleHi: 'पारिवारिक देखभालकर्ता',
-      titleAs: 'পৰিয়ালৰ তত্ত্বাৱধায়ক',
       desc: 'Track 7-day cognitive performance trend, baseline stability, hydration & medication adherence, and urgent alerts.',
       descHi: '7-दिवसीय संज्ञानात्मक प्रदर्शन रुझान, दवा और जल सेवन ट्रैकिंग एवं महत्वपूर्ण अलर्ट।',
-      descAs: 'বিগত ৭ দিনৰ স্মৃতি আৰু দক্ষতাৰ ধাৰা, ঔষধ আৰু পানী খোৱাৰ হিচাপ, আৰু প্ৰয়োজনীয় সতৰ্কবাৰ্তা।',
       icon: <Users size={26} className="text-sky-300" />,
       badge: 'Family Portal',
       badgeHi: 'परिवार पोर्टल',
-      badgeAs: 'পৰিয়াল পোৰ্টেল',
     },
     {
       role: 'clinician' as Role,
       title: 'Doctor / PHC Clinician',
       titleHi: 'चिकित्सक / डॉक्टर',
-      titleAs: 'চিকিৎসক / ডাক্তৰ',
       desc: 'Longitudinal cognitive domain radar, baseline deviations, adherence compliance, and 1-click Downloadable Clinical PDF.',
       descHi: 'संज्ञानात्मक डोमेन रडार चार्ट, दवा अनुपालन और 1-क्लिक डाउनलोड करने योग्य क्लिनिकल PDF रिपोर्ट।',
-      descAs: 'মগজুৰ বিভিন্ন দিশৰ অগ্ৰগতি, ঔষধৰ নিয়মীয়া হিচাপ আৰু চিকিৎসা প্ৰতিবেদন (PDF) ডাউনল’ড।',
       icon: <Stethoscope size={26} className="text-purple-300" />,
       badge: 'Clinical Portal',
       badgeHi: 'क्लिनिकल पोर्टल',
-      badgeAs: 'চিকিৎসক পোৰ্টেল',
     },
     {
       role: 'asha' as Role,
       title: 'ASHA / Health Worker',
       titleHi: 'आशा / स्वास्थ्य कार्यकर्ता',
-      titleAs: 'আশা / স্বাস্থ্য কৰ্মী',
       desc: 'Village geriatric roster, offline screening test execution, home visit logging, and medicine stock tracking.',
       descHi: 'ग्रामीण बुजुर्ग सूची, ऑफलाइन स्क्रीनिंग परीक्षण, गृह भ्रमण लॉगिंग और दवा स्टॉक ट्रैकिंग।',
-      descAs: 'গাঁও ভিত্তিক জ্যেষ্ঠ নাগৰিকৰ তালিকা, অফলাইন স্ক্ৰীনিং পৰীক্ষা, গৃহ পৰিদৰ্শন আৰু ঔষধৰ তথ্য।',
       icon: <Activity size={26} className="text-indigo-300" />,
       badge: 'Field Portal',
       badgeHi: 'फील्ड पोर्टल',
-      badgeAs: 'ফিল্ড পোৰ্টেল',
     },
   ];
 
   const getCardTitle = (card: typeof roleCards[0]) => {
-    if (lang === 'as') return card.titleAs;
     if (lang === 'hi') return card.titleHi;
     return card.title;
   };
 
   const getCardDesc = (card: typeof roleCards[0]) => {
-    if (lang === 'as') return card.descAs;
     if (lang === 'hi') return card.descHi;
     return card.desc;
   };
 
   const getCardBadge = (card: typeof roleCards[0]) => {
-    if (lang === 'as') return card.badgeAs;
     if (lang === 'hi') return card.badgeHi;
     return card.badge;
   };
@@ -170,7 +155,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
                   : 'hover:text-white'
               }`}
             >
-              {lang === 'as' ? 'ঘৰ (Home)' : lang === 'hi' ? 'होम (Home)' : 'Home'}
+              {lang === 'hi' ? 'होम (Home)' : 'Home'}
             </button>
             <button
               onClick={() => {
@@ -183,7 +168,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
                   : 'hover:text-white'
               }`}
             >
-              {lang === 'as' ? 'প’ৰ্টেলসমূহ (Portals)' : lang === 'hi' ? 'पोर्टल (Portals)' : 'Portals'}
+              {lang === 'hi' ? 'पोर्टल (Portals)' : 'Portals'}
             </button>
             <button
               onClick={() => {
@@ -196,7 +181,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
                   : 'hover:text-white'
               }`}
             >
-              {lang === 'as' ? 'স্মৃতি খেল (Games)' : lang === 'hi' ? 'स्मृति खेल (Games)' : 'Memory Games'}
+              {lang === 'hi' ? 'स्मृति खेल (Games)' : 'Memory Games'}
             </button>
             <button
               onClick={() => {
@@ -209,7 +194,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
                   : 'hover:text-white'
               }`}
             >
-              {lang === 'as' ? 'ঔষধ সুৰক্ষা (Safety)' : lang === 'hi' ? 'दवा सुरक्षा (Safety)' : 'Safety AI'}
+              {lang === 'hi' ? 'दवा सुरक्षा (Safety)' : 'Safety AI'}
             </button>
           </nav>
 
@@ -219,7 +204,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
               onClick={() => handleRoleClick('patient')}
               className="px-5 sm:px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white font-bold text-xs sm:text-sm backdrop-blur-md transition-all shadow-lg hover:border-purple-400/50 cursor-pointer"
             >
-              {lang === 'as' ? 'প্ৰৱেশ কৰক' : lang === 'hi' ? 'शुरू करें' : 'Join Now'}
+              {lang === 'hi' ? 'शुरू करें' : 'Join Now'}
             </button>
           </div>
         </header>
@@ -239,9 +224,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
           {/* Subtitles & Badges on the sides of typography */}
           <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 mb-2 text-xs sm:text-sm text-sky-100/90 font-medium">
             <p className="max-w-xs leading-relaxed">
-              {lang === 'as'
-                ? 'জ্যেষ্ঠ নাগৰিকৰ মগজুৰ সতেজতা আৰু স্বাস্থ্য যত্ন।'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'स्वस्थ जीवन के लिए व्यक्तिगत संज्ञानात्मक देखभाल।'
                 : 'Personalized care for healthier living.'}
             </p>
@@ -257,9 +240,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
             <Smriti3DLogoVisual
               onExplore={() => scrollToSection('portals-section')}
               exploreLabel={
-                lang === 'as'
-                  ? 'সেৱা আৰু প’ৰ্টেলসমূহ চাওক'
-                  : lang === 'hi'
+                lang === 'hi'
                   ? 'देखभाल सेवाएं देखें'
                   : 'Explore Services'
               }
@@ -300,9 +281,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
 
               {/* Pill badge */}
               <div className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold text-sky-100 shadow-md">
-                {lang === 'as'
-                  ? 'আপোনাৰ স্বাস্থ্য আপোনাৰ হাতত।'
-                  : lang === 'hi'
+                {lang === 'hi'
                   ? 'आपका स्वास्थ्य आपके हाथों में।'
                   : 'Your health in your hands.'}
               </div>
@@ -326,11 +305,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
                     92%
                   </span>
                   <span className="text-[11px] font-bold text-purple-200 leading-tight">
-                    {lang === 'as' ? 'ৰোগী সন্তুষ্টি হাৰ' : lang === 'hi' ? 'मरीज संतुष्टि दर' : 'Patient Satisfaction Rate'}
+                    {lang === 'hi' ? 'मरीज संतुष्टि दर' : 'Patient Satisfaction Rate'}
                   </span>
                 </div>
                 <h4 className="text-xs sm:text-sm font-bold text-white">
-                  {lang === 'as' ? 'ডাঃ প্ৰিয়ম বৰুৱা (MD)' : lang === 'hi' ? 'डॉ. प्रियम बरुआ (MD)' : 'Dr. Emma Roberts (MD)'}
+                  {lang === 'hi' ? 'डॉ. प्रियम बरुआ (MD)' : 'Dr. Emma Roberts (MD)'}
                 </h4>
                 <p className="text-[10px] font-extrabold text-[#c084fc] tracking-wider uppercase">
                   15+ YEARS EXPERIENCE
@@ -342,9 +321,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
             <div className="flex flex-col items-start md:items-end justify-between gap-3 text-left md:text-right">
               <div>
                 <h3 className="text-base sm:text-lg font-black text-white leading-tight">
-                  {lang === 'as'
-                    ? '২৫+ জিলাত জ্যেষ্ঠ নাগৰিকৰ সেৱাত নিয়োজিত'
-                    : lang === 'hi'
+                  {lang === 'hi'
                     ? '25+ जिलों में बुजुर्गों की सेवा में समर्पित'
                     : 'Serving patients across 25+ districts'}
                 </h3>
@@ -359,7 +336,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
                 onClick={() => scrollToSection('portals-section')}
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-[#c084fc] hover:underline cursor-pointer"
               >
-                <span>{lang === 'as' ? 'অধিক জানক' : lang === 'hi' ? 'और जानें' : 'Learn More'}</span>
+                <span>{lang === 'hi' ? 'और जानें' : 'Learn More'}</span>
                 <ArrowRight size={14} />
               </button>
             </div>
@@ -377,16 +354,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
             <span>4 Dedicated Stakeholder Interfaces</span>
           </div>
           <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-            {lang === 'as'
-              ? 'আপোনাৰ প্ৰৱেশ ভূমিকা বাছক'
-              : lang === 'hi'
+            {lang === 'hi'
               ? 'अपना देखभाल पोर्टल चुनें'
               : 'Choose Your Care Portal'}
           </h2>
           <p className="text-xs sm:text-sm text-sky-200/80 font-medium">
-            {lang === 'as'
-              ? 'প্ৰতিটো ভূমিকাৰ বাবে বিশেষভাৱে নিৰ্মাণ কৰা আধুনিক পৰ্টেল'
-              : lang === 'hi'
+            {lang === 'hi'
               ? 'प्रत्येक हितधारक के लिए विशेष रूप से डिज़ाइन किया गया इंटरफ़ेस।'
               : 'Select one of four specialized interfaces tailored for each stakeholder.'}
           </p>
@@ -419,7 +392,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
 
               <div className="flex items-center justify-between pt-4 border-t border-white/10">
                 <span className="text-xs font-bold text-[#c084fc] flex items-center gap-1.5 group-hover:translate-x-1.5 transition-transform">
-                  {lang === 'as' ? 'প’ৰ্টেলত প্ৰৱেশ কৰক' : lang === 'hi' ? 'पोर्टल में प्रवेश करें' : 'Enter Portal'}
+                  {lang === 'hi' ? 'पोर्टल में प्रवेश करें' : 'Enter Portal'}
                   <ArrowRight size={16} />
                 </span>
                 <VoiceNarratorButton
@@ -441,9 +414,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
           <h3 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2.5">
             <ShieldCheck className="text-[#c084fc]" size={26} />
             <span>
-              {lang === 'as'
-                ? 'স্মৃতি কেয়াৰৰ মুখ্য বৈশিষ্ট্য আৰু ডায়গনষ্টিকছ'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'मुख्य मंच विशेषताएं एवं बायोमार्कर'
                 : 'Key Platform Capabilities & Biomarkers'}
             </span>
@@ -461,12 +432,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
               <Brain size={24} />
             </div>
             <h4 className="font-black text-base text-white group-hover:text-[#c084fc] transition-colors">
-              {lang === 'as' ? '৬ টা অভিযোজিত খেল' : lang === 'hi' ? '6 अनुकूलनीय खेल' : '6 Adaptive Memory Games'}
+              {lang === 'hi' ? '6 अनुकूलनीय खेल' : '6 Adaptive Memory Games'}
             </h4>
             <p className="text-xs text-sky-200/80 mt-2 leading-relaxed font-medium">
-              {lang === 'as'
-                ? 'জাপি মিলোৱা, পথ অনুসৰণ, দৈনন্দিন ৰুটিন আৰু থলুৱা স্মৃতি খেল যিয়ে স্বয়ংক্ৰিয়ভাৱে কাঠিন্য নিয়ন্ত্ৰণ কৰে।'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'सांस्कृतिक प्रतीक, पैटर्न मिलान और अनुक्रम खेल जो कठिनाई स्तर को अनुकूलित करते हैं।'
                 : 'Culturally localized games with 3-tier dynamic adaptive difficulty based on reaction time and accuracy.'}
             </p>
@@ -478,12 +447,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
               <ShieldCheck size={24} />
             </div>
             <h4 className="font-black text-base text-white group-hover:text-sky-300 transition-colors">
-              {lang === 'as' ? 'AI ঔষধ আৰু লেব সুৰক্ষা' : lang === 'hi' ? 'AI दवा व लैब सुरक्षा' : 'AI Medicine & Lab Safety'}
+              {lang === 'hi' ? 'AI दवा व लैब सुरक्षा' : 'AI Medicine & Lab Safety'}
             </h4>
             <p className="text-xs text-sky-200/80 mt-2 leading-relaxed font-medium">
-              {lang === 'as'
-                ? 'AI Vision ঔষধৰ পেকেট চিনাক্তকৰণ, প্ৰেচক্ৰিপশ্বনৰ সৈতে সময় মিলোৱা আৰু সহজ লেব ৰিপৰ্ট ব্যাখ্যা।'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'AI विजन दवा पैकेजिंग पहचान, समय सत्यापन और लैब रिपोर्ट का सरल हिंदी अनुवाद।'
                 : 'AI Vision strip identification, cross-verification against prescription times, and simplified lab report translation.'}
             </p>
@@ -495,12 +462,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
               <HeartHandshake size={24} />
             </div>
             <h4 className="font-black text-base text-white group-hover:text-[#c084fc] transition-colors">
-              {lang === 'as' ? 'পৰিয়ালৰ স্মৃতি এলবাম' : lang === 'hi' ? 'स्मृति एल्बम' : 'Memory Journal & Sathi'}
+              {lang === 'hi' ? 'स्मृति एल्बम' : 'Memory Journal & Sathi'}
             </h4>
             <p className="text-xs text-sky-200/80 mt-2 leading-relaxed font-medium">
-              {lang === 'as'
-                ? 'পাৰিবাৰিক ফটো কাহিনী, অডিঅ’ স্মৃতি সংকেত আৰু Smriti Sathi AI সংগী।'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'पारिवारिक फोटो कहानियां, ऑडियो स्मृति संकेत और भावनात्मक जुड़ाव के लिए AI साथी।'
                 : 'Interactive family photo stories, audio reminiscence cues, and empathetic Smriti Sathi conversational AI.'}
             </p>
@@ -540,7 +505,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectRole }) => {
           </div>
 
           <p className="text-xs sm:text-sm text-sky-100/80 leading-relaxed">
-            SmritiCare was engineered by <strong className="text-purple-300">Team StarX</strong> to bridge digital geriatric care and community health workers (ASHAs) across Assam with trilingual accessibility, neuro-cognitive exercises, and emergency safety networks.
+            SmritiCare was engineered by <strong className="text-purple-300">Team StarX</strong> to bridge digital geriatric care and community health workers (ASHAs) across Assam with bilingual accessibility, neuro-cognitive exercises, and emergency safety networks.
           </p>
         </div>
       </section>

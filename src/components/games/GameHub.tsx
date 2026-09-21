@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Brain, Sparkles, Play, Award, Clock, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Brain, Play, Award } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { GameId } from '../../types';
 import { getTranslation } from '../../lib/i18n';
@@ -39,92 +39,71 @@ export const GameHub: React.FC = () => {
   const gamesList: {
     id: GameId;
     title: string;
-    titleHi?: string;
-    titleAs: string;
+    titleHi: string;
     desc: string;
-    descHi?: string;
-    descAs: string;
+    descHi: string;
     domain: string;
-    domainHi?: string;
-    domainAs: string;
+    domainHi: string;
     icon: string;
   }[] = [
     {
       id: 'remember-match',
       title: 'Remember & Match',
       titleHi: 'याद रखें और मिलान करें',
-      titleAs: 'মনত ৰাখক আৰু মিলাওক',
-      desc: 'Match pairs of traditional Assamese heritage symbols like Japi, Gamosa, and Rhino.',
+      desc: 'Match pairs of traditional cultural symbols like Japi, Gamosa, and Rhino.',
       descHi: 'जापी, गमोसा और एक सींग वाले गैंडे जैसे सांस्कृतिक प्रतीकों के जोड़े मिलाकर याददाश्त तेज करें।',
-      descAs: 'জাপি, গামোচা, শৰাই আদি অসমীয়া প্ৰতীকৰ যোৰ মিলাই স্মৃতিশক্তি জোখক।',
       domain: 'Visual & Spatial Memory',
       domainHi: 'दृश्य एवं स्थानिक स्मृति',
-      domainAs: 'দৃষ্টি আৰু স্থানিক স্মৃতি',
       icon: '👒',
     },
     {
       id: 'find-symbol',
       title: 'Find the Symbol',
       titleHi: 'चिह्न ढूंढें',
-      titleAs: 'চিহ্ন বিচাৰি উলিয়াওক',
       desc: 'Spot the target cultural emblem among distractors to train attention and visual search.',
       descHi: 'अन्य आकृतियों के बीच से सही सांस्कृतिक चिह्न खोजकर एकाग्रता और ध्यान बढ़ाएं।',
-      descAs: 'অন্যান্য ছবিৰ মাজৰ পৰা সঠিক অসমীয়া চিহ্ন বিচাৰি মনোযোগ বৃদ্ধি কৰক।',
       domain: 'Attention & Visual Search',
       domainHi: 'ध्यान एवं दृश्य खोज',
-      domainAs: 'মনোযোগ আৰু চিহ্ন অনুসন্ধান',
       icon: '🦏',
     },
     {
       id: 'follow-path',
       title: 'Follow the Path',
       titleHi: 'क्रमबद्ध पथ अनुसरण',
-      titleAs: 'ক্ৰম অনুসৰি পথ বাছক',
       desc: 'Trail making test connecting numbers and letters in sequence (1-2-3 / 1-A-2-B).',
       descHi: 'संख्याओं और अक्षरों को सही क्रम में जोड़कर मानसिक योजना और लचीलापन मजबूत करें।',
-      descAs: 'ক্ৰম অনুসাৰে সংখ্যা আৰু আখৰ সংযোগ কৰি মগজুৰ পৰিকল্পনা ক্ষমতা বৃদ্ধি কৰক।',
       domain: 'Executive Trail Making',
       domainHi: 'कार्यकारी योजना एवं समन्वय',
-      domainAs: 'কাৰ্য্যকৰী পৰিকল্পনা',
       icon: '🔢',
     },
     {
       id: 'remember-routine',
       title: 'Remember the Routine',
       titleHi: 'दैनिक दिनचर्या स्मरण',
-      titleAs: 'দৈনন্দিন ৰুটিন মনত পেলাওক',
       desc: 'Order everyday morning-to-night tasks in their natural daily sequence.',
       descHi: 'सुबह से रात तक के दैनिक कार्यों को उनके सही स्वाभाविक क्रम में व्यवस्थित करें।',
-      descAs: 'পুৱাৰ পৰা ৰাতিলৈকে কৰিবলগীয়া কামসমূহ শুদ্ধ ক্ৰমত সজাওক।',
       domain: 'Daily Procedural Recall',
       domainHi: 'दैनिक प्रक्रियात्मक स्मरण',
-      domainAs: 'দৈনন্দিন ৰুটিন স্মৃতি',
       icon: '🌅',
     },
     {
       id: 'sequence-recall',
       title: 'Sequence Recall',
       titleHi: 'ध्वनि व रंग अनुक्रम',
-      titleAs: 'ৰং আৰু শব্দৰ ক্ৰম',
       desc: 'Remember and repeat the glowing sound and color patterns to stimulate working memory.',
       descHi: 'चमकती रोशनी और ध्वनि के पैटर्न को याद रखकर दोहराएं और कार्यशील स्मृति बढ़ाएं।',
-      descAs: 'ৰং আৰু সংকেতৰ ক্ৰম মনত ৰাখি পুনৰাবৃত্তি কৰক।',
       domain: 'Short-term Working Memory',
       domainHi: 'अल्पकालिक कार्यशील स्मृति',
-      domainAs: 'স্বল্পম্যাদী ক্ৰমিক স্মৃতি',
       icon: '✨',
     },
     {
       id: 'local-memory',
       title: 'Local Heritage Memory',
       titleHi: 'स्थानीय सांस्कृतिक धरोहर',
-      titleAs: 'থলুৱা ঐতিহ্য স্মৃতি',
-      desc: 'Engaging trivia celebrating Assam’s folklore, Majuli island, Kaziranga, and Bihu festivals.',
+      desc: 'Engaging trivia celebrating regional folklore, Majuli island, Kaziranga, and festivals.',
       descHi: 'माजुली, काजीरंगा और बिहू उत्सव जैसे पूर्वोत्तर की समृद्ध संस्कृति से जुड़े रोचक प्रश्न।',
-      descAs: 'অসমৰ উৎসৱ, ইতিহাস আৰু ঐতিহ্য সম্পৰ্কীয় স্মৃতি প্ৰশ্ন।',
       domain: 'Episodic & Semantic Memory',
       domainHi: 'प्रासंगिक एवं अर्थगत स्मृति',
-      domainAs: 'সাংস্কৃতিক স্মৃতি',
       icon: '🏝️',
     },
   ];
@@ -142,27 +121,21 @@ export const GameHub: React.FC = () => {
             <span>AI Adaptive Cognitive Stimulation</span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
-            {lang === 'as'
-              ? 'মগজুৰ ৬ টা সক্ৰিয় খেল'
-              : lang === 'hi'
+            {lang === 'hi'
               ? '6 दैनिक संज्ञानात्मक देखभाल खेल'
               : '6 Daily Cognitive Care Games'}
           </h1>
           <p className="text-sm sm:text-base text-sky-200/80 leading-relaxed">
-            {lang === 'as'
-              ? 'প্ৰতিটো খেল আপোনাৰ ব্যক্তিগত দক্ষতা আৰু আৰাম অনুসৰি স্বয়ংক্রিয়ভাৱে সহজ বা মধ্যম হৈ পৰে।'
-              : lang === 'hi'
-              ? 'पूर्वोत्तर की सांस्कृतिक धरोहर पर आधारित वैज्ञानिक खेल। आपकी गति और सटीकता के अनुसार कठिनाई स्वतः अनुकूलित होती है।'
-              : 'Scientifically validated neuro-cognitive modules rooted in Assam heritage. Automatically adjusts tier based on your reaction time and accuracy.'}
+            {lang === 'hi'
+              ? 'सांस्कृतिक धरोहर पर आधारित वैज्ञानिक खेल। आपकी गति और सटीकता के अनुसार कठिनाई स्वतः अनुकूलित होती है।'
+              : 'Scientifically validated neuro-cognitive modules rooted in cultural heritage. Automatically adjusts tier based on your reaction time and accuracy.'}
           </p>
         </div>
 
         <div className="relative z-10">
           <VoiceNarratorButton
             textToRead={
-              lang === 'as'
-                ? 'মগজুৰ ৬ টা সক্ৰিয় খেল। আপোনাৰ পচন্দৰ খেলটো বাছি লৈ খেলক।'
-                : lang === 'hi'
+              lang === 'hi'
                 ? '6 दैनिक संज्ञानात्मक स्वास्थ्य खेल। शुरुआत करने के लिए नीचे दिए गए किसी भी खेल पर टैप करें।'
                 : 'Six daily cognitive care games. Select any game below to begin your exercise.'
             }
@@ -192,22 +165,18 @@ export const GameHub: React.FC = () => {
                     {game.icon}
                   </span>
                   <span className="text-[11px] font-extrabold uppercase px-3 py-1 rounded-full bg-purple-500/20 text-purple-200 border border-purple-400/30">
-                    {lang === 'as'
-                      ? tier.tierLabelAs
-                      : lang === 'hi'
-                      ? (tier.tierLabelHi || tier.tierLabel)
-                      : tier.tierLabel}
+                    {lang === 'hi' ? (tier.tierLabelHi || tier.tierLabel) : tier.tierLabel}
                   </span>
                 </div>
 
                 <p className="text-xs font-bold text-[#c084fc] uppercase tracking-wider mb-1">
-                  {lang === 'as' ? game.domainAs : lang === 'hi' ? (game.domainHi || game.domain) : game.domain}
+                  {lang === 'hi' ? (game.domainHi || game.domain) : game.domain}
                 </p>
                 <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#c084fc] transition-colors">
-                  {lang === 'as' ? game.titleAs : lang === 'hi' ? (game.titleHi || game.title) : game.title}
+                  {lang === 'hi' ? (game.titleHi || game.title) : game.title}
                 </h3>
                 <p className="text-xs text-sky-200/70 leading-relaxed font-medium">
-                  {lang === 'as' ? game.descAs : lang === 'hi' ? (game.descHi || game.desc) : game.desc}
+                  {lang === 'hi' ? (game.descHi || game.desc) : game.desc}
                 </p>
               </div>
 
@@ -218,7 +187,7 @@ export const GameHub: React.FC = () => {
                   </span>
                 ) : (
                   <span className="text-xs text-sky-200/50 font-medium">
-                    {lang === 'hi' ? 'खेलने के लिए तैयार' : lang === 'as' ? 'খেলিবলৈ সাজু' : 'Ready to play'}
+                    {lang === 'hi' ? 'खेलने के लिए तैयार' : 'Ready to play'}
                   </span>
                 )}
 

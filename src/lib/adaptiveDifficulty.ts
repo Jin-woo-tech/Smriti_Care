@@ -3,7 +3,6 @@ import { GameId, GameScoreRecord } from '../types';
 export interface AdaptiveTierConfig {
   tier: 1 | 2 | 3;
   tierLabel: string;
-  tierLabelAs: string;
   tierLabelHi?: string;
   gridSize?: { rows: number; cols: number };
   symbolCount?: number;
@@ -13,7 +12,6 @@ export interface AdaptiveTierConfig {
   pathNodesCount?: number;
   routineStepCount?: number;
   feedbackMessage: string;
-  feedbackMessageAs: string;
   feedbackMessageHi?: string;
 }
 
@@ -35,7 +33,6 @@ export function calculateAdaptiveDifficulty(
       gameId,
       2,
       'Welcome! Starting with a comfortable, balanced pace.',
-      'নমস্কাৰ! আৰামদায়ক আৰু সন্তুলিত স্তৰেৰে আৰম্ভ কৰা হৈছে।',
       'नमस्ते! एक सुखद और संतुलित स्तर से शुरुआत की जा रही है।'
     );
   }
@@ -45,13 +42,12 @@ export function calculateAdaptiveDifficulty(
   const avgReactionTime = recent.reduce((sum, r) => sum + r.reactionTimeMs, 0) / recent.length;
 
   // Decision logic:
-  // If player is scoring >= 90% consistently with fast reaction (< 2000ms), step up to Tier 3
+  // If player is scoring >= 90% consistently with fast reaction (< 2200ms), step up to Tier 3
   if (avgAccuracy >= 90 && avgReactionTime < 2200) {
     return getTierConfig(
       gameId,
       3,
       'Excellent performance! Challenge level increased to stimulate deeper focus.',
-      'অসাধাৰণ দক্ষতা! মনোযোগ আৰু স্মৃতিশক্তি বৃদ্ধি কৰিবলৈ স্তৰ বঢ়োৱা হৈছে।',
       'उत्कृष्ट प्रदर्शन! एकाग्रता बढ़ाने के लिए चुनौती स्तर बढ़ाया गया है।'
     );
   }
@@ -62,7 +58,6 @@ export function calculateAdaptiveDifficulty(
       gameId,
       1,
       'Adjusted to a gentle, relaxed pace for comfortable play.',
-      'আপোনাৰ আৰাম আৰু সুবিধাৰ বাবে সহজ স্তৰ নিৰ্ধাৰণ কৰা হৈছে।',
       'आपकी सुविधा और आराम के लिए एक सरल और शांत स्तर चुना गया है।'
     );
   }
@@ -72,7 +67,6 @@ export function calculateAdaptiveDifficulty(
     gameId,
     2,
     'Steady and comfortable pace matched to your personal baseline.',
-    'আপোনাৰ স্বাভাৱিক দক্ষতাৰ সৈতে মিল থকা সন্তুলিত স্তৰ।',
     'आपकी व्यक्तिगत आधार रेखा के अनुकूल एक संतुलित स्तर।'
   );
 }
@@ -81,22 +75,19 @@ function getTierConfig(
   gameId: GameId,
   tier: 1 | 2 | 3,
   feedbackMsg: string,
-  feedbackMsgAs: string,
   feedbackMsgHi?: string
 ): AdaptiveTierConfig {
   const tierLabels = {
-    1: { en: 'Tier 1: Gentle Pace', as: 'স্তৰ ১: সহজ আৰু শান্ত', hi: 'स्तर 1: सरल व शांत' },
-    2: { en: 'Tier 2: Standard Pace', as: 'স্তৰ ২: মান্য স্তৰ', hi: 'स्तर 2: मानक स्तर' },
-    3: { en: 'Tier 3: Active Challenge', as: 'স্তৰ ৩: সক্ৰিয় প্ৰত্যাহ্বান', hi: 'स्तर 3: सक्रिय चुनौती' },
+    1: { en: 'Tier 1: Gentle Pace', hi: 'स्तर 1: सरल व शांत' },
+    2: { en: 'Tier 2: Standard Pace', hi: 'स्तर 2: मानक स्तर' },
+    3: { en: 'Tier 3: Active Challenge', hi: 'स्तर 3: सक्रिय चुनौती' },
   };
 
   const base: AdaptiveTierConfig = {
     tier,
     tierLabel: tierLabels[tier].en,
-    tierLabelAs: tierLabels[tier].as,
     tierLabelHi: tierLabels[tier].hi,
     feedbackMessage: feedbackMsg,
-    feedbackMessageAs: feedbackMsgAs,
     feedbackMessageHi: feedbackMsgHi || feedbackMsg,
   };
 

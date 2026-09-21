@@ -38,9 +38,7 @@ export const CaregiverDashboard: React.FC = () => {
   const { settings, reminders, cognitiveTrends, journal, addJournalEntry, activePatient } = useApp();
   const lang = settings.language;
   const patientName =
-    lang === 'as' && activePatient.nameAs
-      ? activePatient.nameAs
-      : lang === 'hi' && activePatient.nameHi
+    lang === 'hi' && activePatient.nameHi
       ? activePatient.nameHi
       : activePatient.name;
 
@@ -69,7 +67,7 @@ export const CaregiverDashboard: React.FC = () => {
       date: 'Caregiver Note: ' + new Date().toLocaleDateString(),
       mood: 'peaceful',
       text: noteText,
-      textAs: noteText,
+      textHi: noteText,
     });
 
     setNoteText('');
@@ -90,16 +88,12 @@ export const CaregiverDashboard: React.FC = () => {
             <span>Family Caregiver Portal • Priyanka Gogoi (Daughter)</span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
-            {lang === 'as'
-              ? `অভিভাৱক নিৰীক্ষণ ফলক: ${patientName} (${activePatient.age} বছৰ)`
-              : lang === 'hi'
+            {lang === 'hi'
               ? `देखभालकर्ता निगरानी पोर्टल: ${patientName} (${activePatient.age} वर्ष)`
               : `Caregiver Overview: ${patientName} (${activePatient.age} yrs)`}
           </h1>
           <p className="text-sm sm:text-base text-sky-200/80 mt-2 leading-relaxed font-medium">
-            {lang === 'as'
-              ? 'ৰোগীৰ দৈনিক ঔষধ পালন, মগজুৰ সুস্থতাৰ ধাৰা আৰু দৈনন্দিন টোকা পৰ্যবেক্ষণ কৰক।'
-              : lang === 'hi'
+            {lang === 'hi'
               ? 'दैनिक दवा अनुपालन, 7-दिवसीय संज्ञानात्मक स्वास्थ्य रुझान और पारिवारिक देखभाल नोट्स देखें।'
               : 'Real-time adherence monitoring, 7-day cognitive trend charts, and family coordination.'}
           </p>
@@ -108,9 +102,7 @@ export const CaregiverDashboard: React.FC = () => {
         <div className="relative z-10">
           <VoiceNarratorButton
             textToRead={
-              lang === 'as'
-                ? `অভিভাৱক ফলক। ${patientName}ৰ আজিৰ ঔষধ পালনৰ হাৰ আৰু বিগত ৭ দিনৰ স্মৃতি পৰীক্ষাৰ ধাৰা চাওক।`
-                : lang === 'hi'
+              lang === 'hi'
                 ? `देखभालकर्ता पोर्टल। ${patientName} का आज का दवा अनुपालन और पिछले 7 दिनों का स्मृति रुझान सामान्य और स्थिर है।`
                 : `Caregiver overview for ${patientName}. Medication adherence is on track with steady visual memory performance.`
             }
@@ -126,9 +118,7 @@ export const CaregiverDashboard: React.FC = () => {
         <div className="glass-card-dark p-6 rounded-[2rem] border border-white/12 hover:border-purple-500/40 space-y-4 group">
           <div className="flex items-center justify-between">
             <span className="text-xs font-black text-sky-200/70 uppercase tracking-wider">
-              {lang === 'as'
-                ? 'আজিৰ ঔষধ পালন'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'आज का दवा अनुपालन'
                 : "Today's Pill Adherence"}
             </span>
@@ -140,7 +130,7 @@ export const CaregiverDashboard: React.FC = () => {
             <span className="text-4xl font-black text-white tracking-tight">{pillPercent}%</span>
             <span className="text-xs font-bold text-sky-200/60">
               ({completedPills}/{reminders.length}{' '}
-              {lang === 'as' ? 'লোৱা হ’ল' : lang === 'hi' ? 'ली गईं' : 'taken'})
+              {lang === 'hi' ? 'ली गईं' : 'taken'})
             </span>
           </div>
           <div className="w-full h-3 bg-[#091224] rounded-full overflow-hidden p-0.5 border border-white/10">
@@ -155,9 +145,7 @@ export const CaregiverDashboard: React.FC = () => {
         <div className="glass-card-dark p-6 rounded-[2rem] border border-white/12 hover:border-purple-500/40 space-y-4 group">
           <div className="flex items-center justify-between">
             <span className="text-xs font-black text-sky-200/70 uppercase tracking-wider">
-              {lang === 'as'
-                ? 'মগজুৰ স্থিৰতা'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'संज्ञानात्मक आधार रेखा'
                 : 'Cognitive Baseline'}
             </span>
@@ -167,16 +155,14 @@ export const CaregiverDashboard: React.FC = () => {
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-4xl font-black text-purple-300 tracking-tight">
-              {lang === 'hi' ? 'स्थिर' : lang === 'as' ? 'স্থিৰ' : 'Stable'}
+              {lang === 'hi' ? 'स्थिर' : 'Stable'}
             </span>
             <span className="text-xs font-extrabold text-purple-200 bg-purple-500/20 border border-purple-400/40 px-2.5 py-0.5 rounded-full shadow-xs">
               +4% vs Baseline
             </span>
           </div>
           <p className="text-xs text-sky-200/70 font-medium leading-relaxed">
-            {lang === 'as'
-              ? 'বিগত ১৪ দিনৰ পৰীক্ষাত স্মৃতি শক্তি স্থিৰ ৰূপত আছে।'
-              : lang === 'hi'
+            {lang === 'hi'
               ? 'पिछले 14 दिनों के सत्रों में प्रदर्शन स्थिर और सकारात्मक बना हुआ है।'
               : 'Performance trend indicates steady engagement over the last 14 sessions.'}
           </p>
@@ -186,9 +172,7 @@ export const CaregiverDashboard: React.FC = () => {
         <div className="glass-card-dark p-6 rounded-[2rem] border border-white/12 hover:border-purple-500/40 space-y-4 group">
           <div className="flex items-center justify-between">
             <span className="text-xs font-black text-sky-200/70 uppercase tracking-wider">
-              {lang === 'as'
-                ? 'দায়িত্বপ্ৰাপ্ত আশা কৰ্মী'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'नियुक्त आशा कार्यकर्ता'
                 : 'Assigned ASHA Worker'}
             </span>
@@ -199,9 +183,7 @@ export const CaregiverDashboard: React.FC = () => {
           <div>
             <h4 className="font-black text-lg text-white">Minoti Das</h4>
             <p className="text-xs text-sky-200/60 font-medium mt-0.5">
-              {lang === 'as'
-                ? 'তিতাবৰ উপ-স্বাস্থ্য কেন্দ্ৰ • অন্তিম পৰিদৰ্শন: ৩ দিন পূৰ্বে'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'तीताबर उप-स्वास्थ्य केंद्र • अंतिम भेंट: 3 दिन पहले'
                 : 'Titabor Sub-centre • Last visit: 3 days ago'}
             </p>
@@ -223,17 +205,13 @@ export const CaregiverDashboard: React.FC = () => {
             <h3 className="text-lg sm:text-xl font-black text-white flex items-center gap-2">
               <Brain size={22} className="text-[#c084fc]" />
               <span>
-                {lang === 'as'
-                  ? 'বিগত ৭ দিনৰ স্মৃতি আৰু মনোযোগ ধাৰা'
-                  : lang === 'hi'
+                {lang === 'hi'
                   ? '7-दिवसीय दीर्घकालिक संज्ञानात्मक रुझान (Longitudinal Performance)'
                   : '7-Day Longitudinal Domain Performance'}
               </span>
             </h3>
             <p className="text-xs sm:text-sm text-sky-200/70 font-medium mt-1">
-              {lang === 'as'
-                ? 'ভিজুৱেল মেমৰি, মনোযোগ আৰু সঁহাৰিৰ গতিৰ মূল্যাংকন।'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'दृश्य स्मृति, ध्यान, प्रतिक्रिया गति और विज़ुओस्पेशियल क्षेत्रों में प्रदर्शन स्कोर।'
                 : 'Tracks normalized scoring across Visual Memory, Attention, Reaction Speed, and Visuospatial domains.'}
             </p>
@@ -241,7 +219,7 @@ export const CaregiverDashboard: React.FC = () => {
 
           <div className="flex items-center gap-2 text-xs font-bold">
             <span className="px-3.5 py-1.5 bg-purple-500/15 text-purple-200 rounded-full border border-purple-400/30">
-              {lang === 'hi' ? 'व्यक्तिगत आधार रेखा:' : lang === 'as' ? 'ব্যক্তিগত বেচলাইন:' : 'Personal Baseline:'} 78 pts
+              {lang === 'hi' ? 'व्यक्तिगत आधार रेखा:' : 'Personal Baseline:'} 78 pts
             </span>
           </div>
         </div>
@@ -299,9 +277,7 @@ export const CaregiverDashboard: React.FC = () => {
           <h3 className="text-lg sm:text-xl font-black text-white flex items-center gap-2">
             <FileText size={22} className="text-[#c084fc]" />
             <span>
-              {lang === 'as'
-                ? 'দৈনন্দিন পাৰিবাৰিক টোকা'
-                : lang === 'hi'
+              {lang === 'hi'
                 ? 'पारिवारिक देखभाल नोट्स व अवलोकन'
                 : 'Family Care Notes & Observations'}
             </span>
@@ -312,7 +288,7 @@ export const CaregiverDashboard: React.FC = () => {
             className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] hover:from-[#9333ea] hover:to-[#7c3aed] text-white rounded-2xl text-xs font-black shadow-lg shadow-purple-600/30 cursor-pointer transition-all active:scale-95 border border-purple-400/30"
           >
             <Plus size={16} />
-            <span>{lang === 'as' ? 'টোকা যোগ কৰক' : lang === 'hi' ? 'नोट जोड़ें' : 'Add Note'}</span>
+            <span>{lang === 'hi' ? 'नोट जोड़ें' : 'Add Note'}</span>
           </button>
         </div>
 

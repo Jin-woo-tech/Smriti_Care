@@ -1,4 +1,4 @@
-// Web Speech API wrapper with graceful fallback
+// Web Speech API wrapper with graceful fallback for English & Hindi
 import { Language } from '../types';
 
 export function speakText(text: string, lang: Language = 'en'): void {
@@ -14,7 +14,7 @@ export function speakText(text: string, lang: Language = 'en'): void {
   utterance.rate = 0.85; // slightly slower and clearer for elderly listeners
   utterance.pitch = 1.0;
 
-  // Try to find an Indian English / Hindi / Assamese voice
+  // Find appropriate Indian English or Hindi voice
   const voices = window.speechSynthesis.getVoices();
   if (lang === 'hi') {
     const hindiVoice = voices.find(v =>
@@ -24,16 +24,6 @@ export function speakText(text: string, lang: Language = 'en'): void {
     );
     if (hindiVoice) utterance.voice = hindiVoice;
     utterance.lang = 'hi-IN';
-  } else if (lang === 'as') {
-    // Look for Assamese, Bengali, or Indian voices
-    const regionalVoice = voices.find(v =>
-      v.lang.includes('as') ||
-      v.lang.includes('bn') ||
-      v.lang.includes('hi-IN') ||
-      v.lang.includes('en-IN')
-    );
-    if (regionalVoice) utterance.voice = regionalVoice;
-    utterance.lang = 'as-IN';
   } else {
     const indianEnglishVoice = voices.find(v =>
       v.lang.includes('en-IN') ||
