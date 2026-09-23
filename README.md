@@ -195,5 +195,7 @@ npm run preview
 ## 🏆 Project Credits
 
 - **Team**: **Team StarX**
+- **Members**: **Vikas Kumar, Aditya Raghav, Priyanshu Jain, Prabal, Ananya Jain, Arpit Singh**
+
 - **Initiative**: Smart India Hackathon (SIH 2026)
-- **Community Partner**: Titabor Block Primary Healthcare Network, Jorhat, Assam
+- **Community Partner**: Titabor Block Primary Healthcare Network
