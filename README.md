@@ -1,7 +1,7 @@
 # 🧠 SmritiCare (স্মৃতি কেয়াৰ / स्मृति केयर)
 ### *AI-Powered Cognitive Care, Medication Safety & Frontline Geriatric Support Platform*
 > **Smart India Hackathon (SIH 2026)** | Project ID: **SIH-2026-SMRITI**  
-> **Developed by**: **Team StarX** | **Geographic Focus**: Titabor, Jorhat District, Assam, India
+> **Developed by**: **Team StarX** (Leader: **Vikas Kumar** | **Priyanshu Jain**, **Aditya Raghav**, **Ananya Jain**, **Arpit Singh**, **Prabal Chauhan**) | **Geographic Focus**: Titabor, Jorhat District, Assam, India
 
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -77,6 +77,29 @@ The platform combines **neuro-cognitive stimulation games with dynamic 3-tier ad
 
 <div align="center">
   <img src="docs/screenshots/09-accessibility-a11y-modal.png" alt="Accessibility & Display Modal" width="550" />
+</div>
+
+---
+
+### 9. 👨‍👩‍👧 Family Caregiver Portal & Longitudinal Analytics
+*Real-time medication compliance tracking, 7-day multi-domain cognitive performance curves, assigned ASHA contact, and family observation notes.*
+
+![Caregiver Portal](docs/screenshots/10-caregiver-portal.png)
+
+---
+
+### 10. 🩺 Clinician Assessment & Multi-Domain Radar Portal
+*Multi-axial cognitive radar chart comparing current performance against personal baselines, domain stability diagnostics, and 1-click clinical PDF export.*
+
+![Clinician Portal](docs/screenshots/11-clinician-portal.png)
+
+---
+
+### 11. 🚨 One-Touch Emergency SOS & Offline Geo-Location
+*High-visibility emergency modal broadcasting live GPS coordinates, local police/ambulance speed dials, and primary family contact dispatch.*
+
+<div align="center">
+  <img src="docs/screenshots/12-emergency-sos-modal.png" alt="Emergency SOS Modal" width="550" />
 </div>
 
 ---
@@ -195,7 +218,13 @@ npm run preview
 ## 🏆 Project Credits
 
 - **Team**: **Team StarX**
-- **Members**: **Vikas Kumar, Aditya Raghav, Priyanshu Jain, Prabal, Ananya Jain, Arpit Singh**
-
+- **Team Leader**: **Vikas Kumar**
+- **Team Members**:
+  - 👑 **Vikas Kumar** (Team Leader)
+  - 🌟 **Priyanshu Jain**
+  - 🌟 **Aditya Raghav**
+  - 🌟 **Ananya Jain**
+  - 🌟 **Arpit Singh**
+  - 🌟 **Prabal Chauhan**
 - **Initiative**: Smart India Hackathon (SIH 2026)
-- **Community Partner**: Titabor Block Primary Healthcare Network
+- **Community & Clinical Partner**: Titabor Block Primary Healthcare Network, Jorhat District, Assam, India
